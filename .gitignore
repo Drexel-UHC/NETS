@@ -1,0 +1,12 @@
+
+.ipynb_checkpoints/
+__pycache__/
+archive/
+samples/
+R_scripts/.RData
+R_scripts/.RDataTmp
+R_scripts/.RDataTmp1
+R_scripts/.Rhistory
+data_checks/
+reports/
+scratch/
