@@ -407,4 +407,13 @@ numslist = [n.zfill(8) for n in numslist]
 sics_not_found = list(set(numslist) - set(funky_sics_places['SIC19']))
 
 
+#%% ADD SIC DESCRIPTIONS/JANA COMMENTS; GET FREQS
 
+
+sic_desc = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\data_checks\sic_check_desc.txt', sep = '\t', dtype={"SICCode":str},  header=0, encoding_errors='replace', usecols=['SICCode', 'SICDescription', 'Jana Comment/potential grouping'])
+
+out_df = pd.merge(funky_sics_places, sic_desc, left_on='SIC19', right_on='SICCode')
+
+freqs = out_df['Jana Comment/potential grouping'].value_counts()
+
+freqs.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/data_checks/sic_check_freqs.txt", sep="\t", header=header, mode='a', index=False)

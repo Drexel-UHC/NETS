@@ -174,7 +174,7 @@ def classify(df, config, header):
     # CONDIT 5: record falls in sic_range and emp NO CATEGORIES HAVE THIS CONDITION
     
     
-    # CONDIT 6: record falls in sic_range AND emp or sales (sales and emp must be non missing)
+    # CONDIT 6: record falls in sic_range AND emp or sales (emp must be non missing) (BDS only)
         
         elif config[cat]['conditional'] == 6:
             sic_range = make_sic_range(cat,config)
@@ -187,7 +187,7 @@ def classify(df, config, header):
                 emp_oper2 = symbols[emp_oper_type][1]
                 emp_bool = df['Emp'].apply(lambda x: True if emp_oper(x, config[cat]['emp'][1]) and emp_oper2(x, config[cat]['emp'][2]) else False)
             elif emp_oper_type in list(symbols.keys())[:4]:
-                emp_bool = df['Emp'].apply(lambda x: True if emp_oper(x, config[cat]['emp'][1]) and (pd.notna(x) or x!=0) else False)
+                emp_bool = df['Emp'].apply(lambda x: True if emp_oper(x, config[cat]['emp'][1]) and pd.notna(x) and x!=0 else False)
             else:
                 print(f"unknown condition. {cat} emp condition in config: {config[cat]['emp']}")
             
@@ -204,8 +204,8 @@ def classify(df, config, header):
     
             # check all bools against each other
             emp_bool[~sales_bool] = False
-            sic_bool[~emp_bool] = False
-            cats.append(pd.DataFrame({cat: sic_bool*1}))
+            range_bool[~emp_bool] = False
+            cats.append(pd.DataFrame({cat: range_bool*1}))
     
             
     # CONDIT 7: record falls in sic range OR sic_range_2 and name match
@@ -248,7 +248,7 @@ def classify(df, config, header):
             cats.append(pd.DataFrame({cat: final_bool*1 }))
     
     
-    # CONDIT 10: sic range AND emp AND sales, either emp or sales can be missing, but not both
+    # CONDIT 10: sic range AND emp AND sales, either emp or sales can be missing, but not both (GRY only)
         
         elif config[cat]['conditional'] == 10:
             sic_range = make_sic_range(cat,config)
@@ -261,7 +261,7 @@ def classify(df, config, header):
                 emp_oper2 = symbols[emp_oper_type][1]
                 emp_bool = df['Emp'].apply(lambda x: True if emp_oper(x, config[cat]['emp'][1]) and emp_oper2(x, config[cat]['emp'][2]) else False)
             elif emp_oper_type in list(symbols.keys())[:4]:
-                emp_bool = df['Emp'].apply(lambda x: True if emp_oper(x, config[cat]['emp'][1]) else False)
+                emp_bool = df['Emp'].apply(lambda x: True if emp_oper(x, config[cat]['emp'][1]) and pd.notna(x) and x!=0 else False)
             else:
                 print(f"unknown condition. {cat} emp condition in config: {config[cat]['emp']}")
             
@@ -272,7 +272,7 @@ def classify(df, config, header):
                 sales_oper2 = symbols[sales_oper_type][1]
                 sales_bool = df['Sales'].apply(lambda x: True if sales_oper(x, config[cat]['sales'][1]) and sales_oper2(x, config[cat]['sales'][2]) else False)
             elif sales_oper_type in list(symbols.keys())[:4]:
-                sales_bool = df['Sales'].apply(lambda x: True if sales_oper(x, config[cat]['sales'][1]) else False)
+                sales_bool = df['Sales'].apply(lambda x: True if sales_oper(x, config[cat]['sales'][1]) and pd.notna(x) and x!=0 else False)
             else:
                 print(f"unknown condition. {cat} sales condition in config: {config[cat]['sales']}")
             

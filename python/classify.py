@@ -10,7 +10,6 @@ import time
 import json
 import NETS_functions as nf
 import warnings 
-import numpy as np
 
 # filter warnings from regex search
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -169,6 +168,6 @@ uniques = pd.DataFrame(uniques)
 catcounts = coded.iloc[:,8:].sum(axis=0)
 catcounts = pd.DataFrame(catcounts, columns=['count'])
 
-with pd.ExcelWriter('../reports/NETS_classify_report2.xlsx') as writer:
+with pd.ExcelWriter('../reports/NETS_classify_report20220509.xlsx') as writer:
     uniques.to_excel(writer, sheet_name='unique_values')
     catcounts.to_excel(writer, sheet_name='cat_counts')
