@@ -8,7 +8,7 @@ Created on Thu Mar 31 10:41:16 2022
 import pandas as pd
 import time
 import json
-import NETS_functions as nf
+import nets_functions as nf
 import warnings 
 
 # filter warnings from regex search

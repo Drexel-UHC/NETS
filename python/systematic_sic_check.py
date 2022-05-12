@@ -1,9 +1,42 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu May  5 14:23:14 2022
+Created on Wed May 11 10:40:39 2022
 
 @author: stf45
 """
+
+"""
+This script is used to create a subset of the NETS data using SIC codes of interest.
+The result is an excel file with the subset of records for particular SIC codes
+in particular places outlined in "Business Data Categorization and Refinement for 
+Application in Longitudinal Neighborhood Health Research: a Methodology, p.274.
+Places were subsetted using city and state names (mid size and large cities) 
+as well as county fips codes (rural counties).
+The subset is further reduced by acquiring random samples of 5 records for each
+SIC code (or all records if a SIC has 5 or fewer instances). The excel file will 
+be used to search businesses on google maps to discover more details regarding the 
+relevance of the SIC codes in question to public health research. 
+
+Inputs: D:\NETS\NETS_2019\RawData\
+    NETS2019_SIC.txt
+    NETS2019_Company.txt
+    NETS2019_Emp.txt
+    NETS2019_Misc.txt
+    NETS2019_Sales.txt
+    sic_check.txt (a csv file containing SICs in question with official SIC descriptions
+                   and comments made by Jana)
+
+Outputs: C:\Users\stf45\Documents\NETS\Processing\
+    data_checks\sic_check.txt (all SICs in sic_check)
+    data_checks\sic_check_places.txt (subset 30 places)
+    reports\systematic_sic_check_20220511.xlsx 
+        sheet1: random samples of sics in systematic review areas(n=5 unless fewer than 5 records available)
+        sheet2: sic freqs
+        sheet3: sics not found in these places
+            
+
+"""
+#%%
 
 import pandas as pd
 import time
@@ -356,7 +389,7 @@ emp_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Emp.txt', sep = '\
 
 sales_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Sales.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Sales19"])
                       
-misc_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Latitude", "Longitude"])
+misc_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Latitude", "Longitude", "FipsCounty"])
                                                                                                                                                           
                                                                                                                                         
 #%% FILTER SICS, MERGE ALL FILES, APPEND TO CSV IN CHUNKS
@@ -370,7 +403,7 @@ for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumera
     sic_chunk = sic_chunk[sic_chunk['SIC19'].isin(numslist)]
     sic_chunk= sic_chunk.astype({'SIC19':int})
     funky_sic_check_wide = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk)
-    funky_sic_check_wide.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/funky_sic_check.txt", sep="\t", header=header, mode='a', index=False)
+    funky_sic_check_wide.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/sic_check.txt", sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - tic
     time_list.append(t)
@@ -381,24 +414,27 @@ print(runtime)
 
 #%% READ IN CSV, ADD BACK LEADING ZEROS TO SICS, FILTER FAMILIAR CITIES
 
-funky_sics = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\funky_sic_check.txt', sep = '\t', dtype={"DunsNumber": str})
+funky_sics = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\data_checks\sic_check.txt', sep = '\t', dtype={"DunsNumber": str})
 
 funky_sics['SIC19'] = funky_sics.SIC19.astype(str).str.zfill(8)
-citylist = ['PHILADELPHIA', 'ANN ARBOR', 'COLUMBIA', 'BOSTON', 'SEATTLE', 'BERKELEY', 'SAN FRANCISCO', 'OAKLAND', 'SANTA FE']
-statelist = ['PA', 'MI', 'SC', 'MA', 'WA', 'CA', 'CA', 'CA', 'NM']
-
+citylist = ['BOSTON', 'WORCESTER', 'NEW YORK', 'NEWARK', 'PHILADELPHIA', 'ALLENTOWN', 'JACKSONVILLE', 'GREENSBORO', 'CHICAGO', 'CINCINNATI', 'HOUSTON', 'PLANO', 'KANSAS CITY', 'LINCOLN', 'DENVER', 'SALT LAKE CITY', 'LOS ANGELES', 'HENDERSON', 'SEATTLE', 'BOISE']
+statelist = ['MA', 'MA', 'NY', 'NJ', 'PA', 'PA', 'FL', 'NC', 'IL', 'OH', 'TX', 'TX', 'MO', 'NE', 'CO', 'UT', 'CA', 'NV', 'WA', 'ID']
+countylist = [23017, 36121, 42119, 21221, 17123, 48067, 19067, 8037, 6015, 53041]
 
 funky_sics_places = pd.DataFrame()
-for x,y in zip(citylist, statelist):
-    df = funky_sics[(funky_sics['City'].str.rstrip() == x) & (funky_sics['State'].str.rstrip() == y)]
+for x,y,z in zip(citylist, statelist, countylist):
+    df = funky_sics[((funky_sics['City'].str.rstrip() == x) & (funky_sics['State'].str.rstrip() == y))|(funky_sics['FipsCounty'] == z)]
     funky_sics_places = pd.concat([funky_sics_places, df], ignore_index=True)
 
-#%% WRITE TABLE TO EXCEL
 
-with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\reports\sic_check_20220506.xlsx') as writer:
-    funky_sics_places.to_excel(writer)
+#%% WRITE FUNKY_SICS_PLACES TO CSV
+
+funky_sics_places.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/sic_check_places.txt", sep="\t", header=True, index=False)
 
 #%% SEE IF ALL SICS IN QUESTION ARE IN DATASET
+
+sic_desc = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\data_checks\sic_potential_adds.txt', sep = '\t', dtype={"SICCode":str},  header=0, encoding_errors='replace', usecols=['SICCode', 'SICDescription', 'Jana Comment/potential grouping'])
+
 
 numslist = [*map(int,numslist)]
 numslist = [*map(str,numslist)]
@@ -406,14 +442,29 @@ numslist = [n.zfill(8) for n in numslist]
 
 sics_not_found = list(set(numslist) - set(funky_sics_places['SIC19']))
 
+sics_not_found = pd.DataFrame(sics_not_found)
+sics_not_found.columns = ['SIC19']
 
+sics_not_found = pd.merge(sics_not_found, sic_desc, left_on='SIC19', right_on='SICCode').drop(columns=['SICCode'])
 #%% ADD SIC DESCRIPTIONS/JANA COMMENTS; GET FREQS
-
-
-sic_desc = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\data_checks\sic_potential_adds.txt', sep = '\t', dtype={"SICCode":str},  header=0, encoding_errors='replace', usecols=['SICCode', 'SICDescription', 'Jana Comment/potential grouping'])
 
 out_df = pd.merge(funky_sics_places, sic_desc, left_on='SIC19', right_on='SICCode')
 
-freqs = out_df['Jana Comment/potential grouping'].value_counts()
+sic_freqs = out_df['SIC19'].value_counts()
+sic_freqs = pd.DataFrame(sic_freqs).reset_index()
+sic_freqs.columns = ['SIC19', 'sic_counts']
 
-freqs.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/data_checks/sic_check_freqs.txt", sep="\t", header=header, mode='a', index=False)
+sic_freqs = pd.merge(sic_freqs, sic_desc, left_on='SIC19', right_on='SICCode').drop(columns=['SICCode'])
+
+#%% SELECT RANDOM SAMPLES OF 5 BY EACH SIC19
+
+random_sample = funky_sics_places.groupby('SIC19').sample(n=5, replace=True).drop_duplicates()
+random_sample = pd.merge(random_sample, sic_desc, left_on='SIC19', right_on='SICCode').drop(columns=['SICCode'])
+
+
+#%% WRITE TABLE TO EXCEL
+
+with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\systematic_sic_check_20220511.xlsx') as writer:
+    random_sample.to_excel(writer, "sics in systematic review areas")
+    sic_freqs.to_excel(writer, "sic freqs")
+    sics_not_found.to_excel(writer, "sics not found in these places")

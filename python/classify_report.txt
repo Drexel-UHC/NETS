@@ -1,3 +1,0 @@
-NETS Classification Report Using classify.py
-
-total time: 0.47 minutes
