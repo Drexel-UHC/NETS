@@ -129,6 +129,8 @@ time_list = []
 for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk) in enumerate(readers):
     tic = time.perf_counter()
     header = (c==0)
+    # add SIC filter here, create siclist above
+    #sic_chunk = sic_chunk[sic_chunk['SIC19'].isin(siclist)]
     classification_wide = nf.merge_sic_emp_sales(sic_chunk, emp_chunk, sales_chunk, company_chunk)
     classification_long = nf.normal_to_long(classification_wide, header)
     nf.classify(classification_long, config, header)

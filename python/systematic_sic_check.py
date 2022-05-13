@@ -40,10 +40,11 @@ Outputs: C:\Users\stf45\Documents\NETS\Processing\
 
 import pandas as pd
 import time
+import numpy as np
 
 #%% CREATE LIST OF SICS AS FLOATS (to match sics read in file)
 
-nums = '''01399906
+sics = '''01399906
 01619904
 07520203
 07520204
@@ -328,10 +329,10 @@ nums = '''01399906
 89990203
 '''
 
-numslist = nums.splitlines()
-numslist = [*map(float, numslist)]
+siclist = sics.splitlines()
+siclist = [*map(float, siclist)]
 
-#%%
+#%% MERGE FUNCTION
 
 def merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk):
     sic_merge = sic_chunk.merge(company_chunk, on='DunsNumber')
@@ -400,10 +401,10 @@ time_list = []
 for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumerate(readers):
     tic = time.perf_counter()
     header = (c==0)
-    sic_chunk = sic_chunk[sic_chunk['SIC19'].isin(numslist)]
+    sic_chunk = sic_chunk[sic_chunk['SIC19'].isin(siclist)]
     sic_chunk= sic_chunk.astype({'SIC19':int})
-    funky_sic_check_wide = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk)
-    funky_sic_check_wide.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/sic_check.txt", sep="\t", header=header, mode='a', index=False)
+    sic_check_wide = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk)
+    sic_check_wide.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/sic_check.txt", sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - tic
     time_list.append(t)
@@ -412,43 +413,46 @@ for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumera
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)
 
-#%% READ IN CSV, ADD BACK LEADING ZEROS TO SICS, FILTER FAMILIAR CITIES
+#%% READ IN CSV, ADD BACK LEADING ZEROS TO SICS, FILTER 30 CHECK AREAS
 
-funky_sics = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\data_checks\sic_check.txt', sep = '\t', dtype={"DunsNumber": str})
+potential_sics = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\data_checks\sic_check.txt', sep = '\t', dtype={"DunsNumber": str})
 
-funky_sics['SIC19'] = funky_sics.SIC19.astype(str).str.zfill(8)
+potential_sics['SIC19'] = potential_sics.SIC19.astype(str).str.zfill(8)
 citylist = ['BOSTON', 'WORCESTER', 'NEW YORK', 'NEWARK', 'PHILADELPHIA', 'ALLENTOWN', 'JACKSONVILLE', 'GREENSBORO', 'CHICAGO', 'CINCINNATI', 'HOUSTON', 'PLANO', 'KANSAS CITY', 'LINCOLN', 'DENVER', 'SALT LAKE CITY', 'LOS ANGELES', 'HENDERSON', 'SEATTLE', 'BOISE']
 statelist = ['MA', 'MA', 'NY', 'NJ', 'PA', 'PA', 'FL', 'NC', 'IL', 'OH', 'TX', 'TX', 'MO', 'NE', 'CO', 'UT', 'CA', 'NV', 'WA', 'ID']
+potential_sics_places = pd.DataFrame()
+for x,y in zip(citylist, statelist):
+    df = potential_sics[(potential_sics['City'].str.rstrip() == x) & (potential_sics['State'].str.rstrip() == y)]
+    potential_sics_places = pd.concat([potential_sics_places, df], ignore_index=True)
+
 countylist = [23017, 36121, 42119, 21221, 17123, 48067, 19067, 8037, 6015, 53041]
-
-funky_sics_places = pd.DataFrame()
-for x,y,z in zip(citylist, statelist, countylist):
-    df = funky_sics[((funky_sics['City'].str.rstrip() == x) & (funky_sics['State'].str.rstrip() == y))|(funky_sics['FipsCounty'] == z)]
-    funky_sics_places = pd.concat([funky_sics_places, df], ignore_index=True)
+for z in countylist:
+    df2 = potential_sics[potential_sics['FipsCounty'] == z]
+    potential_sics_places = pd.concat([potential_sics_places, df2], ignore_index=True)
 
 
-#%% WRITE FUNKY_SICS_PLACES TO CSV
 
-funky_sics_places.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/sic_check_places.txt", sep="\t", header=True, index=False)
+#%% WRITE POTENTIAL_SICS_PLACES TO CSV
+
+potential_sics_places.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/sic_check_places.txt", sep="\t", header=True, index=False)
 
 #%% SEE IF ALL SICS IN QUESTION ARE IN DATASET
 
 sic_desc = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\data_checks\sic_potential_adds.txt', sep = '\t', dtype={"SICCode":str},  header=0, encoding_errors='replace', usecols=['SICCode', 'SICDescription', 'Jana Comment/potential grouping'])
 
 
-numslist = [*map(int,numslist)]
-numslist = [*map(str,numslist)]
-numslist = [n.zfill(8) for n in numslist]
+siclist = [*map(int,siclist)]
+siclist = [*map(str,siclist)]
+siclist = [n.zfill(8) for n in siclist]
 
-sics_not_found = list(set(numslist) - set(funky_sics_places['SIC19']))
-
+sics_not_found = list(set(siclist) - set(potential_sics_places['SIC19']))
 sics_not_found = pd.DataFrame(sics_not_found)
 sics_not_found.columns = ['SIC19']
 
 sics_not_found = pd.merge(sics_not_found, sic_desc, left_on='SIC19', right_on='SICCode').drop(columns=['SICCode'])
-#%% ADD SIC DESCRIPTIONS/JANA COMMENTS; GET FREQS
+#%% GET SIC FREQS WITH SIC DESCRIPTIONS/JANA COMMENTS
 
-out_df = pd.merge(funky_sics_places, sic_desc, left_on='SIC19', right_on='SICCode')
+out_df = pd.merge(potential_sics_places, sic_desc, left_on='SIC19', right_on='SICCode')
 
 sic_freqs = out_df['SIC19'].value_counts()
 sic_freqs = pd.DataFrame(sic_freqs).reset_index()
@@ -456,15 +460,28 @@ sic_freqs.columns = ['SIC19', 'sic_counts']
 
 sic_freqs = pd.merge(sic_freqs, sic_desc, left_on='SIC19', right_on='SICCode').drop(columns=['SICCode'])
 
-#%% SELECT RANDOM SAMPLES OF 5 BY EACH SIC19
 
-random_sample = funky_sics_places.groupby('SIC19').sample(n=5, replace=True).drop_duplicates()
+#%% CREATE NEW PLACE VARIABLE FOR GROUPBY IN NEXT STEP
+    
+potential_sics_places['check_area'] = np.where(potential_sics_places['FipsCounty'].isin(countylist), potential_sics_places['FipsCounty'].astype(str), potential_sics_places['City'])
+        
+   
+#%% SELECT RANDOM SAMPLES OF 5 BY EACH SIC19, GET COUNTS
+
+random_sample = potential_sics_places.groupby(['check_area','SIC19']).sample(n=5, replace=True).drop_duplicates()
 random_sample = pd.merge(random_sample, sic_desc, left_on='SIC19', right_on='SICCode').drop(columns=['SICCode'])
+random_sample['Longitude'] = random_sample['Longitude']*-1
+
+counts = random_sample.SIC19.value_counts()
+counts = pd.DataFrame(counts).reset_index()
+counts.columns = ['SIC19', 'sic_counts']
+sample_sic_freqs = pd.merge(counts, sic_desc, left_on='SIC19', right_on='SICCode').drop(columns=['SICCode'])
 
 
 #%% WRITE TABLE TO EXCEL
 
 with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\systematic_sic_check_20220511.xlsx') as writer:
-    random_sample.to_excel(writer, "sics in systematic review areas")
-    sic_freqs.to_excel(writer, "sic freqs")
-    sics_not_found.to_excel(writer, "sics not found in these places")
+    random_sample.to_excel(writer, "sics in systematic review areas", index=False)
+    sic_freqs.to_excel(writer, "sic freqs in places", index=False)
+    sics_not_found.to_excel(writer, "sics not found in these places", index=False)
+    sample_sic_freqs.to_excel(writer, "sic freqs in random samples", index=False)
