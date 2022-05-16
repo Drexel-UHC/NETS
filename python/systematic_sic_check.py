@@ -3,9 +3,8 @@
 Created on Wed May 11 10:40:39 2022
 
 @author: stf45
-"""
 
-"""
+
 This script is used to create a subset of the NETS data using SIC codes of interest.
 The result is an excel file with the subset of records for particular SIC codes
 in particular places outlined in "Business Data Categorization and Refinement for 
@@ -13,7 +12,8 @@ Application in Longitudinal Neighborhood Health Research: a Methodology, p.274.
 Places were subsetted using city and state names (mid size and large cities) 
 as well as county fips codes (rural counties).
 The subset is further reduced by acquiring random samples of 5 records for each
-SIC code (or all records if a SIC has 5 or fewer instances). The excel file will 
+SIC code (or all records if a SIC has 5 or fewer instances) in each place (theoretical                                                                         
+max # of records per SIC code is 150). The excel file will 
 be used to search businesses on google maps to discover more details regarding the 
 relevance of the SIC codes in question to public health research. 
 
@@ -23,7 +23,7 @@ Inputs: D:\NETS\NETS_2019\RawData\
     NETS2019_Emp.txt
     NETS2019_Misc.txt
     NETS2019_Sales.txt
-    sic_check.txt (a csv file containing SICs in question with official SIC descriptions
+    sic_potential_adds.txt (a csv file containing SICs in question with official SIC descriptions
                    and comments made by Jana)
 
 Outputs: C:\Users\stf45\Documents\NETS\Processing\
@@ -33,9 +33,8 @@ Outputs: C:\Users\stf45\Documents\NETS\Processing\
         sheet1: random samples of sics in systematic review areas(n=5 unless fewer than 5 records available)
         sheet2: sic freqs
         sheet3: sics not found in these places
-            
-
 """
+
 #%%
 
 import pandas as pd
@@ -331,6 +330,7 @@ sics = '''01399906
 
 siclist = sics.splitlines()
 siclist = [*map(float, siclist)]
+
 
 #%% MERGE FUNCTION
 
