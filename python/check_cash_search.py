@@ -3,7 +3,23 @@
 Created on Mon May 16 11:05:02 2022
 
 @author: stf45
+
+This script grabs all records in the NETS dataset with SIC 60999901 
+(check cashing) in the year 2019. It is used as a preliminary check on records
+with this SIC code.
+
+Inputs: D:\NETS\NETS_2019\RawData\
+    NETS2019_SIC.txt
+    NETS2019_Company.txt
+    NETS2019_Emp.txt
+    NETS2019_Misc.txt
+    NETS2019_Sales.txt
+
+Outputs:
+    check_cash_check_20220516.xlsx
+    check_cashing_check.txt
 """
+#%%
 
 import pandas as pd
 import time
@@ -45,11 +61,12 @@ misc_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt', sep = 
 
 readers = zip(sic_reader, emp_reader, sales_reader, company_reader, misc_reader)
 time_list = []
+siclist = ['60999901','60999902']
 
 for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumerate(readers):
     tic = time.perf_counter()
     header = (c==0)
-    sic_chunk = sic_chunk[sic_chunk['SIC19'] == '60999901']
+    sic_chunk = sic_chunk[sic_chunk['SIC19'].isin(siclist)]
     sic_check_wide = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk)
     sic_check_wide.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/check_cashing_check.txt", sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
@@ -68,5 +85,5 @@ check_cash = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch
 
 #%% WRITE TABLE TO EXCEL
 
-with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\check_cash_check_20220516.xlsx') as writer:
+with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\check_cash_check_20220518.xlsx') as writer:
     check_cash.to_excel(writer, "records w check cashing sic", index=False)

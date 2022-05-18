@@ -10,6 +10,22 @@ Created on Mon May 16 11:25:31 2022
 Created on Mon May 16 11:05:02 2022
 
 @author: stf45
+
+This script grabs all records in the NETS dataset in the SIC family 8399 
+(social services) in the year 2019. It is used as a preliminary check on records
+in this SIC family.
+
+Inputs: D:\NETS\NETS_2019\RawData\
+    NETS2019_SIC.txt
+    NETS2019_Company.txt
+    NETS2019_Emp.txt
+    NETS2019_Misc.txt
+    NETS2019_Sales.txt
+
+Outputs:
+    social_serv_check_20220516.xlsx
+    social_serv_check.txt
+
 """
 
 import pandas as pd
@@ -65,11 +81,9 @@ for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumera
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)     
 
-
 #%% READ IN CSV
 
 social_serv = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/social_serv_check.txt", sep = '\t', dtype={"DunsNumber": str},  header=0)
-
 
 #%% WRITE TABLE TO EXCEL
 
