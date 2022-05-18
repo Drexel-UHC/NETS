@@ -150,14 +150,14 @@ for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumera
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)                                                                                                
 
-#%% READ IN CSV
+#%% READ IN CSVS
 
-snr_cntrs = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/snr_cntr_check.txt", sep = '\t', dtype={"DunsNumber": str},  header=0)
-
+snr_cntr_name = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/data_checks/snr_cntr_check.txt", sep = '\t', dtype={"DunsNumber": str},  header=0)
+snr_cntr_sics = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/data_checks/snr_cntr_sics.txt", sep = '\t', dtype={"DunsNumber": str},  header=0)
 
 #%% WRITE TABLE TO EXCEL
 
-with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\senior_sic_check_20220516.xlsx') as writer:
-    snr_cntrs.to_excel(writer, "records w snr cntr sics", index=False)
-    senior_centers.to_excel(writer, "records w SENIOR CENTER", index=False)
+with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\senior_sic_name_check_20220518.xlsx') as writer:
+    snr_cntr_sics.to_excel(writer, "records w snr cntr sics", index=False)
+    snr_cntr_name.to_excel(writer, "records w SENIOR CENTER", index=False)
     counts.to_excel(writer, "sic freqs from string search", index=False)
