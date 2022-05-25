@@ -155,7 +155,7 @@ print(runtime)
 snr_cntr_name = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/data_checks/snr_cntr_check.txt", sep = '\t', dtype={"DunsNumber": str},  header=0)
 snr_cntr_sics = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/data_checks/snr_cntr_sics.txt", sep = '\t', dtype={"DunsNumber": str},  header=0)
 
-#%% WRITE TABLE TO EXCEL
+#%% WRITE TABLE TO EXCEL 
 
 with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\senior_sic_name_check_20220518.xlsx') as writer:
     snr_cntr_sics.to_excel(writer, "records w snr cntr sics", index=False)
