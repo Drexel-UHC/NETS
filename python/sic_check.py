@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed May 25 09:54:25 2022
+Created on Thu May 26 13:52:25 2022
 
 @author: stf45
 
-This script does a regex search for senior citizens centers in the NETS
-dataset and exports all records with relevant columns into a csv "check_cash_name.txt".
-It will likely be replaced with a more complex and inclusive regex search in a 
-different file.
+
+This script pulls all records with a given SIC code in the NETS 2019 dataset.
 
 Inputs: D:\NETS\NETS_2019\RawData\
     NETS2019_SIC.txt
@@ -20,8 +18,7 @@ Inputs: D:\NETS\NETS_2019\RawData\
     regex_config.json
 
 Outputs:
-    social_serv_check_20220516.xlsx
-    social_serv_check.txt
+    sic_search.txt
     
 Runtime: approx 7 mins
 """
@@ -30,11 +27,9 @@ Runtime: approx 7 mins
 
 import pandas as pd
 import time
-import json
 from datetime import datetime
 
-with open(r'C:\Users\stf45\Documents\NETS\Processing\config/regex_config.json', 'r') as f:
-    config = json.load(f)
+
 #%% MERGE FUNCTION
 
 def merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk):
@@ -50,7 +45,7 @@ def merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, m
 n = 71498225
 chunksize = 10000000
 
-sic_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_SIC.txt', sep = '\t', dtype={"DunsNumber": str, "SIC8": int},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
+sic_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_SIC.txt', sep = '\t', dtype={"DunsNumber": str, "SIC19": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
                                                                                                                                                                               "SIC8"])
 
                                                                                                                                                           
@@ -103,25 +98,23 @@ for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumera
     header = (c==0)
     # do string search, grab dunsnumbers, find most recent sics of those dunsnumbers
     # create new dataframe with the company names, dunsnumbers, and sics
-    regex = '|'.join(config["CHK"]['name'])
-    company_match = company_chunk[(company_chunk['Company'].str.contains(regex)) | (company_chunk['TradeName'].str.contains(regex))]
-    out_df = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_match, misc_chunk)
+    sic_chunk = sic_chunk.loc[sic_chunk['SIC8'] == "60999901"]
+    out_df = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk)
     # make longs negative
     out_df['Longitude'] = out_df['Longitude']*-1
-    out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/regex_search2.txt", sep="\t", header=header, mode='a', index=False)
+    out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/sic_search.txt", sep="\t", header=header, mode='a', index=False)
     toc = time.time()
     t = toc - tic
     time_list.append(t)
     print('chunk {} completed in {} minutes! {} chunks to go'.format(c+1, round(t/60, 2), n/chunksize-(c+1)))
 
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
-print(runtime)                                                                                                
+print(runtime)  
 
-#%%
-regex_search_csv2 = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/regex_search2.txt", sep = '\t', dtype=str,  header=0)
-regex_search_csv = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/regex_search.txt", sep = '\t', dtype=str,  header=0)
+print(f"End Time: {datetime.now()}")
+                                                                                              
 
+#%% CHECK CSV
+sic_search_csv = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/sic_search.txt", sep = '\t', dtype=str,  header=0)
 
-with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\regex_search.xlsx') as writer:
-    regex_search_csv.to_excel(writer, "regex search results", index=False)
 
