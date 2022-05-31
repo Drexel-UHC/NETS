@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed May 25 09:54:25 2022
+Created on Thu May 26 13:52:25 2022
 
 @author: stf45
+
 
 This script does a regex search for senior citizens centers in the NETS
 dataset and exports all records with relevant columns into a csv "check_cash_name.txt".
@@ -30,11 +31,9 @@ Runtime: approx 7 mins
 
 import pandas as pd
 import time
-import json
 from datetime import datetime
 
-with open(r'C:\Users\stf45\Documents\NETS\Processing\config/regex_config.json', 'r') as f:
-    config = json.load(f)
+
 #%% MERGE FUNCTION
 
 def merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk):
@@ -103,12 +102,11 @@ for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumera
     header = (c==0)
     # do string search, grab dunsnumbers, find most recent sics of those dunsnumbers
     # create new dataframe with the company names, dunsnumbers, and sics
-    regex = '|'.join(config["SNR"]['name'])
-    company_match = company_chunk[(company_chunk['Company'].str.contains(regex)) | (company_chunk['TradeName'].str.contains(regex))]
-    out_df = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_match, misc_chunk)
+    sic_chunk = sic_chunk.loc[sic_chunk['SIC8'] == 83220103]
+    out_df = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk)
     # make longs negative
     out_df['Longitude'] = out_df['Longitude']*-1
-    out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/regex_search.txt", sep="\t", header=header, mode='a', index=False)
+    out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/sic_search.txt", sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - tic
     time_list.append(t)
@@ -117,10 +115,7 @@ for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumera
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)                                                                                                
 
-#%%
-regex_search_csv = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/regex_search.txt", sep = '\t', dtype=str,  header=0)
+#%% CHECK CSV
+regex_search_csv = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/sic_search.txt", sep = '\t', dtype=str,  header=0)
 
-
-with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\regex_search.xlsx') as writer:
-    regex_search_csv.to_excel(writer, "regex search results", index=False)
 
