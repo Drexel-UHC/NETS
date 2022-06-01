@@ -45,7 +45,7 @@ def merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, m
 n = 71498225
 chunksize = 10000000
 
-sic_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_SIC.txt', sep = '\t', dtype={"DunsNumber": str, "SIC19": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
+sic_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_SIC.txt', sep = '\t', dtype={"DunsNumber": str, "SIC8": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
                                                                                                                                                                               "SIC8"])
 
                                                                                                                                                           

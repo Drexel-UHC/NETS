@@ -23,7 +23,7 @@ Outputs:
     social_serv_check_20220516.xlsx
     social_serv_check.txt
     
-Runtime: approx 7 mins
+Runtime: approx 17 mins
 """
 
 #%%
@@ -96,10 +96,11 @@ misc_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt', sep = 
 
 print(f"Start Time: {datetime.now()}")
 readers = zip(sic_reader, emp_reader, sales_reader, company_reader, misc_reader)
-time_list = []
+time_list = [0]
+
+tic = time.perf_counter()
 
 for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumerate(readers):
-    tic = time.time()
     header = (c==0)
     # do string search, grab dunsnumbers, find most recent sics of those dunsnumbers
     # create new dataframe with the company names, dunsnumbers, and sics
@@ -109,8 +110,8 @@ for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumera
     # make longs negative
     out_df['Longitude'] = out_df['Longitude']*-1
     out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/regex_search2.txt", sep="\t", header=header, mode='a', index=False)
-    toc = time.time()
-    t = toc - tic
+    toc = time.perf_counter()
+    t = toc - (sum(time_list) + tic)
     time_list.append(t)
     print('chunk {} completed in {} minutes! {} chunks to go'.format(c+1, round(t/60, 2), n/chunksize-(c+1)))
 

@@ -96,9 +96,9 @@ misc_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt', sep = 
 print(f"Start Time: {datetime.now()}")
 readers = zip(sic_reader, emp_reader, sales_reader, company_reader, misc_reader)
 time_list = []
+tic = time.perf_counter()
 
 for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumerate(readers):
-    tic = time.perf_counter()
     header = (c==0)
     # do string search, grab dunsnumbers, find most recent sics of those dunsnumbers
     # create new dataframe with the company names, dunsnumbers, and sics
@@ -108,7 +108,7 @@ for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumera
     out_df['Longitude'] = out_df['Longitude']*-1
     out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/sic_search.txt", sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
-    t = toc - tic
+    t = toc - (sum(time_list) + tic)
     time_list.append(t)
     print('chunk {} completed in {} minutes! {} chunks to go'.format(c+1, round(t/60, 2), n/chunksize-(c+1)))
 
@@ -116,6 +116,7 @@ runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)                                                                                                
 
 #%% CHECK CSV
+
 regex_search_csv = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/sic_search.txt", sep = '\t', dtype=str,  header=0)
 
 
