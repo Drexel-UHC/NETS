@@ -19,9 +19,8 @@ Inputs: D:\NETS\NETS_2019\RawData\
     C:\Users\stf45\Documents\NETS\Processing\config\
     regex_config.json
 
-Outputs:
-    social_serv_check_20220516.xlsx
-    social_serv_check.txt
+Output:
+    C:\Users\stf45\Documents\NETS\Processing\data_checks\check_cash_name.txt
     
 Runtime: approx 17 mins
 """

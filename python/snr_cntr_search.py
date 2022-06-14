@@ -7,7 +7,8 @@ Created on Mon May 16 09:24:21 2022
 This script grabs all records in the NETS dataset with "SENIOR CENTER" in the 
 Company variable. Then it takes 5 of the top 6 freq SIC codes and pulls all 
 records with these SICs from the most recent year available. This is used to check the potential
-for an entirely new category for senior centers, and the accuracy of SIC code
+for an entirely new category for senior centers, and the range of relevant businesses 
+in each SIC code. 
 
 
 Inputs: D:\NETS\NETS_2019\RawData\

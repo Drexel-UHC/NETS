@@ -5,7 +5,7 @@ Created on Thu May 26 13:52:25 2022
 @author: stf45
 
 
-This script does a regex search for senior citizens centers in the NETS
+This script grabs all records with SIC code 83220103 in the NETS
 dataset and exports all records with relevant columns into a csv "check_cash_name.txt".
 It will likely be replaced with a more complex and inclusive regex search in a 
 different file.
@@ -24,7 +24,7 @@ Outputs:
     social_serv_check_20220516.xlsx
     social_serv_check.txt
     
-Runtime: approx 7 mins
+Runtime: approx 15 mins
 """
 
 #%%

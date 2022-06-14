@@ -61,7 +61,7 @@ misc_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt', sep = 
 
 readers = zip(sic_reader, emp_reader, sales_reader, company_reader, misc_reader)
 time_list = []
-siclist = ['60999901','60999902']
+siclist = ['60999901']
 
 for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumerate(readers):
     tic = time.perf_counter()

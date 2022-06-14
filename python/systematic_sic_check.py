@@ -396,17 +396,18 @@ misc_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt', sep = 
 #%% FILTER SICS, MERGE ALL FILES, APPEND TO CSV IN CHUNKS
 
 readers = zip(sic_reader, emp_reader, sales_reader, company_reader, misc_reader)
-time_list = []
+time_list = [0]
+tic = time.perf_counter()
+
 
 for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumerate(readers):
-    tic = time.perf_counter()
     header = (c==0)
     sic_chunk = sic_chunk[sic_chunk['SIC19'].isin(siclist)]
     sic_chunk= sic_chunk.astype({'SIC19':int})
     sic_check_wide = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk)
     sic_check_wide.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/sic_check.txt", sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
-    t = toc - tic
+    t = toc - (sum(time_list) + tic)
     time_list.append(t)
     print('chunk {} completed in {} minutes! {} chunks to go'.format(c+1, round(t/60, 2), n/chunksize-(c+1)))
 
@@ -415,7 +416,7 @@ print(runtime)
 
 #%% READ IN CSV, ADD BACK LEADING ZEROS TO SICS, FILTER 30 CHECK AREAS
 
-potential_sics = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\data_checks\sic_check.txt', sep = '\t', dtype={"DunsNumber": str})
+potential_sics = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\sic_check.txt', sep = '\t', dtype={"DunsNumber": str})
 
 potential_sics['SIC19'] = potential_sics.SIC19.astype(str).str.zfill(8)
 citylist = ['BOSTON', 'WORCESTER', 'NEW YORK', 'NEWARK', 'PHILADELPHIA', 'ALLENTOWN', 'JACKSONVILLE', 'GREENSBORO', 'CHICAGO', 'CINCINNATI', 'HOUSTON', 'PLANO', 'KANSAS CITY', 'LINCOLN', 'DENVER', 'SALT LAKE CITY', 'LOS ANGELES', 'HENDERSON', 'SEATTLE', 'BOISE']
