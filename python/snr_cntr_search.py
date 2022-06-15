@@ -49,10 +49,7 @@ snr_cntr_duns = snr_cntr.DunsNumber.tolist()
 snr_cntr_sic = sic[sic['DunsNumber'].isin(snr_cntr_duns)]
 senior_centers = pd.merge(snr_cntr, snr_cntr_sic, on='DunsNumber')
 
-# get freqs for most recent sic codes, 
-counts = snr_cntr_sic.SIC8.value_counts()
-counts = pd.DataFrame(counts).reset_index()
-counts.columns = ['SIC8', 'sic_counts']
+
 
 
 # these are five of the top six sic codes counted from dunsnumbers with "Company"
