@@ -363,6 +363,7 @@ def classify(df, config, header):
         else:
             cats.append(pd.DataFrame({cat: np.zeros(df.shape[0])}))
     
+    df = df.astype({'SIC':int, 'Emp':int, 'Sales':int})
     df['SIC'] = df['SIC'].astype(str).str.zfill(8)
     out_df = pd.concat(cats,axis=1)
     final_df = pd.concat([df, out_df],axis=1)
