@@ -24,7 +24,6 @@ Outputs:
 import pandas as pd
 import time
 
-
 #%% MERGE FUNCTION
 
 def merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk):
@@ -49,6 +48,7 @@ company_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Company.txt', 
                                                                                                                                                                     "City",
                                                                                                                                                                     "State",
                                                                                                                                                                     "ZipCode"])
+
 emp_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Emp.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Emp19"])
 
                                                                                                                                                                                   

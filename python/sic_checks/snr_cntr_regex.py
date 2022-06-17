@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu May 26 13:52:25 2022
+Created on Wed May 25 09:54:25 2022
 
 @author: stf45
 
+This script does a regex search for senior citizens centers in the NETS
+dataset and exports all records with relevant columns into a csv "snr_cntr_regex20220526.txt".
 
-This script pulls all records with a given SIC code in the NETS 2019 dataset.
 
 Inputs: D:\NETS\NETS_2019\RawData\
     NETS2019_SIC.txt
@@ -17,19 +18,22 @@ Inputs: D:\NETS\NETS_2019\RawData\
     C:\Users\stf45\Documents\NETS\Processing\config\
     regex_config.json
 
-Outputs:
-    sic_search.txt
+Output: C:\Users\stf45\Documents\NETS\Processing\data_checks\
+    snr_cntr_regex20220526.txt
+    snr_cntr_regex20220526.xlsx
     
-Runtime: approx 7 mins
+Runtime: approx 17 mins
 """
 
 #%%
 
 import pandas as pd
 import time
+import json
 from datetime import datetime
 
-
+with open(r'C:\Users\stf45\Documents\NETS\Processing\config/regex_config.json', 'r') as f:
+    config = json.load(f)
 #%% MERGE FUNCTION
 
 def merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk):
@@ -45,7 +49,7 @@ def merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, m
 n = 71498225
 chunksize = 10000000
 
-sic_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_SIC.txt', sep = '\t', dtype={"DunsNumber": str, "SIC8": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
+sic_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_SIC.txt', sep = '\t', dtype={"DunsNumber": str, "SIC8": int},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
                                                                                                                                                                               "SIC8"])
 
                                                                                                                                                           
@@ -91,30 +95,35 @@ misc_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt', sep = 
 
 print(f"Start Time: {datetime.now()}")
 readers = zip(sic_reader, emp_reader, sales_reader, company_reader, misc_reader)
-time_list = []
+time_list = [0]
 
+tic = time.perf_counter()
+
+# run chunks through for loop 
 for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumerate(readers):
-    tic = time.time()
     header = (c==0)
     # do string search, grab dunsnumbers, find most recent sics of those dunsnumbers
     # create new dataframe with the company names, dunsnumbers, and sics
-    sic_chunk = sic_chunk.loc[sic_chunk['SIC8'] == "60999901"]
-    out_df = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk)
+    regex = '|'.join(config["SNR"]['name'])
+    company_match = company_chunk[(company_chunk['Company'].str.contains(regex)) | (company_chunk['TradeName'].str.contains(regex))]
+    out_df = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_match, misc_chunk)
     # make longs negative
     out_df['Longitude'] = out_df['Longitude']*-1
-    out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/sic_search.txt", sep="\t", header=header, mode='a', index=False)
-    toc = time.time()
-    t = toc - tic
+    out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/snr_cntr_regex20220526.txt", sep="\t", header=header, mode='a', index=False)
+    toc = time.perf_counter()
+    t = toc - (sum(time_list) + tic)
     time_list.append(t)
     print('chunk {} completed in {} minutes! {} chunks to go'.format(c+1, round(t/60, 2), n/chunksize-(c+1)))
 
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
-print(runtime)  
+print(runtime)                                                                                                
 
-print(f"End Time: {datetime.now()}")
-                                                                                              
+#%% CHECK DATA, WRITE TO EXCEL
 
-#%% CHECK CSV
-sic_search_csv = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/sic_search.txt", sep = '\t', dtype=str,  header=0)
+regex_search_csv2 = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/regex_search2.txt", sep = '\t', dtype=str,  header=0)
+regex_search_csv = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/regex_search.txt", sep = '\t', dtype=str,  header=0)
 
+
+with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\snr_cntr_regex20220526.xlsx') as writer:
+    regex_search_csv.to_excel(writer, "regex search results", index=False)
 

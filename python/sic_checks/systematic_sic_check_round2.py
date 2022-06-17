@@ -5,8 +5,10 @@ Created on Fri May 13 15:11:09 2022
 @author: stf45
 
 
-This script is used to make a smaller excel file of records with SIC codes
-in question to check on google/google street view. 
+This script is used as a second round check after spot checking the output 
+(systematic_sic_check_20220511.xlsx) from systematic_sic_check.py. The SIC list
+has been reduced from the previous round.
+
 
 Inputs:
     data_checks\sic_check_places.txt (subset 30 places)
@@ -17,6 +19,38 @@ Outputs: C:\Users\stf45\Documents\NETS\Processing\
         sheet1: random samples of sics in systematic review areas(n=5 unless fewer than 5 records available)
         sheet2: sic freqs in places
         sheet3: sics freqs in random samples
+        
+        
+DOCUMENTATION FROM PREVIOUS STEP (systematc_sic_check.py):
+    
+    This script is used to create a subset of the NETS data using SIC codes of interest existing in the year 2019.
+    The result is an excel file with the subset of records for particular SIC codes
+    in particular places outlined in "Business Data Categorization and Refinement for 
+    Application in Longitudinal Neighborhood Health Research: a Methodology, p.274.
+    Places were subsetted using city and state names (mid size and large cities) 
+    as well as county fips codes (rural counties).
+    The subset is further reduced by acquiring random samples of 5 records for each
+    SIC code (or all records if a SIC has 5 or fewer instances) in each place (theoretical                                                                         
+    max # of records per SIC code is 150). The excel file will 
+    be used to search businesses on google maps to discover more details regarding the 
+    relevance of the SIC codes in question to public health research. 
+    
+    Inputs: D:\NETS\NETS_2019\RawData\
+        NETS2019_SIC.txt
+        NETS2019_Company.txt
+        NETS2019_Emp.txt
+        NETS2019_Misc.txt
+        NETS2019_Sales.txt
+        sic_potential_adds.txt (a csv file containing SICs in question with official SIC descriptions
+                       and comments made by Jana)
+
+    Outputs: C:\Users\stf45\Documents\NETS\Processing\
+        data_checks\sic_check.txt (all SICs in sic_check)
+        data_checks\sic_check_places.txt (subset 30 places)
+        reports\systematic_sic_check_20220511.xlsx 
+            sheet1: random samples of sics in systematic review areas(n=5 unless fewer than 5 records available)
+            sheet2: sic freqs
+            sheet3: sics not found in these places
 """
 
 
@@ -140,7 +174,7 @@ sics2 = '''01399906
 siclist2 = sics2.splitlines()
 siclist2 = [*map(int, siclist2)]
 
-#%% SUBSET TO SICLIST2 
+#%% SUBSET BY REDUCED LIST OF SIC CODES 
 
 potential_sics_places =  pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\data_checks\sic_check_places.txt', sep = '\t', dtype={"SIC19":str})
 potential_sics_places = potential_sics_places[potential_sics_places['SIC19'].isin(siclist2)]

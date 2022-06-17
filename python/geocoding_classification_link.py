@@ -3,6 +3,9 @@
 Created on Thu Mar 31 10:41:16 2022
 
 @author: stf45
+
+This is a working draft file used to figure out how to link geocoding data with 
+categorized (classify.py output) data.
 """
 
 import pandas as pd

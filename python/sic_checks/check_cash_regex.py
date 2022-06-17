@@ -1,20 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Jun 14 13:51:57 2022
-
-@author: stf45
-"""
-
-# -*- coding: utf-8 -*-
-"""
 Created on Wed May 25 09:54:25 2022
 
 @author: stf45
 
 This script does a regex search for senior citizens centers in the NETS
-dataset and exports all records with relevant columns into a csv "check_cash_name.txt".
-It will likely be replaced with a more complex and inclusive regex search in a 
-different file.
+dataset and exports all records with relevant columns into a csv "check_cash_regex20220531.txt".
+
 
 Inputs: D:\NETS\NETS_2019\RawData\
     NETS2019_SIC.txt
@@ -26,10 +18,11 @@ Inputs: D:\NETS\NETS_2019\RawData\
     C:\Users\stf45\Documents\NETS\Processing\config\
     regex_config.json
 
-Output:
-    C:\Users\stf45\Documents\NETS\Processing\data_checks\servpro_search.txt
+Output: C:\Users\stf45\Documents\NETS\Processing\data_checks\
+    check_cash_regex20220531.txt
+    check_cash_regex20220531.xlsx
     
-Runtime: approx 15 mins
+Runtime: approx 17 mins
 """
 
 #%%
@@ -39,7 +32,8 @@ import time
 import json
 from datetime import datetime
 
-
+with open(r'C:\Users\stf45\Documents\NETS\Processing\config/regex_config.json', 'r') as f:
+    config = json.load(f)
 #%% MERGE FUNCTION
 
 def merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk):
@@ -109,12 +103,12 @@ for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumera
     header = (c==0)
     # do string search, grab dunsnumbers, find most recent sics of those dunsnumbers
     # create new dataframe with the company names, dunsnumbers, and sics
-    regex = "\\bSE?RVE? ?PRO?(?! INDUSTR(?:Y|IES))\\b"
+    regex = '|'.join(config["CHK"]['name'])
     company_match = company_chunk[(company_chunk['Company'].str.contains(regex)) | (company_chunk['TradeName'].str.contains(regex))]
     out_df = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_match, misc_chunk)
     # make longs negative
     out_df['Longitude'] = out_df['Longitude']*-1
-    out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/servpro_search.txt", sep="\t", header=header, mode='a', index=False)
+    out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/regex_search2.txt", sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
     time_list.append(t)
@@ -123,20 +117,11 @@ for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumera
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)                                                                                                
 
-#%% check csv output
-
-servpro_search_csv = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/servpro_search.txt", sep = '\t', dtype=str,  header=0)
-
-
 #%%
+regex_search_csv2 = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/regex_search2.txt", sep = '\t', dtype=str,  header=0)
+regex_search_csv = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/regex_search.txt", sep = '\t', dtype=str,  header=0)
 
-# get freqs for most recent sic codes, 
-counts = servpro_search_csv.SIC8.value_counts()
-counts = pd.DataFrame(counts).reset_index()
-counts.columns = ['SIC8', 'sic_counts']
 
-#%% CREATE EXCEL
+with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\check_cash_regex20220531.xlsx') as writer:
+    regex_search_csv.to_excel(writer, "regex search results", index=False)
 
-with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\servpro_search.xlsx') as writer:
-    servpro_search_csv.to_excel(writer, "regex search results", index=False)
-    counts.to_excel(writer, "SIC8 freqs", index=False)
