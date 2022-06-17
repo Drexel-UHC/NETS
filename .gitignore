@@ -10,3 +10,4 @@ R_scripts/.Rhistory
 data_checks/
 reports/
 scratch/
+python/nets_samples.py
