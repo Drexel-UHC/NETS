@@ -3,6 +3,11 @@
 Created on Tue Apr 26 13:42:03 2022
 
 @author: stf45
+
+
+This file contains the functions used to wrangle and process the NETS 2019 dataset
+for the Drexel MESA Neighborhoods Aging study. Functions are further documented
+individually throughout this file.
 """
 
 import pandas as pd
@@ -11,6 +16,9 @@ import operator as op
 
 
 #%%
+'''
+This function is used in classify.py. Merge the sic, emp, sales, and company datasets. 
+'''
 
 def merge_sic_emp_sales(sic_chunk, emp_chunk, sales_chunk, company_chunk):
     
@@ -20,6 +28,13 @@ def merge_sic_emp_sales(sic_chunk, emp_chunk, sales_chunk, company_chunk):
     return classification_wide
     
 #%%
+'''
+This function is used in classify.py. Swings wide dataset 
+(such as that generated from merge_sic_emp_sales) into long
+format, so that each record has a unique DunsNumber/Year aka "DunsYear". Output columns include:
+['DunsNumber','DunsYear','YearFull','Company','TradeName','SIC', 'Emp','Sales']
+DunsYear's with null SIC values are dropped.
+'''
 
 def normal_to_long(chunk, header):
     
@@ -54,6 +69,8 @@ def normal_to_long(chunk, header):
 
 #%% FIRST LAST 
 '''
+This function is used in create_first_last.py.
+
 This function creates a "FirstYear" column depicting a dunsnumber's first year 
 in business, as well as a "LastYear" column depicting its last year in business.
 It takes the long version (sorted in ascending order by dunsnumber and year) 
@@ -67,7 +84,7 @@ Input:
     sic_long_filter.txt: n=564824373
 Output: 
     first_last.txt n=564824373 
-Runtime: approx ?????
+Runtime: approx ????? (overnight)
 '''
 
 def first_last(chunk, header):
@@ -92,6 +109,13 @@ def first_last(chunk, header):
     
 
 #%%  SIC RANGE FUNCTIONS 
+
+'''
+These functions are used in classify.py.
+
+these functions create lists of every possible value in SIC ranges provided in
+the configuration file. SIC exclusives are included when provided.
+'''
 
 def make_sic_range(cat,config):
     sic_range = []
@@ -123,10 +147,26 @@ def make_sic_ex_range2(cat,config):
 
 #%% CLASSIFY FUNCTION
 
-# THOUGHTS: 
-    # would turning sic_range, sic_exclusive into numpy arrays improve performance?
-    ## not sure of the proper syntax to achieve the same effect
-    # how is this thing gonna work when I send chunks through it?
+'''
+This function is used in classify.py.
+
+This function takes in the long version of the NETS 2019 dataset and classifies
+each DunsYear into a MESA 3 letter (3LTR) category. Each category has different
+conditions, utilizing various combinations of the SIC, Emp, Sales, Company, 
+and TradeName Variables. There are 13 conditional code categories, which group 
+3 letter categories based on the combination of variables used. 
+
+Output from this file is the input file 
+with binary variables for each 3LTR category marking whether or not a record
+falls in that category. Most, but not all categories are mutually exclusive. 
+As of 06/21/2022 this function (and classify.py) ONLY CATEGORIZES AUXILIARY
+CATEGORIES. Main categories will be classified based on auxiliary category status
+later.
+
+"symbols" variable is used to change out conditions marked in the config file (less than, 
+greater than or equal to, etc). Code using symbols may need to be reworked if 
+conditions are changed in the future. 
+'''
 
 
 symbols = {"l": [op.lt], "le": [op.le], "g": [op.gt], "ge": [op.ge], "bt":[op.ge, op.lt]}
@@ -136,7 +176,7 @@ def classify(df, config, header):
     for cat in config.keys():
     
     # CONDIT 1: record has name match
-    ## check name match in either Company or TradeName columns? NO CATEGORIES HAVE THIS CONDITION; just a test.
+    ## check name match in either Company or TradeName columns. NO CATEGORIES HAVE THIS CONDITION; just a test.
     
         if config[cat]['conditional'] == 1:
             regex = '|'.join(config[cat]['name'])
@@ -145,7 +185,8 @@ def classify(df, config, header):
             cats.append(pd.DataFrame({cat: comp_match*1 + trade_match*2 }))
     
     # CONDIT 2: record falls in sic_exclusive OR sic_range and name match
-    ## check company and trade name? currently checking company only
+    ## check company and trade name? currently checking company only (this is 
+    ## what was previously done).
     
         elif config[cat]['conditional'] == 2:
             sic_range = make_sic_range(cat,config)
@@ -373,6 +414,10 @@ def classify(df, config, header):
 #%% MERGE FIRST_LAST TO GEOCODING_1 AND WRANGLE FUNCTION
 
 '''
+This function is used in a file that is now archived (create_geocoding.py), because 
+the Drexel MESA team is using geocoded records from James Quinn at Columbia 
+University's Built Environment and Health (BEH) group.
+
 -takes one of the geocoding dataset halves (queried in the next cell as either 
 "DunsNumber <= 100000000" or "DunsNumber > 100000000"), merges it with the 
 first_last dataset so each dunsnumber/address gets a first year ('FirstYear') 
