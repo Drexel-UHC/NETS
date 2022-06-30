@@ -11,7 +11,7 @@ Created on Wed May 25 09:54:25 2022
 
 @author: stf45
 
-This script does a regex search for senior citizens centers in the NETS
+This script does a regex search for ServPro businesses in the NETS
 dataset and exports all records with relevant columns into a csv "servpro_regex20220615.txt".
 
 
@@ -21,9 +21,6 @@ Inputs: D:\NETS\NETS_2019\RawData\
     NETS2019_Emp.txt
     NETS2019_Misc.txt
     NETS2019_Sales.txt
-    
-    C:\Users\stf45\Documents\NETS\Processing\config\
-    regex_config.json
 
 Output: C:\Users\stf45\Documents\NETS\Processing\data_checks\
     servpro_regex20220615.txt
