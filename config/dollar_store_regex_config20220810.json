@@ -1,0 +1,49 @@
+{
+  "DLR": {
+	"name": [
+	  "\\b(DO?L?LA?R GE?NE?RA?L)\\b",
+	  "\\b(FA?MI?LY DO?L?LA?R)\\b",
+	  "\\b(DO?L?LA?R TRE?E)\\b",
+	  "\\b(FI?VE? BE?LO?W)\\b",
+	  "\\b(99 CE?NTS O?NLY)\\b",
+	  "\\b(DG MA?RKE?T)\\b",
+	  "\\b(DA?I?SO? JA?PA?N)\\b",
+	  "\\b(PO?PSHE?LF)\\b",
+	  "\\b(MA?XWA?Y)\\b",
+	  "\\b(DGX)\\b",
+	  "\\b(KI?NG DO?L?LA?R)\\b",
+	  "\\b(SU?PE?R DO?L?LA?R)\\b",
+	  "\\b(JU?ST A BU?CK)\\b",
+	  "\\b(MI?GHTY DO?L?LA?R)\\b",
+	  "\\b(SU?PE?R 10)\\b",
+	  "\\b(ME?RCHA?NDI?SE? OU?TLE?T)\\b",
+	  "\\b(DO?L?LA?R STA?R)\\b",
+	  "\\b(BI?L?LS DO?L?LA?R)\\b",
+	  "\\b(DO?L?LA?R CA?STLE?)\\b",
+	  "\\b(DO?L?LA?R DA?ZE?)\\b",
+	  "\\b(HO?YS 5 (?:&|AND) 10)\\b",
+	  "\\b(BA?RGA?I?N TO?WN USA)\\b",
+	  "\\b(CE?E (?:&|AND) CE?E DE?PA?RTME?NT STO?RE?S?)\\b",
+	  "\\b(DO?LL?A?R MA?X)\\b",
+	  "\\b(A DO?L?LA?R)\\b"
+	  ],
+    "sic_range": [
+      51000000,
+      51999999,
+	  53000000,
+	  53999999,
+	  54000000,
+	  54999999,
+	  55400000,
+	  55499999,
+	  56000000,
+	  56999999,
+	  58000000,
+	  58999999,
+	  59000000,
+	  59999999,
+	  65120200,
+	  65120299
+    ]
+  }
+}

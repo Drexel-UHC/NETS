@@ -1,0 +1,31 @@
+{
+  "DLR": {
+	  "name": [
+	  "\\b(DOLLAR GENERAL)\\b",
+	  "\\b(FAMILY DOLLAR)\\b",
+	  "\\b(DOLLAR TREE)\\b",
+	  "\\b(FIVE BELOW)\\b",
+	  "\\b(99 CENTS ONLY)\\b",
+	  "\\b(DG MARKET)\\b",
+	  "\\b(DAISO JAPAN)\\b",
+	  "\\b(POPSHELF)\\b",
+	  "\\b(MAXWAY)\\b",
+	  "\\b(DGX)\\b",
+	  "\\b(KING DOLLAR)\\b",
+	  "\\b(SUPER DOLLAR)\\b",
+	  "\\b(JUST A BUCK)\\b",
+	  "\\b(MIGHTY DOLLAR)\\b",
+	  "\\b(SUPER 10)\\b",
+	  "\\b(MERCHANDISE OUTLET)\\b",
+	  "\\b(DOLLAR STAR)\\b",
+	  "\\b(BILLS)\\b",
+	  "\\b(DOLLAR CASTLE)\\b",
+	  "\\b(DOLLAR DAZE)\\b",
+	  "\\b(HOYS 5 (?:&|AND) 10)\\b",
+	  "\\b(BARGAIN TOWN USA)\\b",
+	  "\\b(CEE (?:&|AND) CEE DEPARTMENT STORES)\\b",
+	  "\\b(DOLLAR MAX)\\b",
+	  "\\b(A DOLLAR)\\b"
+	  ]
+  }
+}
