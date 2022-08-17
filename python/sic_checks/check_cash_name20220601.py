@@ -32,7 +32,7 @@ import time
 import json
 from datetime import datetime
 
-with open(r'C:\Users\stf45\Documents\NETS\Processing\config/regex_config.json', 'r') as f:
+with open(r'C:\Users\stf45\Documents\NETS\Processing\config/check_cash_name_config20220601.json', 'r') as f:
     config = json.load(f)
 #%% MERGE FUNCTION
 
@@ -49,8 +49,8 @@ def merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, m
 n = 71498225
 chunksize = 10000000
 
-sic_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_SIC.txt', sep = '\t', dtype={"DunsNumber": str, "SIC8": int},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
-                                                                                                                                                                              "SIC8"])
+sic_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_SIC.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
+                                                                                                                                                                              "SIC19"])
 
                                                                                                                                                           
 company_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Company.txt', sep = '\t', dtype={"DunsNumber": str, "ZipCode": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
@@ -60,11 +60,11 @@ company_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Company.txt', 
                                                                                                                                                                     "City",
                                                                                                                                                                     "State",
                                                                                                                                                                     "ZipCode"])
-emp_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Emp.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "EmpHere"])
+emp_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Emp.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Emp19"])
 
                                                                                                                                                                                   
 
-sales_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Sales.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "SalesHere"])
+sales_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Sales.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Sales19"])
                       
 misc_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt', sep = '\t', dtype={"DunsNumber": str, "FipsCounty":str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Latitude", "Longitude", "FipsCounty"])
 
@@ -92,11 +92,9 @@ misc_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt', sep = 
 # misc_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\misc_sample.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Latitude", "Longitude", "FipsCounty"])
                                                                                                                                                           
 #%% FILTER SICS, MERGE ALL FILES, APPEND TO CSV IN CHUNKS
-
 print(f"Start Time: {datetime.now()}")
 readers = zip(sic_reader, emp_reader, sales_reader, company_reader, misc_reader)
 time_list = [0]
-
 tic = time.perf_counter()
 
 for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumerate(readers):
@@ -104,11 +102,12 @@ for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumera
     # do string search, grab dunsnumbers, find most recent sics of those dunsnumbers
     # create new dataframe with the company names, dunsnumbers, and sics
     regex = '|'.join(config["CHK"]['name'])
+    sic_chunk.dropna(subset=['SIC19'], inplace=True)
     company_match = company_chunk[(company_chunk['Company'].str.contains(regex)) | (company_chunk['TradeName'].str.contains(regex))]
     out_df = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_match, misc_chunk)
     # make longs negative
     out_df['Longitude'] = out_df['Longitude']*-1
-    out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/regex_search2.txt", sep="\t", header=header, mode='a', index=False)
+    out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/check_cash_name20220601.txt", sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
     time_list.append(t)
@@ -118,9 +117,9 @@ runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)                                                                                                
 
 #%%
-regex_search_csv2 = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/regex_search2.txt", sep = '\t', dtype=str,  header=0)
-regex_search_csv = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/regex_search.txt", sep = '\t', dtype=str,  header=0)
+results = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/check_cash_name20220601.txt", sep = '\t', dtype=str,  header=0)
 
+results.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/check_cash_name20220601.txt", sep="\t", header=True, mode='a', index=False)
 
 with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\check_cash_regex20220531.xlsx') as writer:
     regex_search_csv.to_excel(writer, "regex search results", index=False)

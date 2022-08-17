@@ -61,14 +61,14 @@ misc_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt', sep = 
 
 readers = zip(sic_reader, emp_reader, sales_reader, company_reader, misc_reader)
 time_list = []
-siclist = ['60999901']
+siclist = ['60999901','60999902']
 
 for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumerate(readers):
     tic = time.perf_counter()
     header = (c==0)
     sic_chunk = sic_chunk[sic_chunk['SIC19'].isin(siclist)]
     sic_check_wide = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk)
-    sic_check_wide.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/check_cashing_check.txt", sep="\t", header=header, mode='a', index=False)
+    sic_check_wide.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/check_cash_sic20220518.txt", sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - tic
     time_list.append(t)
@@ -80,7 +80,7 @@ print(runtime)
 
 #%% READ IN CSV
 
-check_cash = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/check_cashing_check.txt", sep = '\t', dtype={"DunsNumber": str},  header=0)
+check_cash = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/check_cashing_check20220518.txt", sep = '\t', dtype={"DunsNumber": str},  header=0)
 
 
 #%% WRITE TABLE TO EXCEL

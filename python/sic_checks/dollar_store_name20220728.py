@@ -3,16 +3,10 @@
 Created on Fri Jul 22 09:06:34 2022
 
 @author: stf45
-"""
 
-# -*- coding: utf-8 -*-
-"""
-Created on Wed May 25 09:54:25 2022
-
-@author: stf45
 
 This script does a regex search for dollar stores in the NETS 2019
-dataset and exports all records with relevant columns into a csv "dollar_store_regex.txt",
+dataset and exports all records with relevant columns into a csv "dollar_store_regex20220728.txt",
 which is also exported to an excel file dollar_store_regex20220722.xlsx.
 It also gets counts for each regex group (dollar store name) match and outputs 
 on a different sheet in the same excel file.
@@ -26,11 +20,11 @@ Inputs: D:\NETS\NETS_2019\RawData\
     NETS2019_Sales.txt
     
     C:\Users\stf45\Documents\NETS\Processing\config\
-    dollar_store_regex_config.json
+    dollar_store_name_config20220728.json
 
 Output: C:\Users\stf45\Documents\NETS\Processing\data_checks\
-    check_cash_regex20220531.txt
-    check_cash_regex20220531.xlsx
+    dollar_store_name20220728.txt
+    dollar_store_name20220728.xlsx
     
 Runtime: approx 20 mins
 """
@@ -41,11 +35,12 @@ import pandas as pd
 import time
 import json
 from datetime import datetime
+import warnings
 
 # filter warnings from regex search
 warnings.filterwarnings("ignore", category=UserWarning)
 
-with open(r'C:\Users\stf45\Documents\NETS\Processing\config/dollar_store_regex_config.json', 'r') as f:
+with open(r'C:\Users\stf45\Documents\NETS\Processing\data_checks\dollar_stores/dollar_store_name_config20220728.json', 'r') as f:
     config = json.load(f)
 #%% MERGE FUNCTION
 
@@ -121,7 +116,7 @@ for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumera
     out_df = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_match, misc_chunk)
     # make longs negative
     out_df['Longitude'] = out_df['Longitude']*-1
-    out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/dollar_store_regex.txt", sep="\t", header=header, mode='a', index=False)
+    out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/dollar_store_name.txt", sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
     time_list.append(t)
@@ -132,12 +127,15 @@ print(runtime)
 
 #%% DROP NANS FROM SIC19
 
-dlrstore = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/dollar_store_regex.txt", dtype={'DunsNumber':str, 'ZipCode':str, 'FipsCounty':str}, sep = '\t',  header=0)
+dlrstore = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/dollar_store_name.txt", dtype={'DunsNumber':str, 'ZipCode':str, 'FipsCounty':str}, sep = '\t',  header=0)
 
 dlrstore.dropna(subset=['SIC19'], inplace=True)
 dlrstore['SIC19'] = dlrstore['SIC19'].astype(int)
 dlrstore['SIC19'] = dlrstore['SIC19'].astype(str)
 dlrstore['SIC19'] = dlrstore['SIC19'].str.zfill(8)
+
+dlrstore.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/dollar_store_name20220728.txt", sep="\t", header=header, mode='a', index=False)
+
 
 #%%
 

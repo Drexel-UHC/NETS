@@ -1,20 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Aug 10 13:44:26 2022
+Created on Wed May 18 13:23:45 2022
 
 @author: stf45
 
-
-
-This script does a regex search for dollar stores in the NETS 2019
-dataset and exports all records with relevant columns into a csv "dollar_store_regex20220810.txt",
-which is also exported to an excel file dollar_store_regex20220810.xlsx.
-It also gets counts for each regex group (dollar store name) match and outputs 
-on a different sheet in the same excel file.
-
-This is a second version of dollar_store_regex.py. It is different from v1 in 
-that it filters for SIC 53310000 (the highest freq SIC in the first search)
-
+This script does a simple name search for "CHECK (CASH|CASHING)" in the NETS
+dataset and exports all records with relevant columns into a csv "check_cash_name.txt".
+It will likely be replaced with a more complex and inclusive regex search in a 
+different file.
 
 Inputs: D:\NETS\NETS_2019\RawData\
     NETS2019_SIC.txt
@@ -22,15 +15,12 @@ Inputs: D:\NETS\NETS_2019\RawData\
     NETS2019_Emp.txt
     NETS2019_Misc.txt
     NETS2019_Sales.txt
-    
-    C:\Users\stf45\Documents\NETS\Processing\config\
-    dollar_store_regex_config.json
 
-Output: C:\Users\stf45\Documents\NETS\Processing\data_checks\
-    check_cash_regex20220531.txt
-    check_cash_regex20220531.xlsx
+Outputs:
+    social_serv_check_20220516.xlsx
+    social_serv_check.txt
     
-Runtime: approx 20 mins
+Runtime: approx 17 mins
 """
 
 #%%
@@ -38,30 +28,19 @@ Runtime: approx 20 mins
 import pandas as pd
 import time
 import json
-from datetime import datetime
 
-# filter warnings from regex search
-warnings.filterwarnings("ignore", category=UserWarning)
-
-with open(r'C:\Users\stf45\Documents\NETS\Processing\config/dollar_store_regex_config20220810.json', 'r') as f:
+with open(r'C:\Users\stf45\Documents\NETS\Processing\config/check_cash_name_config20220525.json', 'r') as f:
     config = json.load(f)
-#%% MERGE AND SIC_RANGE FUNCTIONS
+#%% MERGE FUNCTION
 
 def merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk):
-    sic_merge = company_chunk.merge(sic_chunk, on='DunsNumber')
+    sic_merge = sic_chunk.merge(company_chunk, on='DunsNumber')
     emp_merge = sic_merge.merge(emp_chunk, on='DunsNumber')
     misc_merge = emp_merge.merge(misc_chunk, on='DunsNumber')
     classification_wide = pd.merge(misc_merge, sales_chunk, on='DunsNumber', how='left')
     return classification_wide
 
-def make_sic_range(cat,config):
-    sic_range = []
-    for i in zip(config[cat]["sic_range"][0::2], config[cat]["sic_range"][1::2]):
-        sic_range.extend(list(range(i[0], i[1]+1)))
-    return sic_range
-
-#%% LOAD IN FILES AS READERS
-
+#%%
 # FULL FILES:           
 n = 71498225
 chunksize = 10000000
@@ -70,7 +49,7 @@ sic_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_SIC.txt', sep = '\
                                                                                                                                                                               "SIC19"])
 
                                                                                                                                                           
-company_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Company.txt', sep = '\t', dtype={"DunsNumber": str, "ZipCode": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
+company_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Company.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
                                                                                                                                                                     "Company",
                                                                                                                                                                     "TradeName",
                                                                                                                                                                     "Address",
@@ -83,14 +62,14 @@ emp_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Emp.txt', sep = '\
 
 sales_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Sales.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Sales19"])
                       
-misc_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt', sep = '\t', dtype={"DunsNumber": str, "FipsCounty":str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Latitude", "Longitude", "FipsCounty"])
+misc_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Latitude", "Longitude", "FipsCounty"])
 
 # # SAMPLE FILES:           
 # n = 1000
 # chunksize = 100
 
-# sic_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\sic_sample.txt', sep = '\t', dtype={"DunsNumber": str, "SIC19": int},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
-#                                                                                                                                                                               "SIC19"])
+# sic_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\sic_sample.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
+#                                                                                                                                                                               "SIC8"])
 
                                                                                                                                                           
 # company_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\company_sample.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
@@ -100,110 +79,43 @@ misc_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt', sep = 
 #                                                                                                                                                                     "City",
 #                                                                                                                                                                     "State",
 #                                                                                                                                                                     "ZipCode"])
-# emp_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\emp_sample.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Emp19"])
+# emp_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\emp_sample.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "EmpHere"])
 
                                                                                                                                                                                   
 
-# sales_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\sales_sample.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Sales19"])
+# sales_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\sales_sample.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "SalesHere"])
                       
 # misc_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\misc_sample.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Latitude", "Longitude", "FipsCounty"])
-         
-#%% MAKE SIC RANGE
-
-sic_range = make_sic_range('DLR', config)                                                                                                                                                 
+                                                                                                                                                          
 #%% FILTER SICS, MERGE ALL FILES, APPEND TO CSV IN CHUNKS
-
 print(f"Start Time: {datetime.now()}")
 readers = zip(sic_reader, emp_reader, sales_reader, company_reader, misc_reader)
 time_list = [0]
-
 tic = time.perf_counter()
-
 
 for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumerate(readers):
     header = (c==0)
     # do string search, grab dunsnumbers, find most recent sics of those dunsnumbers
     # create new dataframe with the company names, dunsnumbers, and sics
-    regex = '|'.join(config["DLR"]['name'])
-    sic_chunk = sic_chunk[sic_chunk['SIC19'].isin(sic_range)]
+    regex = '|'.join(config["CHK"]['name'])
+    sic_chunk.dropna(subset=['SIC19'], inplace=True)
     company_match = company_chunk[(company_chunk['Company'].str.contains(regex)) | (company_chunk['TradeName'].str.contains(regex))]
-    out_df = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_match, misc_chunk)
-    # make longs negative
-    out_df['Longitude'] = out_df['Longitude']*-1
-    out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/dollar_store_regex.txt", sep="\t", header=header, mode='a', index=False)
+    sic_check_wide = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_match, misc_chunk)
+    sic_check_wide.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/check_cash_name20220525.txt", sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
     time_list.append(t)
     print('chunk {} completed in {} minutes! {} chunks to go'.format(c+1, round(t/60, 2), n/chunksize-(c+1)))
-    
+
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
-print(runtime)            
+print(runtime)                                                                                                
 
-#%% DROP NANS FROM SIC19
+#%% CHECK CSV
+check_cash_csv = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/check_cash_name20220525.txt", sep = '\t', dtype={"DunsNumber": str},  header=0)
 
-dlrstore = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/dollar_store_regex.txt", dtype={'DunsNumber':str, 'ZipCode':str, 'FipsCounty':str}, sep = '\t',  header=0)
-
-dlrstore.dropna(subset=['SIC19'], inplace=True)
-dlrstore['SIC19'] = dlrstore['SIC19'].astype(int)
-dlrstore['SIC19'] = dlrstore['SIC19'].astype(str)
-dlrstore['SIC19'] = dlrstore['SIC19'].str.zfill(8)
-
-#%%
-
-# get freqs for most recent sic codes, 
-counts = dlrstore.SIC19.value_counts()
-counts = pd.DataFrame(counts).reset_index()
-counts.columns = ['SIC19', 'sic_counts']
-
-#%% DOLLAR STORE NAMES
-
-namelist = ['Dollar General',
-'Family Dollar',
-'Dollar Tree',
-'Five Below',
-'99 Cents Only Stores',
-'DG Market',
-'Daiso Japan',
-'Popshelf',
-'Maxway',
-'DGX',
-'King Dollar',
-'Super Dollar',
-'Just A Buck',
-'Mighty Dollar',
-'Super 10',
-'Merchandise Outlet',
-'Dollar Star',
-'Bills',
-'Dollar Castle',
-'Dollar Daze',
-'Hoys 5 & 10',
-'Bargain Town USA',
-'Cee & Cee Department Stores',
-'Dollar Max',
-'A Dollar']
-
-namelist = pd.DataFrame({'store_name': namelist})
-namelist.reset_index(drop=True, inplace=True)
-
-#%%
-
-dlrstore['regex_name'] = dlrstore['Company'] + dlrstore['TradeName']
-dlrgroup= dlrstore['regex_name'].str.extract(regex)
-dlrstore.drop(columns=['regex_name'], inplace=True)
-
-#%% READ IN CSV FOR GROUP COUNTS, GET FREQS
-
-# get freqs for dollar store names, 
-store_counts = dlrgroup.notnull().sum()
-store_counts = pd.DataFrame({'count': store_counts})
-store_counts.reset_index(drop=True,inplace=True)
-store_countsdf = pd.concat([namelist, store_counts], axis=1)   
-store_countsdf['count'].sum()
 
 #%% WRITE TO EXCEL 
 
-with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\dollar_store_regex.xlsx') as writer:
-    dlrstore.to_excel(writer, "regex search results", index=False)
-    counts.to_excel(writer, "SIC freqs for regex search", index=False)
-    store_countsdf.to_excel(writer, "store name counts", index=False)
+with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\check_cash_name20220525.xlsx') as writer:
+    check_cash_csv.to_excel(writer, "regex search results", index=False)
+
