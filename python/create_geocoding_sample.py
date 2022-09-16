@@ -11,7 +11,7 @@ from random import sample
 
 #%% LOAD IN GEOCODING FILE 1
 
-df = pd.read_csv(r'D:\NETS\NETS_2020\nets_tall_v1_20220913_1.csv', sep = '|', dtype=object, header=0,
+df = pd.read_csv(r'D:\NETS\NETS_2020\geocoding\nets_tall_v1_20220913_1.csv', sep = '|', dtype=object, header=0,
                                      usecols=['behid',
                                               'duns',
                                               'behloc',
@@ -29,4 +29,4 @@ sample = pd.DataFrame(sample)
 
 merge = sample.merge(df, on='duns')
 
-merge.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\geocode_sample20220915.csv')
+merge.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\geocode_sample20220915.csv', index=False)
