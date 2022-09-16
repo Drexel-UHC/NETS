@@ -4,7 +4,7 @@ Created on Thu Sep 15 15:42:07 2022
 
 @author: stf45
 
-This file takes the NETS 2020 geocoding csv file recieved from James Quinn on 
+This file takes the NETS 2020 geocoding csv (first half, file #1) file recieved from James Quinn on 
 09/13/2022 and adds two new columns referring to the first year and last year a
 record exists at a particular location. Columns are: loc_fyear (first year at location) 
 and loc_lyear (last year at location), where the year that a company moved is its last year 
@@ -14,8 +14,10 @@ NETS2020_Move['MoveYear'].
 loc_fyear == myear + 1, unless myear is null, in which case loc_fyear == fyear
 loc_lyear == myear lagged by 1, unless myear lag 1 is null, in which case loc_lyear == lyear
 
-Input: \\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2020\NETS2020Geocoding\nets_tall_locfirstlast20220916.csv
+Input: \\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2020\NETS2020Geocoding\nets_tall_v1_20220913_1.csv
 Output: \\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2020\NETS2020Geocoding\nets_tall_locfirstlast20220916.csv
+
+Runtime: approx 6 minutes
 """
 #%%
 
