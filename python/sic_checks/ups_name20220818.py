@@ -21,7 +21,7 @@ C:\Users\stf45\Documents\NETS\Processing\data_checks\from_kari_20220817\
     ups_name20220817.txt
     ups_name20220817.xlsx
     
-Runtime: approx 20 mins
+Runtime: approx 17 mins
 """
 
 #%%
@@ -108,11 +108,11 @@ for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk, misc_chunk) in enumera
     sic_chunk['SIC19'] = sic_chunk['SIC19'].astype(int)
     sic_chunk['SIC19'] = sic_chunk['SIC19'].astype(str)
     sic_chunk['SIC19'] = sic_chunk['SIC19'].str.zfill(8)
-    company_match = company_chunk[(company_chunk['Company'].str.contains("\\b(UPS)\\b")) | (company_chunk['TradeName'].str.contains("\\b(UPS)\\b"))]
+    company_match = company_chunk[(company_chunk['Company'].str.contains("\\b(UPS STORE)\\b")) | (company_chunk['TradeName'].str.contains("\\b(UPS STORE)\\b"))]
     out_df = merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_match, misc_chunk)
     # make longs negative
     out_df['Longitude'] = out_df['Longitude']*-1
-    out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/ups_name20220817.txt", sep="\t", header=header, mode='a', index=False)
+    out_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/ups_name20220818.txt", sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
     time_list.append(t)
@@ -123,7 +123,7 @@ print(runtime)
 
 #%% CHECK DATA
 
-ups = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/ups_name20220817.txt", dtype={'DunsNumber':str, 'ZipCode':str, 'FipsCounty':str}, sep = '\t',  header=0)
+ups = pd.read_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/ups_name20220818.txt", dtype={'DunsNumber':str, 'ZipCode':str, 'FipsCounty':str}, sep = '\t',  header=0)
 
 #%%
 
@@ -134,6 +134,6 @@ counts.columns = ['SIC19', 'sic_counts']
 
 #%% WRITE TO EXCEL 
 
-with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\ups_name20220817.xlsx') as writer:
+with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\ups_name20220818.xlsx') as writer:
     ups.to_excel(writer, "name search results", index=False)
     counts.to_excel(writer, "SIC freqs for name search", index=False)
