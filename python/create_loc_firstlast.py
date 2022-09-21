@@ -4,9 +4,9 @@ Created on Thu Sep 15 15:42:07 2022
 
 @author: stf45
 
-This file takes the NETS 2020 geocoding csv (first half, file #1) file recieved from James Quinn on 
+This file takes the NETS 2020 geocoding csv (first half, file #1) file received from James Quinn on 
 09/13/2022 and adds two new columns referring to the first year and last year a
-record exists at a particular location. Columns are: loc_fyear (first year at location) 
+record exists at a particular location. Columns are: loc_fyear (first year at location)
 and loc_lyear (last year at location), where the year that a company moved is its last year 
 in that location. First year in new location is move year + 1. Move data derived from 
 NETS2020_Move['MoveYear'].

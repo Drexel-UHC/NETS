@@ -9,7 +9,6 @@ This file takes the NETS 2020 geocoding csv file (second half, file #2) recieved
 (rooftop or parcel centriod; dxwgs84, dywgs84) coordinates, as opposed to the "primary" 
 (street-side/routing location; xwgs84 & ywgs84) coordinates. 
 
-INPUT WAS COPIED TO LOCAL COMPUTER FOR PROCESSING
 Input: \\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2020\NETS2020Geocoding\nets_tall_v1_20220913_2.csv
 Output: \\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2020\NETS2020Geocoding\nets_tall_priority_xy20220916.csv
 
