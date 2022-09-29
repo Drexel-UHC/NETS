@@ -13,7 +13,7 @@ import numpy as np
 
 jquinn = pd.read_csv(r'D:\NETS\NETS_2020\geocoding\nets_tall_priority_xy20220916.csv', usecols={'behid', 'uhc_x', 'uhc_y'}, header=0)
 
-dwalls = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2xy.txt", sep='\t', usecols={'DunsMove', 'Latitude', 'longitude'}, header=0)
+dwalls = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2xy.txt", sep='\t', usecols={'DunsMove', 'Latitude', 'Longitude'}, header=0)
 
 #%%
 
@@ -25,5 +25,4 @@ y2 = dwalls['Latitude']
 
 compare = jquinn.merge(dwalls, left_on='behid', right_on='DunsMove')
 
-compare['diff'] = np.sqrt(((x1-x2)**2) - ((y1-y2)**2))
 

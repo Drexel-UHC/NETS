@@ -16,7 +16,7 @@ Inputs:
         last years that a dunsnumber existed.
         
 Outputs:
-    geocoding_1.txt - intermediate file containing combined Move and MIsc datasets,
+    geocoding_1.txt - intermediate file containing combined Move and Misc datasets,
         only including necessary columns
     geocoding_2.txt - final dataset to be used for geocoding all NETS addresses
     
@@ -141,8 +141,10 @@ def geocoding_wrangle(geocoding_1_half, first_last, header):
             count += 1
             movenum.append(count)
     
-    geocoding_2['MoveNum'] = movenum
-    geocoding_2['DunsMove'] = "1" + geocoding_2['MoveNum'].astype(str) + geocoding_2['DunsNumber']
+    geocoding_2['MoveNum'] = np.array(movenum)+10
+    # DunsMove = 10 (int) + MoveNum (int) + Dunsnumber (str). DunsNumbers with Dunsmove 
+    #of over 9 will be an 11 digit code starting with a 2.
+    geocoding_2['DunsMove'] = geocoding_2['MoveNum'].astype(str) + geocoding_2['DunsNumber']
     
     # set values in 'GcLastYear' == 3000 to value in 'LastYear', all other values equal
     # This applies the last year of a dunsnumber's existence (last year that data
@@ -152,13 +154,14 @@ def geocoding_wrangle(geocoding_1_half, first_last, header):
     geocoding_2['GcLastYear'] = np.where(geocoding_2['GcLastYear'] == 3000, geocoding_2['LastYear'], geocoding_2['GcLastYear']).astype(int)
     
     
-    # group by dunsnumber to find lowest 
+    # group by dunsnumber to find lowest GcLastYear
     geocoding_2['min'] = geocoding_2['GcLastYear'].groupby(geocoding_2['DunsNumber']).transform('min')
     geocoding_2['GcLastLag'] = geocoding_2['GcLastYear'].shift(-1)
     
-    # make this so the last argument is GcLastLag + 1
+    # for the lowest GcLastYear per dunsnumber, GcFirstYear = FirstYear. Otherwise, GcFirstYear = previous location's last year + 1
     geocoding_2['GcFirstYear'] = np.where(geocoding_2['GcLastYear'] == geocoding_2['min'], geocoding_2['FirstYear'], geocoding_2['GcLastLag'] + 1).astype(int)
     
+    # drop unnecessary columns and make longitudes negative
     geocoding_2 = geocoding_2.drop(columns=['dunslag', 'min', 'MoveNum', 'GcLastLag', 'FirstYear', 'LastYear'])
     geocoding_2['Longitude'] = geocoding_2['Longitude'].apply(lambda x: x*-1)
 
@@ -187,7 +190,7 @@ necessary for memory purposes.
 # first_last = r"C:\Users\stf45\Documents\NETS\Processing\samples\first_last_sample.txt"
 
 # for full
-first_last = r"C:\Users\stf45\Documents\NETS\Processing\first_last.txt"
+first_last = r"C:\Users\stf45\Documents\NETS\Processing\scratch\first_last2019.txt"
 
 
 first_last_df = pd.read_csv(first_last, sep = '\t', header=0)
@@ -197,11 +200,11 @@ schema = {'DunsNumber': int,
             'Longitude': float,
             'GcLastYear': int}
 
-# takes about 30mins
+# takes about 25mins 
+tic = time.perf_counter()
 geocoding_1_reader = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1xy.txt", sep="\t", dtype=schema, header=0, chunksize=10000000)
 geo_first_half = pd.concat((x.query("DunsNumber <= 100000000") for x in geocoding_1_reader), ignore_index=True)
 print("{} gigabytes".format(sys.getsizeof(geo_first_half)/1024**3))
-tic = time.perf_counter()
 geocoding_wrangle(geo_first_half, first_last_df, True)
 toc = time.perf_counter()
 t = toc - tic
@@ -209,10 +212,10 @@ print('time: {} minutes'.format(round(t/60, 2)))
 del geo_first_half
 
 # takes about 30mins
+tic = time.perf_counter()
 geocoding_1_reader = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1xy.txt", sep="\t", dtype=schema, header=0, chunksize=10000000)
 geo_second_half = pd.concat((x.query("DunsNumber > 100000000") for x in geocoding_1_reader), ignore_index=True)
 print("{} gigabytes".format(sys.getsizeof(geo_second_half)/1024**3))
-tic = time.perf_counter()
 geocoding_wrangle(geo_second_half, first_last_df, False)
 toc = time.perf_counter()
 t = toc - tic
@@ -226,18 +229,14 @@ del first_last_df
 #%% DATA CHECK
 
 geocoding_1 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1xy.txt", dtype={'DunsNumber': str}, sep = '\t', header=0, skiprows=71498220, nrows=10000)
-geocoding_1_sample = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1xy.txt", dtype={'DunsNumber': str}, sep = '\t', header=0)
 
-
-geocoding_2 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2xy.txt", dtype={'DunsNumber': str}, sep = '\t', header=0)
+geocoding_2 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2xy.txt", dtype={'DunsNumber': str}, sep = '\t', header=0, nrows=10000)
 
 first_last = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing/first_last.txt", dtype={'DunsNumber': str}, sep = '\t', header=0)
 
-
 geocoding_2.GcFirstYear.value_counts()
 
-df = geocoding_2.query("DunsNumber == '038928987'")
-
+df = geocoding_2.loc(geocoding_2["DunsNumber"] == '038928987')
 
 geocoding_2_reader = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2xy.txt", chunksize=40000000, sep = '\t', header=0)
 
