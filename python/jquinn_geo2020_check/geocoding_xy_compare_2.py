@@ -10,14 +10,18 @@ jquinn = NETS 2020 data geocoded by jquinn (unique id is dunsnumber + move numbe
 
 
 jquinn (input)                                                       n=84,889,235
-jquinn2019 (after all records loc_fyear==2020 removed)               n=79,456,025
+jquinn2019 (output; after all records loc_fyear==2020 removed)       n=79,456,025
 difference b/t above (n records where loc_fyear==2020)               n= 5,433,210
 n records in jquinn where behid is shifted due to moves in 2020      n=   313,881
 
 dwalls (input)                                                       n=78,466,868
-n records where dwalls.dunsmove not in jquinn.behid2019              n= 1,506,907
-n records where jquinn.behid2019 not in dwalls.dunsmove              n=   517,750
+n records that are in jquinn but not in dwalls                       n= 1,506,900
+n records that are in dwalls but not in jquinn                       n=   517,743
 difference b/t dwalls and jquinn2019                                 n=   989,157
+
+I think this means that 989,157 records (all pre-2020 data) were retroactively added to the 
+NETS2020 dataset. These locations will not have matching business categorization data
+and should be removed. The number of records that are 
 """
 
 #%%
@@ -61,17 +65,22 @@ dunslist = jquinn.loc[jquinn['loc_fyear']==2020, 'DunsNumber'].tolist()
 # if record has dunsnumber in dunslist, new column "Move2020" == 1. All others nan
 jquinn.loc[jquinn['DunsNumber'].isin(dunslist), "Move2020"] = 1 
 
+# rename behid behid2019, as these should now match DunsMove from NETS2019
+jquinn.rename(columns={'behid': 'behid2019'}, inplace=True)
+
+# duplicate behid column and make it called behid2020
+jquinn['behid2020'] = jquinn['behid2019']
+
+# if Move2020 == 1, behid = behid - 1000000000 (second digit aka move number -1)
+jquinn.loc[jquinn['Move2020'] == 1, 'behid2019'] -= 1000000000
+
+# make new df containing only records that share the same dunsnumber as a record where Move2020 ==1. 
+shifted = jquinn.loc[jquinn['Move2020']==1, ['DunsNumber','behid2019','behid2020']]
+
 # remove any record with loc_fyear 2020
 jquinn = jquinn.loc[jquinn['loc_fyear']!=2020]
 
-# dupliecate behid column and make it called behid2020
-jquinn['behid2020'] = jquinn['behid']
-
-# if Move2020 == 1, behid = behid - 1000000000 (second digit aka move number -1)
-jquinn.loc[jquinn['Move2020'] == 1, 'behid'] -= 1000000000
-
-# rename behid behid2019, as these should now match DunsMove from NETS2019
-jquinn.rename(columns={'behid': 'behid2019'}, inplace=True)
+jquinn.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/jquinn2019.csv", index=False)
 
 # end of runtime
 toc = time.perf_counter()
@@ -86,24 +95,29 @@ print(runtime)
 
 # create new df of both behid columns where Move2020==1
 shifted = jquinn.loc[jquinn['Move2020']==1, ['behid2019','behid2020']]
-# from this subset^^, has the second digit been moved up +1 for all values in behid2019? T/F
-shifted.loc[diff['behid2019'] + 1000000000 != shifted['behid2020']].shape[0] == 0
+
+# from this subset^^, has the second digit been moved up +1 for all values in behid2019?:: Yes
+shifted.loc[shifted['behid2019'] + 1000000000 != shifted['behid2020']].shape[0] == 0
 
 #%% DATA CHECK 2
 
-dwalls = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2xy.txt", sep='\t', usecols={'DunsMove', 'DunsNumber'}, dtype={'DunsNumber': str},  header=0)
+dwalls = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2xy.txt", sep='\t', 
+                     usecols={'DunsMove', 'DunsNumber'}, 
+                     dtype={'DunsNumber': str},  
+                     header=0,
+                     # nrows=1000
+                     )
 
-# how many records from the 2020 data match that of the 2019 data on behid2019 and DunsMove?: 
-print(jquinn.loc[~jquinn['behid2019'].isin(dwalls['DunsMove'])].shape[0]) # = 1506907
+# how many records from the 2020 data do not match records from the 2019 data on behid2019 and DunsMove?: 
+jquinn_notin_dwalls = jquinn.loc[~jquinn['behid2019'].isin(dwalls['DunsMove'])] # n = 1506900
 
-# how many records from the 20109 data match that of the 2020 data on DunsMove and behid2019?:
-print(dwalls.loc[~dwalls['DunsMove'].isin(jquinn['behid2019'])].shape[0]) # = 517750
+# how many records from the 2019 data do not match records from the 2020 data on DunsMove and behid2019?:
+dwalls_notin_jquinn = dwalls.loc[~dwalls['DunsMove'].isin(jquinn['behid2019'])] # n = 517743
 
 print(jquinn.shape[0] - dwalls.shape[0]) # = 989157
 
 #%% DATA CHECK 3
 
-dwalls.DunsNumber.value_counts().max()
 
 # the results below show that behid and Dunsmove have different results when
 #the n of moves per dunsnumber is greater than 9. behid changes first digit to 2,

@@ -7,6 +7,8 @@ Created on Tue Sep 20 10:06:02 2022
 
 
 This script creates the dataset necessary to geocode all of the NETS addresses.
+Since we are not geocoding, this will now be used to compare NETS 2019 XYs with
+NETS 2020 XYs geocoded by james quinn.
 
 Inputs:
     NETS2019_Misc.txt - original NETS file
@@ -19,7 +21,13 @@ Outputs:
     geocoding_1.txt - intermediate file containing combined Move and Misc datasets,
         only including necessary columns
     geocoding_2.txt - final dataset to be used for geocoding all NETS addresses
-    
+        Cols: DunsNumber
+              DunsMove: move number (how many moves prior to the most recent location) + 10, concatenated to front of DunsNumber
+              GcFirstYear: First year at location
+              GcLastYear: Last year at location
+              Latitude: latitude at location in wgs84
+              Longitude: Longitude at location in wgs84
+              
 Runtime: approx 1.25 hours
 
 """
@@ -211,7 +219,7 @@ t = toc - tic
 print('time: {} minutes'.format(round(t/60, 2)))
 del geo_first_half
 
-# takes about 30mins
+# takes about 25mins
 tic = time.perf_counter()
 geocoding_1_reader = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1xy.txt", sep="\t", dtype=schema, header=0, chunksize=10000000)
 geo_second_half = pd.concat((x.query("DunsNumber > 100000000") for x in geocoding_1_reader), ignore_index=True)
@@ -224,29 +232,23 @@ del geo_second_half
 
 del first_last_df
 
-
-
 #%% DATA CHECK
 
-geocoding_1 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1xy.txt", dtype={'DunsNumber': str}, sep = '\t', header=0, skiprows=71498220, nrows=10000)
+geocoding_1 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1xy.txt", dtype={'DunsNumber': str}, sep = '\t', header=0)
+geocoding_2 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2xy.txt", dtype={'DunsNumber': str}, sep = '\t', header=0)
+first_last = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing/scratch\first_last2019.txt", dtype={'DunsNumber': str}, sep = '\t', header=0)
+move = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Move.txt', sep = '\t', dtype=object,  header=0, encoding_errors='replace', usecols=['DunsNumber', 'MoveYear', 'OriginLatitude', 'OriginLongitude'])
 
-geocoding_2 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2xy.txt", dtype={'DunsNumber': str}, sep = '\t', header=0, nrows=10000)
-
-first_last = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing/first_last.txt", dtype={'DunsNumber': str}, sep = '\t', header=0)
-
+# get freqs for GcFirstYear
 geocoding_2.GcFirstYear.value_counts()
 
-df = geocoding_2.loc(geocoding_2["DunsNumber"] == '038928987')
+# grab all records that have matching dunsnumbers with records with dunsmoves > 19999999999
+geo2019 = geocoding_2.loc[geocoding_2['DunsMove']>19999999999]
+geo2019_duns = geocoding_2.loc[geocoding_2['DunsNumber'].isin(geo2019['DunsNumber'])]
 
-geocoding_2_reader = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2xy.txt", chunksize=40000000, sep = '\t', header=0)
+# do the years line up?:: yes
+firstlast_match = first_last.loc[first_last['DunsNumber'].isin(geo2019['DunsNumber'])]
 
-lens=[]
-for i, c in enumerate(geocoding_2_reader):
-    tic = time.perf_counter()
-    lens.append(len(c))
-    toc = time.perf_counter()
-    t = toc - tic
-    print('chunk {} completed in {} minutes'.format(i+1, round(t/60,2)))
-
-print(sum(lens))
-
+# do the lat/longs match up between NETS2019_Move DestLatitude, DestLongitude and
+#geocoding_2xy Latitude, Longitude?:: yes
+move_match = move.loc[move['DunsNumber'].isin(geo2019['DunsNumber'])]
