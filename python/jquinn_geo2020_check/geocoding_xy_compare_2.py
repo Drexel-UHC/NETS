@@ -8,20 +8,24 @@ INPUTS:
 dwalls = NETS 2019 data with (unique id is dunsnumber + move number: 'DunsMove')
 jquinn = NETS 2020 data geocoded by jquinn (unique id is dunsnumber + move number: 'behid2020')
 
-
+STATS:
 jquinn (input)                                                       n=84,889,235
 jquinn2019 (output; after all records loc_fyear==2020 removed)       n=79,456,025
 difference b/t above (n records where loc_fyear==2020)               n= 5,433,210
 n records in jquinn where behid is shifted due to moves in 2020      n=   313,881
 
 dwalls (input)                                                       n=78,466,868
-n records that are in jquinn but not in dwalls                       n= 1,506,900
-n records that are in dwalls but not in jquinn                       n=   517,743
+n records in jquinn whose behid2019 do not match any dwalls.DunsMove n= 1,506,900
+n records in dwalls whose DunsMove do not match any jquinn.behid2019 n=   517,743
 difference b/t dwalls and jquinn2019                                 n=   989,157
+n records in dwalls whose dunsnumber do not match any in jquinn      n=    45,289
 
-I think this means that 989,157 records (all pre-2020 data) were retroactively added to the 
+I think that 989,157 records (all pre-2020 data) were retroactively added to the 
 NETS2020 dataset. These locations will not have matching business categorization data
-and should be removed. The number of records that are 
+and should be removed. It seems like there are 517,743 records in dwalls that aren't 
+in jquinn and 517,743 that are in jquinn but not in dwalls after accounting for the
+989,157 difference between the two. What does this mean? That this many businesses
+changed dunsnumber?
 """
 
 #%%
@@ -111,8 +115,16 @@ dwalls = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocodin
 # how many records from the 2020 data do not match records from the 2019 data on behid2019 and DunsMove?: 
 jquinn_notin_dwalls = jquinn.loc[~jquinn['behid2019'].isin(dwalls['DunsMove'])] # n = 1506900
 
+# how many records from the 2020 data do not match records from the 2019 data on DunsNumbers?: 
+jquinn_notin_dwalls_dunsonly = jquinn.loc[~jquinn['DunsNumber'].isin(dwalls['DunsNumber'])] # n = 1496087
+
 # how many records from the 2019 data do not match records from the 2020 data on DunsMove and behid2019?:
 dwalls_notin_jquinn = dwalls.loc[~dwalls['DunsMove'].isin(jquinn['behid2019'])] # n = 517743
+
+# how many records from the 2019 data do not match records from the 2020 data on DunsNumbers?:
+dwalls_notin_jquinn_dunsonly = dwalls.loc[~dwalls['DunsNumber'].isin(jquinn['DunsNumber'])] # n = 45289
+
+dwalls_notin_jquinn_dunsonly['DunsNumber'].nunique()
 
 print(jquinn.shape[0] - dwalls.shape[0]) # = 989157
 
