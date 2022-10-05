@@ -12,7 +12,7 @@ STATS:
 jquinn (input)                                                       n=84,889,235
 jquinn2019 (output; after all records loc_fyear==2020 removed)       n=79,456,025
 difference b/t above (n records where loc_fyear==2020)               n= 5,433,210
-n records in jquinn where behid is shifted due to moves in 2020      n=   313,881
+n additional records in jquinn where behid is shifted due to moves in 2020      n=   313,881
 
 dwalls (input)                                                       n=78,466,868
 n records in jquinn whose behid2019 do not match any dwalls.DunsMove n= 1,506,900
@@ -24,8 +24,10 @@ I think that 989,157 records (all pre-2020 data) were retroactively added to the
 NETS2020 dataset. These locations will not have matching business categorization data
 and should be removed. It seems like there are 517,743 records in dwalls that aren't 
 in jquinn and 517,743 that are in jquinn but not in dwalls after accounting for the
-989,157 difference between the two. What does this mean? That this many businesses
-changed dunsnumber?
+989,157 difference between the two. What does this mean? It appears that only 45,055
+DunsNumbers appear in dwalls but not in jquinn2019, which only have an additional 234
+Locations.
+
 """
 
 #%%
@@ -46,7 +48,7 @@ jquinn2 = pd.read_csv(r'D:\NETS\NETS_2020\geocoding\nets_tall_locfirstlast202209
 #%% MERGE JQUINN VARIABLES
 
 # merge jquinn2 vars with jquinn
-jquinn = jquinn.merge(jquinn2, on='behid')
+jquinn = jquinn.merge(jquinn2, left_on='behid', right_on='behid')
 
 # add dunsnumber column (grabbed from last 9 digits of behid)
 jquinn['DunsNumber'] = jquinn['behid'].astype(str).str[2:]
@@ -106,10 +108,10 @@ shifted.loc[shifted['behid2019'] + 1000000000 != shifted['behid2020']].shape[0] 
 #%% DATA CHECK 2
 
 dwalls = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2xy.txt", sep='\t', 
-                     usecols={'DunsMove', 'DunsNumber'}, 
+                     usecols={'DunsMove', 'DunsNumber', 'GcLastYear'}, 
                      dtype={'DunsNumber': str},  
                      header=0,
-                     # nrows=1000
+                     # nrows=1000,
                      )
 
 # how many records from the 2020 data do not match records from the 2019 data on behid2019 and DunsMove?: 
@@ -128,7 +130,7 @@ dwalls_notin_jquinn_dunsonly['DunsNumber'].nunique()
 
 print(jquinn.shape[0] - dwalls.shape[0]) # = 989157
 
-#%% DATA CHECK 3
+#%% DATA CHECK 3:: RESOLVED
 
 
 # the results below show that behid and Dunsmove have different results when
@@ -137,5 +139,37 @@ print(jquinn.shape[0] - dwalls.shape[0]) # = 989157
 jquinn['behid2019'].max() # = 21037380375
 dwalls['DunsMove'].max() # = 111037380375
 
+#%% DATA CHECK 4 
 
+move = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Move.txt', sep='\t', dtype= {'DunsNumber':str, 'MoveYear':float}, usecols=['DunsNumber', 'MoveYear'], encoding_errors='replace')
 
+movematch = jquinn.merge(move, left_on=['DunsNumber', 'myear'], right_on=['DunsNumber', 'MoveYear'])
+
+jquinn_duns = jquinn.groupby("DunsNumber")['behid2020']
+jquinn_duns.rename(columns={'behid':'behid_count'}, inplace=True)
+dwalls_duns = dwalls.groupby("DunsNumber")['DunsMove'].count().reset_index()
+dwalls_duns.rename(columns={'DunsMove':'DunsMove_count'}, inplace=True)
+
+# how many dunsnumbers from the 2020 data do not match dunsnumbers from 2019 data?: 6,678,441
+# this is how many dunsnumbers were added to the 2020 dataset
+dunsjd = jquinn.loc[jquinn['DunsNumber'].isin(dwalls['DunsNumber'])] 
+print(shape(dunsjd))
+dunsjd = dunsjd.loc[jquinn['Move2020'] = 1]
+
+# create subset of jquinn excluding dunsnumbers that dont match dwalls (aka excluding new duns): 77,959,938
+jquinn_oldduns = jquinn.loc[~jquinn['DunsNumber'].isin(dunsjd['DunsNumber'])]
+
+# now add moves. how many additional locations is this?: 6,687,653 (6678441 + 9212 additional moves )
+dunsjd['behid_count'].values.sum()
+
+# how many records 
+dunsjd_isin = jquinn_duns.loc[jquinn_duns['DunsNumber'].isin(dwalls_duns['DunsNumber'])] 
+
+# how many dunsnumbers from the 2019 data are not in the 2020 data?: 45,055
+# this is how many DunsNumbers were removed from the 2020 dataset
+dunsdj = dwalls_duns.loc[~dwalls_duns['DunsNumber'].isin(jquinn_duns['DunsNumber'])] 
+
+jbehid = jquinn[['behid2019', 'DunsNumber']]
+ddunsmove = dwalls[['DunsMove', 'DunsNumber']]
+
+match = jbehid.merge(ddunsmove, left_on='behid2019', right_on='DunsMove')
