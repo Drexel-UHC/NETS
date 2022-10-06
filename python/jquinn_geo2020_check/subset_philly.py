@@ -1,17 +1,49 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Sep 23 10:27:41 2022
+Created on Thu Oct  6 15:14:39 2022
 
 @author: stf45
 """
 
 #%%
 import pandas as pd
+import numpy as np
+from datetime import datetime
+import time
 
-#%% READ IN CSVS
+#%% START TIMER
 
-jquinn = pd.read_csv(r'D:\NETS\NETS_2020\geocoding\nets_tall_priority_xy20220916.csv', usecols={'behid', 'accu', 'uhc_x', 'uhc_y'}, header=0)
-dwalls = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2xy.txt", sep='\t', usecols={'DunsMove', 'DunsNumber', 'Latitude', 'Longitude'}, dtype={'DunsNumber': str},  header=0)
+print(f"Start Time: {datetime.now()}")
+time_list = [0]
+tic = time.perf_counter()
+
+#%% READ IN JQUINN (NETS2020) DATASET (TWO FILES)
+
+jquinn = pd.read_csv(r'D:\NETS\NETS_2020\geocoding\nets_tall_priority_xy20220916.csv', 
+                      usecols={'behid', 'accu', 'uhc_x', 'uhc_y'}, 
+                      header=0)
+jquinn2 = pd.read_csv(r'D:\NETS\NETS_2020\geocoding\nets_tall_locfirstlast20220916.csv',
+                      usecols={'behid', 'loc_fyear', 'loc_lyear'}, 
+                      header=0)
+
+#%% MERGE JQUINN VARIABLES
+
+# merge jquinn2 vars with jquinn
+jquinn = jquinn.merge(jquinn2, left_on='behid', right_on='behid')
+
+# add dunsnumber column (grabbed from last 9 digits of behid)
+jquinn['DunsNumber'] = jquinn['behid'].astype(str).str[2:]
+
+# delete jquinn2 to free space
+del jquinn2
+
+#%% READ IN DWALLS (NETS2019) DATASET
+dwalls = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2xy.txt", sep='\t', 
+                     usecols={'DunsMove', 'DunsNumber', 'GcFirstYear', 'GcLastYear'}, 
+                     dtype={'DunsNumber': str},
+                     header=0,
+                     # nrows=1000,
+                     )
 
 #%% SUBSET FOR PHILLY, ADD DUNSNUMBER COLUMN TO PHILA_QUINN
 
@@ -26,47 +58,3 @@ phila_quinn['DunsNumber'] = phila_quinn['behid'].astype(str).str[2:]
 
 # check for any nulls in df
 phila_quinn.isnull().values.any()
-
-
-#%% COMPARE DUNSNUMBERS 
-
-# check how many locs per dunsnumber in phila_quinn, add as column to phila_quinn. export to csv
-phila_quinn['loc_count'] = phila_quinn.groupby(['DunsNumber'])['behid'].transform('count')
-phila_quinn.to_csv(r'D:\NETS\NETS_2020\geocoding\data_checks\NETS2020quinn_phila.csv', header=True, index=False)
-
-# get unique value counts of DunsNumber col in phila_quinn
-addcount = phila_quinn['DunsNumber'].value_counts()
-pq_dunscount = pd.DataFrame(addcount).reset_index()
-pq_dunscount.columns = ['DunsNumber', 'count2020']
-
-# check how many locs per dunsnumber in phila_dwalls, add as column to phila_dwalls. export to csv
-phila_dwalls['loc_count'] = phila_dwalls.groupby(['DunsNumber'])['DunsMove'].transform('count')
-phila_dwalls.to_csv(r'D:\NETS\NETS_2020\geocoding\data_checks\NETS2019dwalls_phila.csv', header=True, index=False)
-
-# get unique value counts of DunsNumber col in phila_dwalls
-addcount = phila_dwalls['DunsNumber'].value_counts()
-pd_dunscount = pd.DataFrame(addcount).reset_index()
-pd_dunscount.columns = ['DunsNumber', 'count2019']
-
-# merge dfs, keeping unmatched records from quinn
-compare = pq_dunscount.merge(pd_dunscount, on='DunsNumber', how='left')
-diff = compare.loc[compare['count2019'] != compare['count2020']]
-diff.to_csv(r'D:\NETS\NETS_2020\geocoding\data_checks\quinn_duns_unmatched.csv', header=True, index=False)
-
-# check how many non null values in count2019 column of diff
-notnull = diff['count2019'].count()
-
-# merge dfs, keeping unmatched records from walls
-compare2 = pq_dunscount.merge(pd_dunscount, on='DunsNumber', how='right')
-diff2 = compare2.loc[compare2['count2019'] != compare2['count2020']]
-diff2.to_csv(r'D:\NETS\NETS_2020\geocoding\data_checks\dwalls_duns_unmatched.csv', header=True, index=False)
-
-retroadd = diff.loc[(diff['count2020']>1) & (diff['count2019'].isnull())]
-retroadd.to_csv(r'D:\NETS\NETS_2020\geocoding\data_checks\retroadd.csv', header=True, index=False)
-
-
-#%% DATACHECKS ON DUNS FROM DISTANT XYS
-
-address = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_AddressFirst.txt', sep = '\t', dtype=object, encoding='latin-1',  header=0)
-
-dunscheck = address.loc[address['DunsNumber']=='018591094']
