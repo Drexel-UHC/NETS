@@ -39,7 +39,7 @@ del jquinn2
 
 #%% READ IN DWALLS (NETS2019) DATASET
 dwalls = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2xy.txt", sep='\t', 
-                     usecols={'DunsMove', 'DunsNumber', 'GcFirstYear', 'GcLastYear'}, 
+                     usecols={'DunsMove', 'DunsNumber', 'GcFirstYear', 'GcLastYear', 'Latitude', 'Longitude'}, 
                      dtype={'DunsNumber': str},
                      header=0,
                      # nrows=1000,
@@ -90,22 +90,83 @@ perfect_match.shape[0]
 
 #%% DATACHECK 2: how many pre-2020 records from 2020 dataset have DunsNumbers that are not in 2019 dataset?::1,496,087
 
-# Records in 2020 dataset with DunsNumbers that are not in 2019 dataset, But First Year < 2020
+# Records in 2020 dataset with DunsNumbers that are not in 2019 dataset, and First Year < 2020
 
 retroadd = jquinn.loc[(jquinn['loc_fyear']<2020) & (~jquinn['DunsNumber'].isin(dwalls['DunsNumber']))]
 
+# Records in 2020 dataset that are not in 2019 dataset, and First Year < 2020
+
 retro_moveonly = jquinn.loc[(jquinn['loc_fyear']<2020) & (~jquinn['behid2019'].isin(dwalls['DunsMove']))]
 
+# get descriptives 
+
+desc = retroadd['loc_fyear'].value_counts().reset_index().rename(columns={'index':'loc_fyear', 'loc_fyear':'count'})
+desc['count'].sum()
+
+retroadd.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\retroadd20221017.csv', index=False)
+
+with pd.ExcelWriter(r'C:\Users\stf45\Documents\NETS\Processing\scratch\retroadd20221017.xlsx') as writer:
+    desc.to_excel(writer, "value counts for first year", index=False)
+    
 #%% DATACHECK 6: A. how many records from the 2019 data do not match records from the 2020 data on DunsNumbers? (how many dunsmoves were removed from 2020):: 45,289
                # B. how many DunsNumbers from the 2019 data are not in the 2020 data? (how many dunsnumbers were removed from 2020):: 45,055
     
-# dunsmoves removed from 2020 dataset: 45,055 
-dwalls.loc[~dwalls['DunsNumber'].isin(jquinn['DunsNumber'])].shape[0] # n = 45289
+# dunsmoves removed from 2020 dataset: 45,289 
+duns_rmfrom2020 = dwalls.loc[~dwalls['DunsNumber'].isin(jquinn['DunsNumber'])] # n = 45289
+duns_rmfrom2020.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\missingfrom2020.csv', index=False)
 
 # dunsnumbers removed from 2020 dataset: 45,055
 dunsnums_rm = dwalls.loc[~dwalls['DunsNumber'].isin(jquinn['DunsNumber'])]
 dunsnums_rm.drop_duplicates(subset=['DunsNumber']).shape[0]
 
+#%% HOW MANY ARE SOLE PROPRIETORS?
+
+misc = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt',
+                      sep='\t',
+                      dtype={'DunsNumber':str},
+                      encoding_errors='replace',
+                      usecols={'DunsNumber', 'LegalStat'}, 
+                      header=0)
+
+legal = duns_rmfrom2020.merge(misc, on='DunsNumber')
+legal['LegalStat'].value_counts()
+
+#%% WHAT ARE THEIR SICS?
+duns_rmfrom2020 = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\missingfrom2020.csv', dtype={"DunsNumber":str}, header=0)
+
+chunksize=50000000
+class_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classification.txt', sep = '\t', dtype={"DunsNumber": str}, encoding_errors='replace', header=0, 
+                           chunksize=chunksize,
+                           usecols=['DunsNumber','YearFull','SIC'])
+
+#%% JOIN SIC, EMP, SALES, ADDRESS INFO TO DUNS_RMFROM2020
+
+print(f"Start Time: {datetime.now()}")
+time_list = [0]
+tic = time.perf_counter()
+match_all = pd.DataFrame()
+lens = []
+
+for c, i in enumerate(class_reader):
+    header = (c==0)
+    match = duns_rmfrom2020.merge(i, left_on=['DunsNumber', 'GcLastYear'], right_on=['DunsNumber', 'YearFull'])
+    match_all = pd.concat([match_all, match])
+    lens.append(len(i))
+    toc = time.perf_counter()
+    t = toc - (sum(time_list) + tic)
+    time_list.append(t)
+    print('chunk {} completed in {} minutes! {} chunks to go'.format(c+1, round(t/60, 2), n/chunksize-(c+1)))
+
+runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
+print(runtime)                                                                                                                                                                  
+
+#%%
+
+sum(lens) # 564,824,373
+sics = match_all['SIC'].value_counts()
+sics = sics[:10]
+
+match_all.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\missingfrom2020_2.csv', index=False)
 #%% END TIMER
 
 toc = time.perf_counter()

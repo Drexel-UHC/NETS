@@ -63,8 +63,8 @@ def normal_to_long(chunk, header):
     long_chunk.drop(columns=['Year'], inplace=True)
     long_chunk = long_chunk.astype({'Sales': int, 'Emp': int, 'SIC': int})
     long_chunk = long_chunk[['DunsNumber','DunsYear','YearFull','Company','TradeName','SIC', 'Emp','Sales']]
-    ## remove index here
-    # long_chunk.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/classification.txt", sep="\t", header=header, mode='a', index=False)
+    # output to csv
+    long_chunk.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/classification.txt", sep="\t", header=header, mode='a', index=False)
     return long_chunk
 
 #%% FIRST LAST 

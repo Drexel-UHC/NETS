@@ -3,6 +3,10 @@
 Created on Thu Mar 31 10:41:16 2022
 
 @author: stf45
+
+memory maxed with 10,000,000 chunksize. trying 8,000,000. trying 6. 6 works
+
+set workspace to (where nets_functions.py lives): C:\Users\stf45\Documents\NETS\Processing\python
 """
 
 import pandas as pd
@@ -10,6 +14,7 @@ import time
 import json
 import nets_functions as nf
 import warnings 
+from datetime import datetime
 
 # filter warnings from regex search
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -18,15 +23,31 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 with open('../config/json_config_2022_04_20_MAR.json', 'r') as f:
     config = json.load(f)
-#%%
+#%% READ IN FILES
 
+# FULL FILES
+# n = 71498225
+# chunksize = 6000000
 
+# company = r'D:\NETS\NETS_2019\RawData\NETS2019_Company.txt'
+# sic = r'D:\NETS\NETS_2019\RawData\NETS2019_SIC.txt'
+# emp = r'D:\NETS\NETS_2019\RawData\NETS2019_Emp.txt'
+# sales = r'D:\NETS\NETS_2019\RawData\NETS2019_Sales.txt'
+
+# SAMPLE FILES
 n = 1000
 chunksize = 100
-company_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\company_sample.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, 
+
+company = r'C:\Users\stf45\Documents\NETS\Processing\samples\company_sample.txt'
+sic = r'C:\Users\stf45\Documents\NETS\Processing\samples\sic_sample.txt'
+emp = r'C:\Users\stf45\Documents\NETS\Processing\samples\emp_sample.txt'
+sales = r'C:\Users\stf45\Documents\NETS\Processing\samples\sales_sample.txt'
+
+
+company_reader = pd.read_csv(company, sep = '\t', dtype={"DunsNumber": str}, encoding_errors='replace', header=0, 
                              chunksize=chunksize, 
                              usecols=['DunsNumber','Company','TradeName'])
-sic_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\sic_sample.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, usecols=["DunsNumber",
+sic_reader = pd.read_csv(sic, sep = '\t', dtype={"DunsNumber": str}, encoding_errors='replace', header=0, chunksize=chunksize, usecols=["DunsNumber",
                                                                                                                                                                 "SIC90",
                                                                                                                                                                 "SIC91",
                                                                                                                                                                 "SIC92",
@@ -58,7 +79,7 @@ sic_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\sic_
                                                                                                                                                                 "SIC18",
                                                                                                                                                                 "SIC19"])
 
-emp_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\emp_sample.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, usecols=["DunsNumber",
+emp_reader = pd.read_csv(emp, sep = '\t', dtype={"DunsNumber": str}, encoding_errors='replace', header=0, chunksize=chunksize, usecols=["DunsNumber",
                                                                                                                                                                 "Emp90",
                                                                                                                                                                 "Emp91",
                                                                                                                                                                 "Emp92",
@@ -90,7 +111,7 @@ emp_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\emp_
                                                                                                                                                                 "Emp18",
                                                                                                                                                                 "Emp19"])
 
-sales_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\sales_sample.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, usecols=["DunsNumber",
+sales_reader = pd.read_csv(sales, sep = '\t', dtype={"DunsNumber": str}, encoding_errors='replace', header=0, chunksize=chunksize, usecols=["DunsNumber",
                                                                                                                                                                     "Sales90",
                                                                                                                                                                     "Sales91",
                                                                                                                                                                     "Sales92",
@@ -124,16 +145,17 @@ sales_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\sa
 
 #%%
 readers = zip(sic_reader, emp_reader, sales_reader, company_reader)
-time_list = []
+print(f"Start Time: {datetime.now()}")
+time_list = [0]
+tic = time.perf_counter()
 
 for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk) in enumerate(readers):
-    tic = time.perf_counter()
     header = (c==0)
     classification_wide = nf.merge_sic_emp_sales(sic_chunk, emp_chunk, sales_chunk, company_chunk)
     classification_long = nf.normal_to_long(classification_wide, header)
     nf.classify(classification_long, config, header)
     toc = time.perf_counter()
-    t = toc - tic
+    t = toc - (sum(time_list) + tic)
     time_list.append(t)
     print('chunk {} completed in {} minutes! {} chunks to go'.format(c+1, round(t/60, 2), n/chunksize-(c+1)))
 
@@ -141,7 +163,7 @@ runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)
 
 
-check = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\NETS_coded_sample.txt', sep='\t', dtype = object, nrows=30000)
+check = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\NETS_coded.txt', sep='\t', dtype = object, nrows=30000)
 
 #%% WRITE OUT REPORT
 
