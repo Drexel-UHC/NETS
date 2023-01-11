@@ -1,0 +1,773 @@
+{
+  "AAL": {
+    "auxiliary": [
+      "BAR",
+      "LIQ"
+    ]
+  },
+  "ACP": {
+    "auxiliary": [
+      "ACM",
+      "CMU",
+      "CVP",
+      "MPC"
+    ]
+  },
+  "ACT": {
+    "auxiliary": [
+      "BHH",
+      "BHO",
+      "CHR",
+      "DDS",
+      "HOS",
+      "HPC",
+      "KCT",
+      "MHH",
+      "MHO",
+      "PHT",
+      "RTC",
+      "URG"
+    ]
+  },
+  "AEC": {
+    "auxiliary": [
+      "BHH",
+      "HOS",
+      "MHH",
+      "RTC",
+      "URG"
+    ]
+  },
+  "AHT": {
+    "auxiliary": [
+      "GHT",
+      "HTL"
+    ]
+  },
+  "AMB": {
+    "auxiliary": [
+      "BHO",
+      "CHR",
+      "DDS",
+      "HPC",
+      "KCT",
+      "MHO",
+      "PHT",
+      "RTC",
+      "URG"
+    ]
+  },
+  "APA": {
+    "auxiliary": [
+      "ACM",
+      "AMP",
+      "AVP",
+      "CMU",
+      "CVP",
+      "GPA",
+      "MUA"
+    ]
+  },
+  "ARL": {
+    "auxiliary": [
+      "REL",
+      "RLG"
+    ]
+  },
+  "ATR": {
+    "auxiliary": [
+      "BIO",
+      "CHR",
+      "MAS",
+      "PHT",
+      "SPA"
+    ]
+  },
+  "AUR": {
+    "auxiliary": [
+      "BDS",
+      "BKN",
+      "BKS",
+      "CFN",
+      "CFS",
+      "CNG",
+      "CNN",
+      "CNV",
+      "FCS",
+      "FFS",
+      "PIZ",
+      "QSV"
+    ]
+  },
+  "AUU": {
+    "auxiliary": [
+      "BDS",
+      "BKN",
+      "BKS",
+      "CFN",
+      "CFS",
+      "CNG",
+      "CNN",
+      "CNV",
+      "DRG",
+      "DRN",
+      "FCS",
+      "FFS",
+      "GSS",
+      "NUT",
+      "PIZ",
+      "QSV"
+    ]
+  },
+  "BHA": {
+    "auxiliary": [
+      "BHH",
+      "BHO"
+    ]
+  },
+  "BKA": {
+    "auxiliary": [
+      "BKN",
+      "BKS"
+    ]
+  },
+  "CAS": {
+    "auxiliary": [
+      "ACM",
+      "AMU",
+      "ARC",
+      "CMU",
+      "CVP",
+      "LIB",
+      "MPC",
+      "REL",
+      "ZOO"
+    ]
+  },
+  "CER": {
+    "auxiliary": [
+      "JCO",
+      "LIB",
+      "MAG",
+      "NPI",
+      "PBE",
+      "PLO",
+      "RCC",
+      "SLC",
+      "UNI"
+    ]
+  },
+  "CEU": {
+    "auxiliary": [
+      "ART",
+      "CMU",
+      "JCO",
+      "LIB",
+      "MAG",
+      "MUA",
+      "NPI",
+      "PBE",
+      "PLO",
+      "RCC",
+      "REL",
+      "SLC",
+      "UNI"
+    ]
+  },
+  "CFA": {
+    "auxiliary": [
+      "CFN",
+      "CFS"
+    ]
+  },
+  "CMB": {
+    "auxiliary": [
+      "RTC",
+      "URG"
+    ]
+  },
+  "CMP": {
+    "auxiliary": [
+      "ACM",
+      "MPC"
+    ]
+  },
+  "CNA": {
+    "auxiliary": [
+      "CNG",
+      "CNN",
+      "CNV"
+    ]
+  },
+  "CST": {
+    "auxiliary": [
+      "CBC",
+      "CRP",
+      "DCS",
+      "DEM",
+      "DRW",
+      "ELW",
+      "ETC",
+      "HWS",
+      "IBC",
+      "ILC",
+      "IPC",
+      "IRC",
+      "IUC",
+      "MFC",
+      "MST",
+      "PCC",
+      "PHV",
+      "RSI",
+      "SFM",
+      "WPS"
+    ]
+  },
+  "CUL": {
+    "auxiliary": [
+      "LIB",
+      "MAG",
+      "PBE"
+    ]
+  },
+  "CUP": {
+    "auxiliary": [
+      "CLS",
+      "DCS",
+      "DEM",
+      "RFS"
+    ]
+  },
+  "DEP": {
+    "auxiliary": [
+      "CMN",
+      "DDP",
+      "DPT",
+      "GMN"
+    ]
+  },
+  "DIS": {
+    "auxiliary": [
+      "CBC",
+      "CLS",
+      "CRP",
+      "DCS",
+      "DEM",
+      "DRW",
+      "ELW",
+      "ETC",
+      "HWS",
+      "IBC",
+      "ILC",
+      "IPC",
+      "IRC",
+      "IUC",
+      "LFS",
+      "LGM",
+      "LGN",
+      "LGW",
+      "MFC",
+      "MST",
+      "PCC",
+      "PHV",
+      "RFS",
+      "RSI",
+      "SFM",
+      "TRS",
+      "WPS"
+    ]
+  },
+  "DPA": {
+    "auxiliary": [
+      "CMN",
+      "DDP",
+      "DLR"
+    ]
+  },
+  "DRA": {
+    "auxiliary": [
+      "DRG",
+      "DRN"
+    ]
+  },
+  "EDD": {
+    "auxiliary": [
+      "JCO",
+      "SCC",
+      "SCN",
+      "UNI"
+    ]
+  },
+  "ELE": {
+    "auxiliary": [
+      "ELW",
+      "ETC"
+    ]
+  },
+  "ETA": {
+    "auxiliary": [
+      "EAO",
+      "EAP",
+      "EEP",
+      "EEU"
+    ]
+  },
+  "FFA": {
+    "auxiliary": [
+      "FCS",
+      "FFS",
+      "QSV"
+    ]
+  },
+  "FIN": {
+    "auxiliary": [
+      "BNK",
+      "CCH",
+      "CRD",
+      "INV",
+      "OFN",
+      "TAX"
+    ]
+  },
+  "FSA": {
+    "auxiliary": [
+      "BDS",
+      "BKN",
+      "BKS",
+      "CMN",
+      "CNG",
+      "CNN",
+      "CNV",
+      "DDP",
+      "FSH",
+      "FVM",
+      "GRY",
+      "GSS",
+      "MET",
+      "NAT",
+      "NUT",
+      "OFD",
+      "SCT",
+      "SMK",
+      "SMN",
+      "WRN",
+      "WRS"
+    ]
+  },
+  "FSR": {
+    "auxiliary": [
+      "ACM",
+      "AMP",
+      "AVP",
+      "BEU",
+      "CMU",
+      "CVP",
+      "GPA",
+      "LIB",
+      "MUA",
+      "RCC",
+      "REL"
+    ]
+  },
+  "FSU": {
+    "auxiliary": [
+      "ACM",
+      "AMP",
+      "AVP",
+      "BDS",
+      "BEU",
+      "BKN",
+      "BKS",
+      "CMN",
+      "CMU",
+      "CNG",
+      "CNN",
+      "CNV",
+      "CVP",
+      "DDP",
+      "FSH",
+      "FVM",
+      "GPA",
+      "GRY",
+      "GSS",
+      "LIB",
+      "MET",
+      "MUA",
+      "NAT",
+      "NUT",
+      "OFD",
+      "RCC",
+      "REL",
+      "SCT",
+      "SMK",
+      "SMN",
+      "WRN",
+      "WRS"
+    ]
+  },
+  "GAM": {
+    "auxiliary": [
+      "GHT",
+      "GNH"
+    ]
+  },
+  "GUN": {
+    "auxiliary": [
+      "GPA",
+      "GUR"
+    ]
+  },
+  "HOI": {
+    "auxiliary": [
+      "BHH",
+      "HOS",
+      "MHH"
+    ]
+  },
+  "HSR": {
+    "auxiliary": [
+      "FVM",
+      "SCT",
+      "SMK",
+      "SMN"
+    ]
+  },
+  "HSU": {
+    "auxiliary": [
+      "CMN",
+      "DDP",
+      "FSH",
+      "FVM",
+      "NAT",
+      "SCT",
+      "SMK",
+      "SMN"
+    ]
+  },
+  "IFC": {
+    "auxiliary": [
+      "IBC",
+      "ILC",
+      "IRC",
+      "IUC"
+    ]
+  },
+  "LGS": {
+    "auxiliary": [
+      "LGN",
+      "LGW"
+    ]
+  },
+  "MBH": {
+    "auxiliary": [
+      "BHH",
+      "BHO",
+      "MHH",
+      "MHO"
+    ]
+  },
+  "MHA": {
+    "auxiliary": [
+      "MHH",
+      "MHO"
+    ]
+  },
+  "MPA": {
+    "auxiliary": [
+      "ACM",
+      "AMP",
+      "GPA"
+    ]
+  },
+  "MUL": {
+    "auxiliary": [
+      "CMU",
+      "MUA"
+    ]
+  },
+  "NGT": {
+    "auxiliary": [
+      "BAR",
+      "GHT",
+      "GNH",
+      "NCL",
+      "SCB"
+    ]
+  },
+  "OMS": {
+    "auxiliary": [
+      "LFS",
+      "LGM",
+      "LGN",
+      "LGW",
+      "TRS"
+    ]
+  },
+  "PBN": {
+    "auxiliary": [
+      "BNK",
+      "CRD"
+    ]
+  },
+  "PTM": {
+    "auxiliary": [
+      "MAS",
+      "PHT"
+    ]
+  },
+  "REN": {
+    "auxiliary": [
+      "CRP",
+      "DRW",
+      "ELW",
+      "MST",
+      "PCC",
+      "PHV",
+      "RSI"
+    ]
+  },
+  "RSA": {
+    "auxiliary": [
+      "CFN",
+      "CFS",
+      "CSD",
+      "EAO",
+      "EAP",
+      "EAT",
+      "EEP",
+      "EEU",
+      "FCS",
+      "FFS",
+      "PIZ",
+      "QSV"
+    ]
+  },
+  "RUA": {
+    "auxiliary": [
+      "CFN",
+      "CFS",
+      "FCS",
+      "FFS",
+      "PIZ",
+      "QSV"
+    ]
+  },
+  "SAF": {
+    "auxiliary": [
+      "FIR",
+      "POL"
+    ]
+  },
+  "SCL": {
+    "auxiliary": [
+      "SCC",
+      "SCN"
+    ]
+  },
+  "SFC": {
+    "auxiliary": [
+      "BAR",
+      "CFN",
+      "CFS",
+      "CSD",
+      "EAO",
+      "EAP",
+      "EAT",
+      "EEP",
+      "EEU",
+      "NCL",
+      "PIZ"
+    ]
+  },
+  "SID": {
+    "auxiliary": [
+      "AMU",
+      "ARC",
+      "GHT",
+      "GNH",
+      "MAG",
+      "PBE",
+      "PLO",
+      "SCB",
+      "SLC",
+      "SPA",
+      "SPS",
+      "ZOO"
+    ]
+  },
+  "SMA": {
+    "auxiliary": [
+      "SCT",
+      "SMK",
+      "SMN"
+    ]
+  },
+  "SRV": {
+    "auxiliary": [
+      "SRC",
+      "SRG",
+      "SRO"
+    ]
+  },
+  "THC": {
+    "auxiliary": [
+      "CND",
+      "CNF"
+    ]
+  },
+  "USR": {
+    "auxiliary": [
+      "BDS",
+      "BKN",
+      "BKS",
+      "CNG",
+      "CNN",
+      "CNV"
+    ]
+  },
+  "USU": {
+    "auxiliary": [
+      "BDS",
+      "BKN",
+      "BKS",
+      "CNG",
+      "CNN",
+      "CNV",
+      "DRG",
+      "DRN",
+      "GSS",
+      "NUT"
+    ]
+  },
+  "VPA": {
+    "auxiliary": [
+      "AVP",
+      "CVP"
+    ]
+  },
+  "WAL": {
+    "auxiliary": [
+      "ACM",
+      "ALM",
+      "AMP",
+      "AMU",
+      "ARC",
+      "AVP",
+      "BAR",
+      "BDS",
+      "BEU",
+      "BKN",
+      "BKS",
+      "BNK",
+      "BOK",
+      "CCH",
+      "CFN",
+      "CFS",
+      "CLO",
+      "CMN",
+      "CMU",
+      "CND",
+      "CNN",
+      "CNV",
+      "COM",
+      "COS",
+      "CRD",
+      "CSD",
+      "CVP",
+      "DCR",
+      "DDP",
+      "DLR",
+      "DOC",
+      "DPT",
+      "DRG",
+      "DRN",
+      "EAO",
+      "EAP",
+      "EAT",
+      "EEP",
+      "EEU",
+      "FCS",
+      "FFS",
+      "FSG",
+      "FSH",
+      "FVM",
+      "FWK",
+      "GHT",
+      "GMM",
+      "GMN",
+      "GNH",
+      "GPA",
+      "GRY",
+      "GUR",
+      "HHG",
+      "HOB",
+      "HTL",
+      "JCO",
+      "LAU",
+      "LGW",
+      "LIB",
+      "LIQ",
+      "LOT",
+      "MAG",
+      "MAS",
+      "MET",
+      "MIR",
+      "MPC",
+      "MUA",
+      "NAT",
+      "NCL",
+      "NPI",
+      "NSD",
+      "NUT",
+      "OFD",
+      "OFN",
+      "PBE",
+      "PET",
+      "PIZ",
+      "PLO",
+      "POS",
+      "PSC",
+      "QSV",
+      "RBS",
+      "RCC",
+      "REL",
+      "RLG",
+      "SCB",
+      "SCC",
+      "SCN",
+      "SCT",
+      "SER",
+      "SHP",
+      "SLC",
+      "SMK",
+      "SMN",
+      "SPA",
+      "SPR",
+      "SPS",
+      "SRB",
+      "SRC",
+      "SRG",
+      "SRO",
+      "STF",
+      "STL",
+      "TAN",
+      "TAT",
+      "TAX",
+      "TOB",
+      "TSC",
+      "TVA",
+      "UNI",
+      "VID",
+      "WOO",
+      "WTL",
+      "XXX",
+      "ZOO"
+    ]
+  },
+  "WRA": {
+    "auxiliary": [
+      "WRN",
+      "WRS"
+    ]
+  }
+}

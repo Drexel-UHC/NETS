@@ -408,7 +408,7 @@ def classify(df, config, header):
     df['SIC'] = df['SIC'].astype(str).str.zfill(8)
     out_df = pd.concat(cats,axis=1)
     final_df = pd.concat([df, out_df],axis=1)
-    final_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/NETS_coded.txt", sep="\t", header=header, mode='a', index=False)
+    final_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/classified.txt", sep="\t", header=header, mode='a', index=False)
 
 
 #%% MERGE FIRST_LAST TO GEOCODING_1 AND WRANGLE FUNCTION

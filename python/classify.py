@@ -4,11 +4,11 @@ Created on Thu Mar 31 10:41:16 2022
 
 @author: stf45
 
-memory maxed with 10,000,000 chunksize. trying 8,000,000. trying 6. 6 works
+6 works
 
 set workspace to (where nets_functions.py lives): C:\Users\stf45\Documents\NETS\Processing\python
 """
-
+#%%
 import pandas as pd
 import time
 import json
@@ -163,7 +163,7 @@ runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)
 
 
-check = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\NETS_coded.txt', sep='\t', dtype = object, nrows=30000)
+check = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classified.txt', sep='\t', dtype = object, nrows=30000)
 
 #%% WRITE OUT REPORT
 

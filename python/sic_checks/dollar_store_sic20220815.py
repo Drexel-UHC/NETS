@@ -34,29 +34,52 @@ def merge_sic_emp_sales_misc(sic_chunk, emp_chunk, sales_chunk, company_chunk, m
     classification_wide = pd.merge(misc_merge, sales_chunk, on='DunsNumber', how='left')
     return classification_wide
 #%%
-# FULL FILES:           
-n = 71498225
-chunksize = 10000000
+# SAMPLE FILES
+n = 1000
+chunksize = 100
 
-sic_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_SIC.txt', sep = '\t', dtype={"DunsNumber": str, 'SIC19':str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
+sic_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\sic_sample.txt', sep = '\t', dtype={"DunsNumber": str, 'SIC19': str},  header=0, chunksize=chunksize, usecols=["DunsNumber",
                                                                                                                                                                               "SIC19"])
 
-                                                                                                                                                          
-company_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Company.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
-                                                                                                                                                                    "Company",
-                                                                                                                                                                    "TradeName",
-                                                                                                                                                                    "Address",
-                                                                                                                                                                    "City",
-                                                                                                                                                                    "State",
-                                                                                                                                                                    "ZipCode"])
+emp_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\emp_sample.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, usecols=["DunsNumber",
+                                                                                                                                                                              "Emp19"])
 
-emp_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Emp.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Emp19"])
+sales_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\sales_sample.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, usecols=["DunsNumber",       
+                                                                                                                                                                                  "Sales19"])
+company_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\company_sample.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, usecols=["DunsNumber",
+                                                                                                                                                                                    "Company",
+                                                                                                                                                                                    "TradeName",
+                                                                                                                                                                                    "Address",
+                                                                                                                                                                                    "City",
+                                                                                                                                                                                    "State",
+                                                                                                                                                                                    "ZipCode"])
+misc_reader = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\misc_sample.txt', sep = '\t', dtype={"DunsNumber":str},  header=0, chunksize=chunksize, usecols=["DunsNumber", "Latitude", "Longitude"])
+
+
+
+# # FULL FILES:           
+# n = 71498225
+# chunksize = 10000000
+
+# sic_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_SIC.txt', sep = '\t', dtype={"DunsNumber": str, 'SIC19':str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
+#                                                                                                                                                                               "SIC19"])
+
+                                                                                                                                                          
+# company_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Company.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber",
+#                                                                                                                                                                     "Company",
+#                                                                                                                                                                     "TradeName",
+#                                                                                                                                                                     "Address",
+#                                                                                                                                                                     "City",
+#                                                                                                                                                                     "State",
+#                                                                                                                                                                     "ZipCode"])
+
+# emp_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Emp.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Emp19"])
 
                                                                                                                                                                                   
 
-sales_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Sales.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Sales19"])
+# sales_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Sales.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Sales19"])
                       
-misc_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Latitude", "Longitude", "FipsCounty"])
+# misc_reader = pd.read_csv(r'D:\NETS\NETS_2019\RawData\NETS2019_Misc.txt', sep = '\t', dtype={"DunsNumber": str},  header=0, chunksize=chunksize, encoding_errors='replace', usecols=["DunsNumber", "Latitude", "Longitude", "FipsCounty"])
                                                                                                                                                           
 #%% FILTER SICS, MERGE ALL FILES, APPEND TO CSV IN CHUNKS
 
