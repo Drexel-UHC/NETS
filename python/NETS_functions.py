@@ -185,14 +185,16 @@ def classify(df, config, header):
             cats.append(pd.DataFrame({cat: comp_match*1 + trade_match*2 }))
     
     # CONDIT 2: record falls in sic_exclusive OR sic_range and name match
-    ## check company and trade name? currently checking company only (this is 
-    ## what was previously done).
+    ##check company and trade name? currently checking company only CHANGE TO
+    #ADD TRADENAME, CHECK
     
         elif config[cat]['conditional'] == 2:
             sic_range = make_sic_range(cat,config)
             sic_exclusive = config[cat]["sic_exclusive"]
             regex = '|'.join(config[cat]['name'])
-            match_bool = (df['Company'].str.contains(regex))
+            compmatch_bool = (df['Company'].str.contains(regex))
+            tradematch_bool = (df['TradeName'].fillna("").str.contains(regex))
+            match_bool = compmatch_bool|tradematch_bool
             range_bool = df["SIC"].isin(sic_range)
             ex_bool = df["SIC"].isin(sic_exclusive)
             match_bool[~range_bool] = False
@@ -250,7 +252,7 @@ def classify(df, config, header):
     
             
     # CONDIT 7: record falls in sic range OR sic_range_2 and name match
-    ## use Company, Tradename, both for this condit? (LIQ only)
+    ## use Company, Tradename, both for this condit?:: yes (LIQ only)
     # this currently takes the longest
     
         elif config[cat]['conditional'] == 7:

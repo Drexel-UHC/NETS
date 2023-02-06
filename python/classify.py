@@ -8,6 +8,7 @@ Created on Thu Mar 31 10:41:16 2022
 
 set workspace to (where nets_functions.py lives): C:\Users\stf45\Documents\NETS\Processing\python
 """
+
 #%%
 import pandas as pd
 import time
@@ -21,7 +22,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 #%% LOAD JSON CONFIG
 
-with open('../config/json_config_2022_04_20_MAR.json', 'r') as f:
+with open(r'C:\Users\stf45\Documents\NETS\Processing\config/json_config_2022_04_20.json', 'r') as f:
     config = json.load(f)
 #%% READ IN FILES
 
