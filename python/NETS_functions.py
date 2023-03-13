@@ -101,7 +101,7 @@ def first_last(chunk, header):
     # drop "YearFull" column, drop duplicate dunsnumbers so all that remains
     #is one first year and last year per dunsnumber
     chunk.drop(['YearFull'], axis=1, inplace=True)
-    chunk.drop_duplicates(subset=['DunsNumber'], inplace=True)
+    chunk = chunk.drop_duplicates(subset=['DunsNumber'])
 
     # add leading zeros back to dunsnumber
     chunk['DunsNumber'] = chunk['DunsNumber'].astype(str).str.zfill(9)
@@ -435,11 +435,10 @@ def classify(df, config, header):
     final_df.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/classified.txt", sep="\t", header=header, mode='a', index=False)
 
 
-#%% MERGE FIRST_LAST TO GEOCODING_1 AND WRANGLE FUNCTION
+#%% GEOCODING WRANGLE 
 
 '''
-This function is used in a file that is now archived (create_geocoding.py). take
-this out of archive. We're going to need this again.
+This function is used in create_geocoding.py
 
 -takes one of the geocoding dataset halves (queried in the next cell as either 
 "DunsNumber <= 100000000" or "DunsNumber > 100000000"), merges it with the 
@@ -464,7 +463,7 @@ def geocoding_wrangle(geocoding_1_half, first_last, header):
     # create column geocoding_2['DunsMove'] that concatenates 1 + movenum + dunsnumber
     movenum = []
     
-    geocoding_2.sort_values(by=['DunsNumber', 'GcLastYear'], ascending=[True, False], inplace=True)
+    geocoding_2 = geocoding_2.sort_values(by=['DunsNumber', 'GcLastYear'], ascending=[True, False])
     geocoding_2['dunslag'] = geocoding_2['DunsNumber'].shift(1)
     for i, row in geocoding_2.iterrows():
         if row['DunsNumber'] != row['dunslag']:
@@ -483,7 +482,7 @@ def geocoding_wrangle(geocoding_1_half, first_last, header):
     #which represent only the most recent addresses. The GcLastYear's for the 
     #other (move) addresses are derived from move['MoveYear']
     geocoding_2['GcLastYear'] = np.where(geocoding_2['GcLastYear'] == 3000, geocoding_2['LastYear'], geocoding_2['GcLastYear']).astype(int)
-    
+
     
     # group by dunsnumber to find lowest 
     geocoding_2['min'] = geocoding_2['GcLastYear'].groupby(geocoding_2['DunsNumber']).transform('min')
@@ -494,6 +493,7 @@ def geocoding_wrangle(geocoding_1_half, first_last, header):
     
     geocoding_2 = geocoding_2.drop(columns=['dunslag', 'min', 'GcLastLag', 'FirstYear', 'LastYear'])
     
+
     geocoding_2 = geocoding_2[['DunsNumber',
                                     'DunsMove',
                                     'MoveNum',
@@ -508,7 +508,40 @@ def geocoding_wrangle(geocoding_1_half, first_last, header):
     
     
     geocoding_2.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2.txt", sep="\t", mode='a', header=header, index=False)
-    
-    
 
+#%% SIC
+
+def sic_normal_to_long(chunk, header):
+    # USING JUST SICYY COLUMNS TO FILTER UNNECESSARY SICS:
+    chunk = chunk.drop(columns = ['SIC2', 'SIC3', 'SIC4', 'SIC6', 'SIC8', 'SIC8_2', 'SIC8_3', 'SIC8_4', 'SIC8_5', 'SIC8_6', 'SICChange', 'Industry', 'IndustryGroup'])
+
+    # swing SICYY columns to long, add key column "Year", value column "SIC"
+    long_chunk = pd.wide_to_long(chunk, stubnames="SIC", i="DunsNumber", j= "Year", suffix='\d+')
+    long_chunk = long_chunk.reset_index()
+    print(long_chunk.isnull().sum(axis = 0))
+    long_chunk = long_chunk.dropna(how='any')
+
+    
+    # create list with four digit years 
+    YearFull = []
+    for num in long_chunk["Year"]:
+        if len(str(num)) == 1:
+            YearFull.append("200" + str(num))
+        elif num < 90: 
+            YearFull.append("20" + str(num))        
+        else:
+            YearFull.append("19" + str(num))
+        
+    
+    # for each dataframe, add four digit years to dataframe, add new column with dunsnumber + year
+    long_chunk.drop(['Year'], axis=1, inplace=True)
+    long_chunk["YearFull"] = YearFull
+    long_chunk['DunsYear'] = long_chunk['DunsNumber'] + "_" + long_chunk['YearFull']
+    
+    # sort by dunsnumber
+    long_chunk.sort_values(['DunsNumber', 'YearFull'], inplace=True)
+    
+    # append chunk to csv
+    long_chunk.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/sic_long_filter.txt", sep="\t", header=header,  mode='a', index=False)
+    
     
