@@ -13,7 +13,7 @@ individually throughout this file.
 import pandas as pd
 import numpy as np
 import operator as op
-
+from datetime import datetime
 
 #%%
 '''
@@ -43,6 +43,7 @@ def normal_to_long(chunk, header):
     long_chunk['Sales'] = long_chunk['Sales'].fillna(0)  
     long_chunk = long_chunk.reset_index()
     long_chunk = long_chunk.dropna(subset=['SIC'])
+
     
     # create list with four digit years 
     YearFull = []
@@ -183,7 +184,8 @@ def classify(df, config, header):
             comp_match = (df['Company'].str.contains(regex))
             trade_match = (df['TradeName'].fillna("").str.contains(regex))
             cats.append(pd.DataFrame({cat: comp_match*1 + trade_match*2 }))
-    
+            print(cat, config[cat]['conditional'], datetime.now().strftime("%H:%M:%S"))
+            
     # CONDIT 2: record falls in sic_exclusive OR sic_range and name match
     ##check company and trade name? currently checking company only CHANGE TO
     #ADD TRADENAME, CHECK
@@ -200,20 +202,22 @@ def classify(df, config, header):
             match_bool[~range_bool] = False
             final_bool = match_bool|ex_bool
             cats.append(pd.DataFrame({cat: final_bool*1}))
-                
+            print(cat, config[cat]['conditional'], datetime.now().strftime("%H:%M:%S"))
+
     # CONDIT 3: record falls in sic_range        
         elif config[cat]['conditional'] == 3:
             sic_range = make_sic_range(cat,config)
             range_bool = df["SIC"].isin(sic_range)
             cats.append(pd.DataFrame({cat: range_bool*1 }))
-
+            print(cat, config[cat]['conditional'], datetime.now().strftime("%H:%M:%S"))
+            
     # CONDIT 4: record falls in sic_exclusive or sic_range      
         elif config[cat]['conditional'] == 4:
             valid_sics = make_sic_ex_range(cat,config)
             sic_bool = df["SIC"].isin(valid_sics)
             cats.append(pd.DataFrame({cat: sic_bool*1}))
+            print(cat, config[cat]['conditional'], datetime.now().strftime("%H:%M:%S"))
             
-    
     # CONDIT 5: record falls in sic_range and emp NO CATEGORIES HAVE THIS CONDITION
     
     
@@ -249,34 +253,30 @@ def classify(df, config, header):
             emp_bool[~sales_bool] = False
             range_bool[~emp_bool] = False
             cats.append(pd.DataFrame({cat: range_bool*1}))
-    
+            print(cat, config[cat]['conditional'], datetime.now().strftime("%H:%M:%S"))
             
-    # CONDIT 7: record falls in sic range OR sic_range_2 and name match
-    ## use Company, Tradename, both for this condit?:: yes (LIQ only)
+    # CONDIT 7: record falls in sic range/exclusive and name match
+    # (SPN only)
     # this currently takes the longest
     
         elif config[cat]['conditional'] == 7:
-            sic_range = make_sic_range(cat,config)
-            sic_range2 = make_sic_range2(cat,config)
+            valid_sics = make_sic_ex_range(cat,config)
             regex = '|'.join(config[cat]['name'])
             compmatch_bool = (df['Company'].str.contains(regex))
             tradematch_bool = (df['TradeName'].fillna("").str.contains(regex))
             match_bool = compmatch_bool|tradematch_bool
-            # make sic_range2 numpy array to improve performance?
-            range_bool = df["SIC"].isin(sic_range)
-            range2_bool = df["SIC"].isin(sic_range2)
-            match_bool[~range2_bool] = False
-            final_bool = match_bool|range_bool
-            cats.append(pd.DataFrame({cat: final_bool*1}))
-    
-    
+            range_bool = df["SIC"].isin(valid_sics)
+            match_bool[~range_bool] = False
+            cats.append(pd.DataFrame({cat: match_bool*1}))
+            print(cat, config[cat]['conditional'], datetime.now().strftime("%H:%M:%S"))
+            
     # CONDIT 8: record falls in sic_exclusive list
         
         elif config[cat]['conditional'] == 8:
             valid_sics = config[cat]['sic_exclusive']
             sic_bool = df["SIC"].isin(valid_sics)
             cats.append(pd.DataFrame({cat: sic_bool*1}))
-            
+            print(cat, config[cat]['conditional'], datetime.now().strftime("%H:%M:%S"))
             
     # CONDIT 9: record falls in sic_exclusive OR name match
     
@@ -289,8 +289,8 @@ def classify(df, config, header):
             match_bool = comp_match|trade_match
             final_bool = match_bool|sic_bool
             cats.append(pd.DataFrame({cat: final_bool*1 }))
-    
-    
+            print(cat, config[cat]['conditional'], datetime.now().strftime("%H:%M:%S"))
+            
     # CONDIT 10: sic range AND emp AND sales, either emp or sales can be missing, but not both (GRY only)
         
         elif config[cat]['conditional'] == 10:
@@ -322,8 +322,7 @@ def classify(df, config, header):
             # create two boolean series' where missing values or 0 are True
             emp_na_bool = df['Emp'].apply(lambda x: True if pd.isna(x) or x==0 else False)   
             sales_na_bool = df['Sales'].apply(lambda x: True if pd.isna(x) or x==0 else False)
-            
-            
+
             # if emp and sales are true, emp_sales is true
             # if emp and sales_na are true, emp_salesna is true
             # if sales and emp_na are true, sales_empna is true
@@ -335,9 +334,9 @@ def classify(df, config, header):
             final_bool = emp_sales|emp_salesna|sales_empna
             final_bool[~range_bool] = False
             cats.append(pd.DataFrame({cat: final_bool*1}))
+            print(cat, config[cat]['conditional'], datetime.now().strftime("%H:%M:%S"))
             
-    
-    # CONDIT 11: record falls in sic_exclusive OR sic_range_2 and sic_exclusive_2 and name search
+    # CONDIT 11: record falls in sic_exclusive OR sic_range_2 or sic_exclusive_2 and name search
     
         elif config[cat]['conditional'] == 11:
             sic_ex = config[cat]['sic_exclusive']
@@ -352,7 +351,8 @@ def classify(df, config, header):
             sic_bool2[~name_bool] = False
             final_bool = sic_bool|sic_bool2
             cats.append(pd.DataFrame({cat: final_bool*1}))
-    
+            print(cat, config[cat]['conditional'], datetime.now().strftime("%H:%M:%S"))
+            
     # CONDIT 12: record falls in sic_range and Company name OR sic_range_2 and TradeName
     
         elif config[cat]['conditional'] == 12:
@@ -367,6 +367,7 @@ def classify(df, config, header):
             tradematch_bool[~sic_bool2] = False
             final_bool = compmatch_bool|tradematch_bool
             cats.append(pd.DataFrame({cat: final_bool*1}))
+            print(cat, config[cat]['conditional'], datetime.now().strftime("%H:%M:%S"))
             
     # CONDIT 13: sic range AND emp or sales, either emp or sales can be missing, but not both
         
@@ -401,24 +402,44 @@ def classify(df, config, header):
             emp_sales = emp_bool|sales_bool
             final_bool = emp_sales & range_bool
             cats.append(pd.DataFrame({cat: final_bool*1}))
-            
-    # if no conditional code found in json
-        else:
-            cats.append(pd.DataFrame({cat: np.zeros(df.shape[0])}))
+            print(cat, config[cat]['conditional'], datetime.now().strftime("%H:%M:%S"))
+        
+    # CONDIT 14: SAS coded cats. will be passed.
+        elif config[cat]['conditional'] == 14:
+            pass
+        
+    # CONDIT 15: sic range and name (DLR, PIN, others)
     
+        elif config[cat]['conditional'] == 15:
+            sic_range = make_sic_range(cat,config)
+            regex = '|'.join(config[cat]['name'])
+            compmatch_bool = (df['Company'].str.contains(regex))
+            tradematch_bool = (df['TradeName'].fillna("").str.contains(regex))
+            match_bool = compmatch_bool|tradematch_bool
+            range_bool = df["SIC"].isin(sic_range)
+            match_bool[~range_bool] = False
+            cats.append(pd.DataFrame({cat: match_bool*1}))
+            print(cat, config[cat]['conditional'], datetime.now().strftime("%H:%M:%S"))
+            
+    # UNKNOWN CODE: if unknown/empty conditional code found in json
+        else:
+            print(f"unknown condition for {cat}")
+            break
+        
     df = df.astype({'SIC':int, 'Emp':int, 'Sales':int})
     df['SIC'] = df['SIC'].astype(str).str.zfill(8)
     out_df = pd.concat(cats,axis=1)
-    final_df = pd.concat([df, out_df],axis=1)
-    final_df.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/classified.txt", sep="\t", header=header, mode='a', index=False)
+    final_df = pd.concat([df['DunsYear'], out_df],axis=1)
+    # get rid of any unclassified rows (has all zeros)
+    final_df = final_df.loc[~(final_df.iloc[:, 1:]==0).all(axis=1)]
+    final_df.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/classified.txt", sep="\t", header=header, mode='a', index=False)
 
 
 #%% MERGE FIRST_LAST TO GEOCODING_1 AND WRANGLE FUNCTION
 
 '''
-This function is used in a file that is now archived (create_geocoding.py), because 
-the Drexel MESA team is using geocoded records from James Quinn at Columbia 
-University's Built Environment and Health (BEH) group.
+This function is used in a file that is now archived (create_geocoding.py). take
+this out of archive. We're going to need this again.
 
 -takes one of the geocoding dataset halves (queried in the next cell as either 
 "DunsNumber <= 100000000" or "DunsNumber > 100000000"), merges it with the 

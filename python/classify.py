@@ -4,12 +4,28 @@ Created on Thu Mar 31 10:41:16 2022
 
 @author: stf45
 
-6 works
+testing with chunksize 100,000, 1 chunk takes 1.54 mins, expected time for full (non-subset) file = 6.03 days.
+we can't subset the input classification file because of CMU category (requires name search over all sics)'
 
-set workspace to (where nets_functions.py lives): C:\Users\stf45\Documents\NETS\Processing\python
+
+testing chunksize of 100,000,000 overnight 02/13-02/14:: maxed out close to end.
+
+testing chunksize of 85,000,000 overnight 2/14-2/15:: maxed out after ZOO classified. 
+probably from concat
+
+testing chunksize of 50,000,000 overnight 2/15-2/16:: maxed out after ZOO classified, from concat.
+
+testing chunksize of 30,000,000 overnight 2/16-2/17
+
+test skipping nrows to start at chunk 2 on sample:: THIS WORKS. just have to run:
+    classified_nodups = classified.drop_duplicates() to drop any duplicates.
+    make sure to uncomment skiprows, fill with the proper chunksize, and make header=False
+    in CLASSIFY cell loop.
 """
 
 #%%
+import os
+os.chdir(r"C:\Users\stf45\Documents\NETS\Processing\python")
 import pandas as pd
 import time
 import json
@@ -20,151 +36,56 @@ from datetime import datetime
 # filter warnings from regex search
 warnings.filterwarnings("ignore", category=UserWarning)
 
-#%% LOAD JSON CONFIG
-
-with open(r'C:\Users\stf45\Documents\NETS\Processing\config/json_config_2022_04_20.json', 'r') as f:
-    config = json.load(f)
 #%% READ IN FILES
 
-# FULL FILES
-# n = 71498225
-# chunksize = 6000000
+# load in json config. this has all aux categories and their conditions.
+with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230206.json', 'r') as f:
+    config = json.load(f)
 
-# company = r'D:\NETS\NETS_2019\RawData\NETS2019_Company.txt'
-# sic = r'D:\NETS\NETS_2019\RawData\NETS2019_SIC.txt'
-# emp = r'D:\NETS\NETS_2019\RawData\NETS2019_Emp.txt'
-# sales = r'D:\NETS\NETS_2019\RawData\NETS2019_Sales.txt'
+# FULL FILE
+# chunksize = 5000000
+# n = 564824373
+# file = r'D:\NETS\NETS_2019\ProcessedData\classification_input20230213.txt'
 
-# SAMPLE FILES
-n = 1000
-chunksize = 100
-
-company = r'C:\Users\stf45\Documents\NETS\Processing\samples\company_sample.txt'
-sic = r'C:\Users\stf45\Documents\NETS\Processing\samples\sic_sample.txt'
-emp = r'C:\Users\stf45\Documents\NETS\Processing\samples\emp_sample.txt'
-sales = r'C:\Users\stf45\Documents\NETS\Processing\samples\sales_sample.txt'
+# SAMPLE FILE
+chunksize = 1000
+n = 7681
+file = r'C:\Users\stf45\Documents\NETS\Processing\scratch\classify_samples\classification.txt'
 
 
-company_reader = pd.read_csv(company, sep = '\t', dtype={"DunsNumber": str}, encoding_errors='replace', header=0, 
-                             chunksize=chunksize, 
-                             usecols=['DunsNumber','Company','TradeName'])
-sic_reader = pd.read_csv(sic, sep = '\t', dtype={"DunsNumber": str}, encoding_errors='replace', header=0, chunksize=chunksize, usecols=["DunsNumber",
-                                                                                                                                                                "SIC90",
-                                                                                                                                                                "SIC91",
-                                                                                                                                                                "SIC92",
-                                                                                                                                                                "SIC93",
-                                                                                                                                                                "SIC94",
-                                                                                                                                                                "SIC95",
-                                                                                                                                                                "SIC96",
-                                                                                                                                                                "SIC97",
-                                                                                                                                                                "SIC98",
-                                                                                                                                                                "SIC99",
-                                                                                                                                                                "SIC00",
-                                                                                                                                                                "SIC01",
-                                                                                                                                                                "SIC02",
-                                                                                                                                                                "SIC03",
-                                                                                                                                                                "SIC04",
-                                                                                                                                                                "SIC05",
-                                                                                                                                                                "SIC06",
-                                                                                                                                                                "SIC07",
-                                                                                                                                                                "SIC08",
-                                                                                                                                                                "SIC09",
-                                                                                                                                                                "SIC10",
-                                                                                                                                                                "SIC11",
-                                                                                                                                                                "SIC12",
-                                                                                                                                                                "SIC13",
-                                                                                                                                                                "SIC14",
-                                                                                                                                                                "SIC15",
-                                                                                                                                                                "SIC16",
-                                                                                                                                                                "SIC17",
-                                                                                                                                                                "SIC18",
-                                                                                                                                                                "SIC19"])
+class_long_reader = pd.read_csv(file, sep='\t', dtype={'DunsNumber':str, 'SIC':int, 'Emp':int, 'Sales':int}, 
+                                chunksize=chunksize,
+                                header=0,
+                                # skiprows=range(1, 1001)
+                                )
 
-emp_reader = pd.read_csv(emp, sep = '\t', dtype={"DunsNumber": str}, encoding_errors='replace', header=0, chunksize=chunksize, usecols=["DunsNumber",
-                                                                                                                                                                "Emp90",
-                                                                                                                                                                "Emp91",
-                                                                                                                                                                "Emp92",
-                                                                                                                                                                "Emp93",
-                                                                                                                                                                "Emp94",
-                                                                                                                                                                "Emp95",
-                                                                                                                                                                "Emp96",
-                                                                                                                                                                "Emp97",
-                                                                                                                                                                "Emp98",
-                                                                                                                                                                "Emp99",
-                                                                                                                                                                "Emp00",
-                                                                                                                                                                "Emp01",
-                                                                                                                                                                "Emp02",
-                                                                                                                                                                "Emp03",
-                                                                                                                                                                "Emp04",
-                                                                                                                                                                "Emp05",
-                                                                                                                                                                "Emp06",
-                                                                                                                                                                "Emp07",
-                                                                                                                                                                "Emp08",
-                                                                                                                                                                "Emp09",
-                                                                                                                                                                "Emp10",
-                                                                                                                                                                "Emp11",
-                                                                                                                                                                "Emp12",
-                                                                                                                                                                "Emp13",
-                                                                                                                                                                "Emp14",
-                                                                                                                                                                "Emp15",
-                                                                                                                                                                "Emp16",
-                                                                                                                                                                "Emp17",
-                                                                                                                                                                "Emp18",
-                                                                                                                                                                "Emp19"])
+#%% CLASSIFY
 
-sales_reader = pd.read_csv(sales, sep = '\t', dtype={"DunsNumber": str}, encoding_errors='replace', header=0, chunksize=chunksize, usecols=["DunsNumber",
-                                                                                                                                                                    "Sales90",
-                                                                                                                                                                    "Sales91",
-                                                                                                                                                                    "Sales92",
-                                                                                                                                                                    "Sales93",
-                                                                                                                                                                    "Sales94",
-                                                                                                                                                                    "Sales95",
-                                                                                                                                                                    "Sales96",
-                                                                                                                                                                    "Sales97",
-                                                                                                                                                                    "Sales98",
-                                                                                                                                                                    "Sales99",
-                                                                                                                                                                    "Sales00",
-                                                                                                                                                                    "Sales01",
-                                                                                                                                                                    "Sales02",
-                                                                                                                                                                    "Sales03",
-                                                                                                                                                                    "Sales04",
-                                                                                                                                                                    "Sales05",
-                                                                                                                                                                    "Sales06",
-                                                                                                                                                                    "Sales07",
-                                                                                                                                                                    "Sales08",
-                                                                                                                                                                    "Sales09",
-                                                                                                                                                                    "Sales10",
-                                                                                                                                                                    "Sales11",
-                                                                                                                                                                    "Sales12",
-                                                                                                                                                                    "Sales13",
-                                                                                                                                                                    "Sales14",
-                                                                                                                                                                    "Sales15",
-                                                                                                                                                                    "Sales16",
-                                                                                                                                                                    "Sales17",
-                                                                                                                                                                    "Sales18",
-                                                                                                                                                                    "Sales19"])
 
-#%%
-readers = zip(sic_reader, emp_reader, sales_reader, company_reader)
 print(f"Start Time: {datetime.now()}")
 time_list = [0]
 tic = time.perf_counter()
 
-for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk) in enumerate(readers):
+for c, class_chunk in enumerate(class_long_reader):
     header = (c==0)
-    classification_wide = nf.merge_sic_emp_sales(sic_chunk, emp_chunk, sales_chunk, company_chunk)
-    classification_long = nf.normal_to_long(classification_wide, header)
-    nf.classify(classification_long, config, header)
+    nf.classify(class_chunk, config, header)
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
     time_list.append(t)
-    print('chunk {} completed in {} minutes! {} chunks to go'.format(c+1, round(t/60, 2), n/chunksize-(c+1)))
+    print('{}: chunk {} completed in {} minutes! {} chunks to go'.format(datetime.now().strftime("%H:%M:%S"),c+1, round(t/60, 2), round(n/chunksize-(c+1),2)))    
+
 
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)
 
+#%%
+classified = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classified.txt', sep='\t',  
+                          nrows=30000
+                         )
 
-check = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classified.txt', sep='\t', dtype = object, nrows=30000)
+#%% DATA CHECK
+
+# print(classification['DunsYear'].nunique()==classified['DunsYear'].nunique())
 
 #%% WRITE OUT REPORT
 
@@ -176,23 +97,21 @@ with open('classify_report.txt', 'w') as f:
         f.write(line)
         f.write('\n')
 
-#%% GET FREQS
-
-coded = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\samples\NETS_coded_sample.txt', sep='\t', header = 0)
+#%% GET FREQS something is deprecated here, this needs to be rewritten
 
 # get sum of each record's total category count
 # get unique values to show how many records were not flagged (0), flagged once (1), etc
-coded['cat_counts'] = coded.iloc[:,8:].sum(axis=1)
-uniques = coded['cat_counts'].value_counts()
+classified['cat_counts'] = classified.iloc[:,8:].sum(axis=1)
+uniques = classified['cat_counts'].value_counts()
 uniques = pd.DataFrame(uniques)
 
 
 # get sum of each category's total record count
-catcounts = coded.iloc[:,8:].sum(axis=0)
+catcounts = classified.iloc[:,8:].sum(axis=0)
 catcounts = pd.DataFrame(catcounts, columns=['count'])
 
 #%% WRITE EXCEL REPORT
 
 with pd.ExcelWriter('../reports/NETS_classify_report20220509.xlsx') as writer:
     uniques.to_excel(writer, sheet_name='unique_values')
-    catcounts.to_excel(writer, sheet_name='cat_counts')
+    catcounts.to_excel(writer, sheet_name='cat_counts')    

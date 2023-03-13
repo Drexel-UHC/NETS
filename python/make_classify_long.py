@@ -4,22 +4,21 @@ Created on Tue Nov  1 14:33:42 2022
 
 @author: stf45
 
-this is a temporary script to convert NETS_coded_sample wide into long. working
-code will eventually be added to the end of classify.py? ::no just keep em separate. 
+this is a script to convert classified.txt from wide into long. 
 """
 
 import pandas as pd
 import time
 import json
 from datetime import datetime
-
-#%% LOAD JSON CONFIG
-
-with open('../config/json_config_2022_04_20_MAR.json', 'r') as f:
-    config = json.load(f)
     
 #%% READ FILE
 
+# load in json config
+with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230206.json', 'r') as f:
+    config = json.load(f)
+    
+    
 n = 7681
 chunksize = 1000
 cats = list(config.keys())
@@ -42,7 +41,7 @@ for c, x in enumerate(coded_reader):
     x = pd.melt(x, id_vars=['DunsYear'])
     x = x.loc[x['value']==1]
     x = x.drop(columns=['value'])
-    x.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/classified_long_sample.txt", sep="\t", header=header, mode='a', index=False)
+    x.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/classified_long.txt", sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
     time_list.append(t)
@@ -51,8 +50,15 @@ for c, x in enumerate(coded_reader):
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)
 
-#%% DATA CHECK
-recode = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classified_long_sample.txt', sep='\t', dtype = object, nrows=30000)
+# data check
+classified_long = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classified_long.txt', sep='\t', dtype = object, nrows=30000)
+dups = classified_long.loc[classified_long.duplicated(subset=['DunsYear'], keep=False)]
+print(classified_long.nunique())
 
-# check dunsyears with multiple cats
-dups = recode.loc[recode.duplicated(subset=['DunsYear'], keep=False)]
+# what variables are missing from config (no records flagged)
+print(set(config.keys()).difference(set(classified_long['variable'].unique())))
+
+
+#%% DATA CHECK
+
+check = classified_long.merge(classification)
