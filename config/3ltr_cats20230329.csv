@@ -1,29 +1,29 @@
-Ôªøcat,type,techdef
+cat,type,techdef
 AUR,Main,If BDS = 1 or BKN = 1 or BKS = 1 or CFN = 1 or CFS = 1 or CNG = 1 or CNN = 1 or CNV = 1 or FCS = 1 or FFS = 1 or PIN = 1 or PIS = 1 or QSV = 1 then AUR = 1
 AUU,Main,If BDS = 1 or BKN = 1 or BKS = 1 or CFN = 1 or CFS = 1 or CNG = 1 or CNN = 1 or CNV = 1 or DRG = 1 or DRN = 1 or FCS = 1 or FFS = 1 or GSS = 1 or NUT = 1 or PIN = 1 or PIS = 1 or QSV = 1 then AUU = 1
 BDS,Auxiliary,"SIC codes in the ranges 54110000-54110199, 54110300-54119999 AND [employees<5 AND sales<$2million or sales=missing]. Employees must be non-missing. If employees<5, then sales could be missing. For sales and employees, the most recent value for these was used if these changed over time."
 BKA,Intermediate,If BKN = 1 or BKS = 1 then BKA = 1
 BKN,Auxiliary,"Meets one of the following criteria:
-1) SIC codes 54000000-54999999, 55400000-55499999, 58000000-58999999, 59630100-59630299, 65120200-65120299 AND Trade Name on the Technomics/R&I list for segment of ‚ÄúQuick Service‚Äù and Menu as ‚ÄúDoughnuts,‚Äù ‚ÄúSpecialty,‚Äù or ‚ÄúFrozen Desserts.‚Äù
-2) SIC codes 54000000-54999999, 58000000-58999999 AND Company on the Technomics/R&I list for segment of ‚ÄúQuick Service‚Äù and Menu as ‚ÄúDoughnuts,‚Äù ‚ÄúSpecialty,‚Äù or ‚ÄúFrozen Desserts.‚Äù
+1) SIC codes 54000000-54999999, 55400000-55499999, 58000000-58999999, 59630100-59630299, 65120200-65120299 AND Trade Name on the Technomics/R&I list for segment of ìQuick Serviceî and Menu as ìDoughnuts,î ìSpecialty,î or ìFrozen Desserts.î
+2) SIC codes 54000000-54999999, 58000000-58999999 AND Company on the Technomics/R&I list for segment of ìQuick Serviceî and Menu as ìDoughnuts,î ìSpecialty,î or ìFrozen Desserts.î
 Chain name list can be found in the appendix (31 chain names).
 "
 BKS,Auxiliary,"SIC codes in the range 54610000-54619999 or SIC codes 54410000, 54419900, 54419901, 54419902, 54419903, 54419905, 54519903, 54999901, 58120200, 58120202, 58120203, 58120204, 59999913"
 CFA,Intermediate,If CFN = 1 or CFS = 1 then CFA = 1
 CFN,Auxiliary,"Meets one of the following criteria:
-1) SIC codes 54000000-54999999, 55400000-55499999, 58000000-58999999, 59630100-59630299, 65120200-65120299 AND Trade Name on the Technomics/R&I list for either segment of ‚ÄúQuick Service‚Äù or ‚ÄúFast Casual‚Äù and Menu is ‚ÄúCoffee,‚Äù ‚ÄúCoffee Caf√©,‚Äù or ‚ÄúCoffee/Tea.‚Äù
-2) SIC codes 54000000-54999999, 58000000-58999999 AND Company on the Technomics/R&I list for either segment of ‚ÄúQuick Service‚Äù or ‚ÄúFast Casual‚Äù and Menu is ‚ÄúCoffee,‚Äù ‚ÄúCoffee Caf√©,‚Äù or ‚ÄúCoffee/Tea.‚Äù
+1) SIC codes 54000000-54999999, 55400000-55499999, 58000000-58999999, 59630100-59630299, 65120200-65120299 AND Trade Name on the Technomics/R&I list for either segment of ìQuick Serviceî or ìFast Casualî and Menu is ìCoffee,î ìCoffee CafÈ,î or ìCoffee/Tea.î
+2) SIC codes 54000000-54999999, 58000000-58999999 AND Company on the Technomics/R&I list for either segment of ìQuick Serviceî or ìFast Casualî and Menu is ìCoffee,î ìCoffee CafÈ,î or ìCoffee/Tea.î
 
 "
 CFS,Auxiliary,"SIC codes 54990201, 54990204, 58120304"
-CMN,Auxiliary,"SIC codes 51000000-51999999, 53000000-53999999, 54000000-54999999, 55400000-55499999, 56000000-56999999, 58000000-58999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ‚ÄúMass Merchandiser‚Äù and sub-channel ‚ÄúConventional Mass Merch.‚Äù "
+CMN,Auxiliary,"SIC codes 51000000-51999999, 53000000-53999999, 54000000-54999999, 55400000-55499999, 56000000-56999999, 58000000-58999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ìMass Merchandiserî and sub-channel ìConventional Mass Merch.î "
 CNA,Intermediate,If CNG = 1 or CNN = 1 or CNV = 1 then CNA = 1
-CNG,Auxiliary,"SIC codes 53000000-53999999, 54000000-54999999, 55400000-55499999, 58000000-58999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ‚ÄúConvenience Store‚Äù and sub-channel ‚ÄúConventional‚Äù where store name does appear on sub-channel ‚ÄúGas station/Kiosk.‚Äù "
-CNN,Auxiliary,"SIC codes 53000000-53999999, 54000000-54999999, 55400000-55499999, 58000000-58999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ‚ÄúConvenience Store‚Äù and sub-channel ‚ÄúConventional‚Äù where store name does not appear on sub-channel ‚ÄúGas station/Kiosk.‚Äù "
+CNG,Auxiliary,"SIC codes 53000000-53999999, 54000000-54999999, 55400000-55499999, 58000000-58999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ìConvenience Storeî and sub-channel ìConventionalî where store name does appear on sub-channel ìGas station/Kiosk.î "
+CNN,Auxiliary,"SIC codes 53000000-53999999, 54000000-54999999, 55400000-55499999, 58000000-58999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ìConvenience Storeî and sub-channel ìConventionalî where store name does not appear on sub-channel ìGas station/Kiosk.î "
 CNV,Auxiliary,SIC codes in the range 54110200-54110299
 CSD,Auxiliary,"Meets one of the following criteria:
-1) SIC codes 54000000-54999999, 55400000-55499999, 58000000-58999999, 59630100-59630299, 65120200-65120299 AND Trade Name on the Technomics/R&I list for either segment of ‚ÄúCasual Dining‚Äù or ‚ÄúFamily Dining‚Äù with any Menu segment or ‚ÄúQuick Service‚Äù and Menu is ‚ÄúFamily Casual.‚Äù
-2) SIC codes 54000000-54999999, 58000000-58999999 AND Company on the Technomics/R&I list for either segment of ‚ÄúCasual Dining‚Äù or ‚ÄúFamily Dining‚Äù with any Menu segment or ‚ÄúQuick Service‚Äù and Menu is ‚ÄúFamily Casual.‚Äù
+1) SIC codes 54000000-54999999, 55400000-55499999, 58000000-58999999, 59630100-59630299, 65120200-65120299 AND Trade Name on the Technomics/R&I list for either segment of ìCasual Diningî or ìFamily Diningî with any Menu segment or ìQuick Serviceî and Menu is ìFamily Casual.î
+2) SIC codes 54000000-54999999, 58000000-58999999 AND Company on the Technomics/R&I list for either segment of ìCasual Diningî or ìFamily Diningî with any Menu segment or ìQuick Serviceî and Menu is ìFamily Casual.î
 "
 EAO,Auxiliary,"SIC codes 58120107, 58120110, 58120111, 58120115, 58120116, 58120117"
 EAP,Auxiliary,"SIC codes 58120103, 58120109, 58120114"
@@ -32,38 +32,38 @@ EEP,Auxiliary,"SIC codes 58120108, 58120112"
 EEU,Auxiliary,"SIC codes 58120104, 58120105, 58120106, 58120113"
 ETA,Main,If EAO = 1 or EAP = 1 or EEP = 1 or EEU = 1 then ETA = 1
 FCS,Auxiliary,"Meets one of the following criteria:
-1) SIC codes 54000000-54999999, 55400000-55499999, 58000000-58999999, 59630100-59630299, 65120200-65120299 AND Trade Name on the Technomics/R&I list for either segment of ‚ÄúFast Casual‚Äù and Menu is not ‚ÄúCoffee.‚Äù
-2) SIC codes 54000000-54999999, 58000000-58999999 AND Company on the Technomics/R&I list for either segment of ‚ÄúFast Casual‚Äù and Menu is not ‚ÄúCoffee.‚Äù
+1) SIC codes 54000000-54999999, 55400000-55499999, 58000000-58999999, 59630100-59630299, 65120200-65120299 AND Trade Name on the Technomics/R&I list for either segment of ìFast Casualî and Menu is not ìCoffee.î
+2) SIC codes 54000000-54999999, 58000000-58999999 AND Company on the Technomics/R&I list for either segment of ìFast Casualî and Menu is not ìCoffee.î
 "
 FFA,Main,If FCS = 1 or FFS = 1 or QSV = 1 then FFA = 1
-FFS,Auxiliary,"SIC codes in the ranges 58120300-58120303, 58120305-58120399 (all 581203 with the exception of 58130304 ‚Äì Coffee shops)"
+FFS,Auxiliary,"SIC codes in the ranges 58120300-58120303, 58120305-58120399 (all 581203 with the exception of 58130304 ñ Coffee shops)"
 FSA,Main,If BDS = 1 or BKN = 1 or BKS = 1 or CMN = 1 or CNG = 1 or CNN = 1 or CNV = 1 or DDP = 1 or FSH = 1 or FVM = 1 or GRY = 1 or GSS = 1 or MET = 1 or NAT = 1 or NUT = 1 or OFD = 1 or SCT = 1 or SMK = 1 or SMN = 1 or WRN = 1 or WRS = 1 then FSA = 1
 FSH,Auxiliary,SIC codes in the range 54210100-54210199
 FVM,Auxiliary,SIC codes in the range 54310000-54319999 and SIC 01619904
-GRY,Auxiliary,"SIC codes in the ranges 54110000-54110199, 54110300-54119999 AND {[employees>=5 AND employees<25] or employees=missing]] and [sales<$2million or sales=missing]}. If employees is missing and sales is not missing, then sales must be <$2million. If sales is missing and employees is not missing, then employees is between 5-24. If both employees and sales is missing, then that record will be coded as ‚ÄòGRY‚Äô here. For sales and employees, the most recent value for these was used if these changed over time."
+GRY,Auxiliary,"SIC codes in the ranges 54110000-54110199, 54110300-54119999 AND {[employees>=5 AND employees<25] or employees=missing]] and [sales<$2million or sales=missing]}. If employees is missing and sales is not missing, then sales must be <$2million. If sales is missing and employees is not missing, then employees is between 5-24. If both employees and sales is missing, then that record will be coded as ëGRYí here. For sales and employees, the most recent value for these was used if these changed over time."
 HSR,Main,If FVM = 1 or SCT = 1 or SMK = 1 or SMN = 1 then HSR = 1
 HSU,Main,If CMN = 1or DDP = 1 or FSH = 1 or FVM = 1 or NAT = 1 or SCT = 1 or SMK = 1 or SMN = 1 then HSU = 1
 MET,Auxiliary,"SIC codes in the range 54210200-54210299 or SIC codes 54210000, 54510000, 54519900, 54519901, 54519902, 54519904, 54999902, 54999904"
 NAT,Auxiliary,SIC codes in the range 54990100-54990199
 NUT,Auxiliary,SIC code 54419904
 OFD,Auxiliary,"SIC codes 54990000, 54990200, 54990202, 54990203, 54990205, 54999900, 54999903, 54999905"
-PIN,Auxiliary,"SIC Codes in the ranges 54110000-54999999, 58120000-58129999 that contain ‚Äúpizza‚Äù or ‚Äúpizzeria‚Äù"
+PIN,Auxiliary,"SIC Codes in the ranges 54110000-54999999, 58120000-58129999 that contain ìpizzaî or ìpizzeriaî"
 PIS,Auxiliary,"SIC codes 58120600, 58120601, 58120602"
 PIZ,Main,If PIN = 1 or PIS = 1 then PIZ = 1
 QSV,Auxiliary,"Meets one of the following criteria:
-1) SIC codes 54000000-54999999, 55400000-55499999, 58000000-58999999, 59630100-59630299, 65120200-65120299 AND Trade Name on the Technomics/R&I list for either segment of ‚ÄúQuick Service‚Äù and Menu is not ‚ÄúSpecialty,‚Äù ‚ÄúFrozen Desserts,‚Äù ‚ÄúCoffee,‚Äù or ‚ÄúFamily Casual.‚Äù
-2) SIC codes 54000000-54999999, 58000000-58999999 AND Company on the Technomics/R&I list for either segment of ‚ÄúQuick Service‚Äù and Menu is not ‚ÄúSpecialty,‚Äù ‚ÄúFrozen Desserts,‚Äù ‚ÄúCoffee,‚Äù or ‚ÄúFamily Casual.‚Äù
+1) SIC codes 54000000-54999999, 55400000-55499999, 58000000-58999999, 59630100-59630299, 65120200-65120299 AND Trade Name on the Technomics/R&I list for either segment of ìQuick Serviceî and Menu is not ìSpecialty,î ìFrozen Desserts,î ìCoffee,î or ìFamily Casual.î
+2) SIC codes 54000000-54999999, 58000000-58999999 AND Company on the Technomics/R&I list for either segment of ìQuick Serviceî and Menu is not ìSpecialty,î ìFrozen Desserts,î ìCoffee,î or ìFamily Casual.î
 Chain name list can be found in the appendix "
 RSA,Main,If CFN = 1 or CFS = 1 or CSD = 1 or EAO = 1 or EAP = 1 or EAT = 1 or EEP = 1 or EEU = 1 or FFS = 1 or FCS = 1 or PIN = 1 or PIS = 1 or QSV = 1 then RSA = 1
 RUA,Main,If CFN = 1 or CFS = 1 or FCS = 1 or FFS = 1 or PIN = 1 or PIS = 1 or QSV = 1  then RUA = 1
-SCT,Auxiliary,"SIC codes 53000000-53999999, 54000000-54999999, 58000000-58999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ‚ÄúGrocery‚Äù and sub-channel ‚ÄúSupercenter.‚Äù"
+SCT,Auxiliary,"SIC codes 53000000-53999999, 54000000-54999999, 58000000-58999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ìGroceryî and sub-channel ìSupercenter.î"
 SMA,Main,If SCT = 1 or SMK = 1 or SMN = 1 then SMA = 1
 SMK,Auxiliary,"SIC codes in the ranges 54110000-54110199, 54110300-54119999 AND [employees>=25 OR sales>=$2million]. Sales or employees could be missing as long as at least one of the two is non-missing and meets the criteria. For sales and employees, the most recent value for these was used if these changed over time."
-SMN,Auxiliary,"SIC codes 53000000-53999999, 54000000-54999999, 58000000-58999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ‚ÄúGrocery‚Äù and sub-channels ‚ÄúSupermarket-Conventional,‚Äù ‚ÄúSupermarket-Limited Assortment,‚Äù ‚ÄúSupermarket-Natural/Gourmet Foods,‚Äù or ‚ÄúWarehouse Grocery.‚Äù "
+SMN,Auxiliary,"SIC codes 53000000-53999999, 54000000-54999999, 58000000-58999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ìGroceryî and sub-channels ìSupermarket-Conventional,î ìSupermarket-Limited Assortment,î ìSupermarket-Natural/Gourmet Foods,î or ìWarehouse Grocery.î "
 USR,Main,If BDS = 1 or BKN = 1 or BKS = 1 or CNG = 1 or CNN = 1 or CNV = 1 then USR = 1
 USU,Main,If BDS = 1 or BKN = 1 or BKS = 1 or CNG = 1 or CNN = 1 or CNV = 1 or DRG = 1 or DRN = 1 or GSS = 1 or NUT = 1 then USU = 1
 WRA,Intermediate,If WRN = 1 or WRS = 1 then WRA = 1
-WRN,Auxiliary,"SIC codes 51000000-51999999, 53000000-53999999, 54000000-54999999, 55400000-55499999, 56000000-56999999, 58000000-58999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ‚ÄúWholesale Club‚Äù and sub-channel ‚ÄúConventional Club.‚Äù "
+WRN,Auxiliary,"SIC codes 51000000-51999999, 53000000-53999999, 54000000-54999999, 55400000-55499999, 56000000-56999999, 58000000-58999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ìWholesale Clubî and sub-channel ìConventional Club.î "
 WRS,Auxiliary,SIC code 53999906
 ACT,Main,If BHH = 1 or BHO = 1 or CHR = 1 or DDS = 1 or HOS = 1 or HPC = 1 or KCT = 1 or MHH = 1 or MHO = 1 or PHT = 1 or RTC = 1 or URG = 1 then ACT = 1
 AEC,Main,If BHH = 1 or HOS = 1 or MHH = 1 or RTC = 1 or URG = 1 then AEC = 1
@@ -81,7 +81,7 @@ CPC,Auxiliary,"SIC codes 80110516, 80420104"
 DDS,Auxiliary,"SIC codes in the range 80210100-80210105 or SIC Codes 80210000, 80210107, 80210108, 80210200, 80210201, 80210202, 80219902"
 DRA,Main,If DRG = 1 or DRN = 1 then DRA = 1
 DRG,Auxiliary,SIC Code in the range 59120000-59129999 or SIC Code in 80110203
-DRN,Auxiliary,"SIC codes 53000000-53999999, 54000000-54999999, 56000000-56999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ‚ÄúDrug‚Äù and sub-channels ‚ÄúConventional Drug Store‚Äù or ‚ÄúRx Only & Small Drug Store.‚Äù 
+DRN,Auxiliary,"SIC codes 53000000-53999999, 54000000-54999999, 56000000-56999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ìDrugî and sub-channels ìConventional Drug Storeî or ìRx Only & Small Drug Store.î 
 "
 EAR,Auxiliary,"SIC codes 50470306, 76290101, 80990202"
 EMT,Auxiliary,SIC code 41199902
@@ -102,14 +102,14 @@ RSC,Auxiliary,"SIC Codes 80599902, 80820000, 80829900, 80829902"
 RTC,Auxiliary,"SIC codes 80990103, 80990201"
 URG,Auxiliary,SIC code 80110204
 ACM,Auxiliary,"SIC codes in the ranges 79110202-79110299, 79330000-79339999 or SIC codes 79110000, 79110200, 79970200, 79970201, 79970400, 79970401, 79990205, 79990701, 79991102, 79991104, 79991121, 79991123, 79991200, 79991201, 79991202, 79991402, 79999903, 79999917, 82999903"
-ACP,Main,If ACM = 1 or AMU = 1 or CMS = 1 or CMW = 1 or CVP = 1 or MPC = 1 then ACP = 1
+ACP,Main,If ACM = 1 or AMW = 1 or CMS = 1 or CMW = 1 or CVP = 1 or MPC = 1 then ACP = 1
 AMP,Auxiliary,"SIC codes in the ranges 79979906-79979908, 79990202-79990204, 79991409-79991411 or SIC codes 79110100, 79110101, 79910202, 79920000, 79970101, 79970202, 79970204, 79979902, 79979904, 79990200, 79990402, 79990601, 79991115, 79991205, 79991400"
-APA,Main,If ACM = 1 or AMP = 1 or AMU = 1 or AVP = 1 or CMS = 1 or CVP = 1 or GPA = 1 or MUA = 1 then APA = 1
+APA,Main,If ACM = 1 or AMP = 1 or AMW = 1 or AVP = 1 or CMS = 1 or CVP = 1 or GPA = 1 or MUA = 1 then APA = 1
 AVP,Auxiliary,"SIC codes in the ranges 79970501-79970503, 79990300-79990399 or SIC codes 79910301, 79970403, 79990103, 79990501,79991107, 79991116, 82999914"
 CMP,Intermediate,If ACM = 1 or MPC = 1 then CMP = 1
 CMU,Main,If AMW = 1 or CMS = 1 or CMW = 1 then CMU = 1
 CMS,Auxiliary,"SIC codes 70110306, 70110307, 79970000, 79991100, 79999910"
-AMW,Auxiliary,"SIC codes 65120000-65129999, 70110000-70119999, 70210000-70219999, 70320000-70329999, 70330000-70339999, 7911000-79119999, 79330000-79339999, 79410000-79419999, 79910000-79919999, 79920000-79929999, 79970000-7997999, 79990000-79999999, 82110000-82119999, 82990000-82999999, 83220000-83229999, 83510000-83519999, 83990000-83999999, 86410000-86419999, 86610000-86619999, 86990000-86999999 and word search for YMCA, YWCA, Jewish Community Centers"
+AMW,Auxiliary,"SIC codes 65120000-65129999, 70110000-70119999, 70210000-70219999, 70320000-70329999, 70330000-70339999, 79110000-79119999, 79330000-79339999, 79410000-79419999, 79910000-79919999, 79920000-79929999, 79970000-79979999, 79990000-79999999, 82110000-82119999, 82990000-82999999, 83220000-83229999, 83510000-83519999, 83990000-83999999, 86410000-86419999, 86610000-86619999, 86990000-86999999 and word search for YMCA, YWCA, Jewish Community Centers"
 CMW,Auxiliary,"SIC codes 65120000-65129999, 70110000-70119999, 70210000-70219999, 70320000-70329999, 70330000-70339999, 7911000-79119999, 79330000-79339999, 79410000-79419999, 79910000-79919999, 79920000-79929999, 79970000-7997999, 79990000-79999999, 82110000-82119999, 82990000-82999999, 83220000-83229999, 83510000-83519999, 83990000-83999999, 86410000-86419999, 86610000-86619999, 86990000-86999999 and word search for Boys & Girls Clubs"
 CRV,Auxiliary,"SIC codes in the ranges 70320000-70320203, 70320301-70339903"
 CVP,Auxiliary,"SIC codes 79970100, 79970102, 79970203, 79970402, 79970404, 79970500, 79970504, 79990100, 79990101, 79990102, 79990600, 79990602, 79990603, 79991103, 79991109, 79991110, 79991111, 79991112, 79991113, 79991118, 79991119, 79991120, 79991122, 79991412"
@@ -135,14 +135,14 @@ REL,Auxiliary,"SIC codes in the range 86610000-86610199 or SIC Codes 82999904, 8
 SCB,Auxiliary,"SIC codes 58130203, 79220302"
 SFC,Main,If BAR = 1 or CFN = 1 or CFS = 1 or CSD = 1 or EAO = 1 or EAP = 1 or EAT = 1 or EEP = 1 or EEU = 1 or NCL = 1 or PIN = 1 or PIS = 1 then SFC = 1
 SID,Main,If AMU = 1 or ARC = 1 or GHT = 1 or GNH = 1 or MAG = 1 or PBE = 1 or PLO = 1 or SCB = 1 or SLC = 1 or SPC = 1 or SPN = 1 or SPS = 1 or ZOO = 1 then SID = 1
-SLC,Auxiliary,"SIC Codes 86410403, 86419901, 86419902, 86419903, 86419904, 86419905, 86419906, 86419907, 86990000, 86990200, 86990202, 86990203, 86999900, 86999901, 86999902, 86999906, 86999908, 86999909"
+SLC,Auxiliary,"SIC Codes 86410400, 86410403, 86419901, 86419902, 86419903, 86419904, 86419905, 86419906, 86419907, 86990000, 86990200, 86990202, 86990203, 86999900, 86999901, 86999902, 86999906, 86999908, 86999909"
 SPA,Main,If SPC = 1 or SPN = 1 then SPA = 1
 SPC,Auxiliary,"SIC codes 72990203, 79910103"
-SPN,Auxiliary,SIC codes 72990200-72990202 or 80499912 and contain the word ‚Äúspa‚Äù in Company or Tradename
+SPN,Auxiliary,SIC codes 72990200-72990202 or 80499912 and contain the word ìspaî in Company or Tradename
 SPS,Auxiliary,"SIC codes in the ranges 79410000-79419899 or SIC codes 79480000, 79480100, 79480101, 79480104, 79480105, 79480200, 79480201, 79480203, 79999916"
 ART,Auxiliary,"SIC codes in the ranges 72210000-72219905,  89990100-89990203 or SIC code 72999903, 72999908"
-CER,Main,If JCO = 1 or LIB = 1 or MAG = 1 or PBE = 1 or PLO = 1 or RCC = 1 or SLC = 1 or UNI = 1 then CER = 1
-CEU,Main,If AMW = 1 or CMS = 1 or JCO = 1 or LIB = 1 or MAG = 1 or MUA = 1 or PBE = 1 or PLO = 1 or RCC = 1 or REL = 1 or SLC = 1 or UNI = 1 or then CEU = 1
+CER,Main,If JCO = 1 or LIB = 1 or MAG = 1 or NPI = 1 or PBE = 1 or PLO = 1 or RCC = 1 or SLC = 1 or UNI = 1 then CER = 1
+CEU,Main,If AMW = 1 or ART = 1 or CMS = 1 or JCO = 1 or LIB = 1 or MAG = 1 or MUA = 1 or NPI = 1 or PBE = 1 or PLO = 1 or RCC = 1 or REL = 1 or SLC = 1 or UNI = 1 or then CEU = 1
 CUL,Main,If LIB = 1 or MAG = 1 or PBE = 1 then CUL = 1
 EDD,Main,If JCO = 1 or SCC = 1 or SCN = 1 or UNI = 1 then EDD = 1
 JCO,Auxiliary,SIC codes in the range 82220000-82229999
@@ -161,12 +161,12 @@ TSC,Auxiliary,"SIC codes in the ranges 72310200-72310203, 82430000-82439903, 824
 BNK,Auxiliary,"SIC codes in the ranges 60210000-60219999, 60220000-60229999, 60290000-60299999, 60350000-60359999, 60360000-60369999"
 CCH,Auxiliary,"SIC code 60999901, 61410104"
 CRD,Auxiliary,"SIC codes in the ranges 60610000-60619999, 60620000-60629999"
-FIN,Main,If BNK = 1 or CCH = 1 or CRD = 1 or INV = 1 or MOR = 1 or ORN = 1 or TAX = 1 then FIN = 1
+FIN,Main,If BNK = 1 or CCH = 1 or CRD = 1 or INV = 1 or MOR = 1 or OFN = 1 or TAX = 1 then FIN = 1
 INV,Auxiliary,SIC codes in the range 62820000-62829905 or SIC code 60910000
 MOR,Auxiliary,SIC codes in the range 61629900-61629905 or SIC code 61620000
 OFN,Auxiliary,"SIC codes in the ranges 60990000-60999900, 60999902-60999912 or SIC codes 72991000, 72991001, 72991102"
 PBN,Main,If BNK = 1 or CRD = 1 then PBN = 1
-TAX,Auxiliary,"SIC codes 72910000, 72991002"
+TAX,Auxiliary,"SIC codes 72910000, 72991002, 73891300"
 AAL,Main,If BAR = 1 or LIN = 1 or LIS = 1 or SCB = 1 then AAL = 1
 CND,Auxiliary,"SIC codes 59939905, 59990909"
 CNF,Auxiliary,SIC code 01399906
@@ -174,14 +174,14 @@ FWK,Auxiliary,SIC code 59999911
 GPA,Auxiliary,"SIC codes in the ranges 79970300-79970302, 79990702-79990705 or SIC code 79990700"
 GUN,Main,If GPA = 1 or GUR = 1 then GUN = 1
 GUR,Auxiliary,"SIC codes in the ranges 59410200-59410202, 76992100-76992102"
-LIN,Auxiliary,"SIC codes i20820000-20829999, 20840000-20849999, 20850000-20859999, 20860000-20869999, 42250000-42259999, 50990000-50999999, 51400000-51499999, 51530000-51539999, 51690000-51699999, 51800000-51899999,  51940000-51949999, 51990000-51999999, 53000000-53999999, 540010000-54999999, 55400000-55499999, 58000000-58129999, 58140000-58999999, 59000000-59999999, 65120200-65120299, 65530000-65539999, 70110000-70119999, 73890000-73899999 that contain ‚Äúliquor‚Äù or ‚Äúliquorette‚Äù"
+LIN,Auxiliary,"SIC codes in the ranges 20820000-20829999, 20840000-20849999, 20850000-20859999, 20860000-20869999, 42250000-42259999, 50990000-50999999, 51400000-51499999, 51530000-51539999, 51690000-51699999, 51800000-51899999,  51940000-51949999, 51990000-51999999, 53000000-53999999, 54000000-54999999, 55400000-55499999, 58000000-58129999, 58140000-58999999, 59000000-59999999, 65120200-65120299, 65530000-65539999, 70110000-70119999, 73890000-73899999 that contain ìliquorî or ìliquoretteî"
 LIQ,Main,If LIN = 1 or LIS = 1 then LIQ = 1
 LIS,Auxiliary,SIC codes in the range 59200000-59299999
 THC,Main,if CND = 1 or CNF = 1 then THC = 1
 TOB,Auxiliary,SIC codes in the range 59930000-59939904 or SIC code 59939906
 AHT,Main,If HTL = 1 or GHT = 1 then AHT = 1
 ALM,Auxiliary,SIC codes in the range 59990100-59990103 or SIC code 59999928
-AWK,Auxiliary,"SIC codes in the ranges 52719900-52719903, 76991300-76991303, 76991400-76991402 or SIC codes 52710000, 59999917, 59999922, 59999926, 72120104, 72991101, 72991104, 72991105, 72991202, 72999902, 72999909, 72999911, 72999912, 76991204, 76992003, 82999915"
+AWK,Auxiliary,"SIC codes in the ranges 52719900-52719903, 59991700-59991702, 76991300-76991303, 76991400-76991402 or SIC codes 52710000, 59999917, 59999922, 59999926, 72120104, 72991101, 72991104, 72991105, 72991202, 72999902, 72999909, 72999911, 72999912, 76991204, 76992003, 82999915"
 BOK,Auxiliary,"SIC codes in the ranges 59320300-59320302, 59420000-59429901, 59429903-59429905"
 CLO,Auxiliary,"SIC codes in the ranges 56110000-56119907, 56210000-56219903, 56320000-56329906, 56410000-56419902, 56510000-56519902, 56610000-56619906, 56990000-56999901, 56999903-56999909, 59320400-59320402, 59480000-59489903, 72990900-72990904, 76310200-76310202, 76991900-76991903 or SIC codes 59440000, 59440102, 59449900, 59449901, 59999923, 72190102, 72190201, 72190202, 72991203, 76310000, 76310102, 76999912"
 COM,Auxiliary,"SIC codes in the ranges 57310000-57319910, 57340000-57349901, 57350000-57350203, 59990600-59990605, 59991400-59991403, 76220200-76220403, 76290200-76290203 or SIC codes 59329902, 59329905, 59329906, 59999905, 59999910, 76220000, 76220100, 76220102, 76290302, 76299900, 76299903, 76299905, 76999911"
@@ -189,13 +189,13 @@ COS,Auxiliary,"SIC codes in the range 59991300-59991304 or SIC codes 59999918, 5
 DCR,Auxiliary,"SIC codes 83510000, 83519900, 83519901"
 DDP,Auxiliary,SIC code 53119901
 DEP,Main,If CMN = 1 or DDP = 1 or DPT = 1 or GMN = 1 then DEP = 1
-DLR,Auxiliary,"SIC codes 51000000-51999999, 53000000-53999999, 54000000-54999999, 55400000-55499999, 56000000-56999999, 58000000-58999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ‚ÄúMass Merchandiser‚Äù and sub-channel ‚ÄúDollar Store.‚Äù "
+DLR,Auxiliary,"SIC codes 51000000-51999999, 53000000-53999999, 54000000-54999999, 55400000-55499999, 56000000-56999999, 58000000-58999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ìMass Merchandiserî and sub-channel ìDollar Store.î "
 DOC,Auxiliary,SIC codes in the range 72990600-72990607
 DPA,Main,If CMN = 1 or DDP = 1 or DLR = 1 then DPA = 1
 DPT,Auxiliary,"SIC codes 53110000, 53119900, 53119902"
 FSG,Auxiliary,"SIC codes in the ranges 59430000-59439904, 59470102-59479902, 59920000-59929902, 59991700-59991702 or SIC codes 59470000, 59470100, 59991602, 59991603"
 GMM,Auxiliary,"SIC codes in the range 53310000-53999905 or SIC codes 59320000, 59329900, 59329904, 59990000, 59999900, 59999902"
-GMN,Auxiliary,"SIC codes 51000000-51999999, 53000000-53999999, 54000000-54999999, 55400000-55499999, 56000000-56999999, 58000000-58999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ‚ÄúMass Merchandiser‚Äù and sub-channel ‚ÄúGeneral Merchandise.‚Äù "
+GMN,Auxiliary,"SIC codes 51000000-51999999, 53000000-53999999, 54000000-54999999, 55400000-55499999, 56000000-56999999, 58000000-58999999, 59000000-59999999, 65120200-65120299 AND Company or Trade Name on the TDLinx list for trade channel ìMass Merchandiserî and sub-channel ìGeneral Merchandise.î "
 HHG,Auxiliary,"SIC codes in the ranges 57120000-57129906, 57140000-57149904, 57190000-57199908, 57220000-57229906, 59320100-59320202, 59320500-59320502, 59991200-59991206, 59991604-59991607, 59991800-59991808, 76991807-76991812, 76992000-76992002 or SIC codes 59440100, 59440101, 59449902, 59470101, 59991600, 59991601, 59999908, 59999914, 72190203, 72190204,  72999907, 76290000, 76290300, 76290301, 76290303, 76310100, 76310101, 76991206, 76991600, 76991601, 76991603, 76991701, 76991802, 76991803, 76992600, 76992601"
 HOB,Auxiliary,"SIC codes in the ranges 59450000-59459901, 59460000-59469902, 59490000-59490207, 59990200-59990503, 59991500-59991502, 76991500-76991503, 76992700-76992702 or SIC codes 59479903, 59999901, 59999903, 59999906, 59999907, 59999915, 59999920, 59999921, 59999927, 76991602, 76991702, 76999902"
 HTL,Auxiliary,"SIC codes in the ranges 70110000-70110300, 70110302-70110305, 70110400-70119901, 70210000-70219903 or SIC codes 70410000, 70419900"
@@ -222,8 +222,8 @@ TAT,Auxiliary,SIC code 72990106
 TOU,Auxiliary,"SIC codes in the ranges 44890000-44899904, 47250000-47259903, 47890300-47890302 or SIC Codes 41199905, 73899952, 79990201, 79990500, 79990502, 79990503, 79991114, 79991403, 79991404, 79991408, 79991501, 79991504, 79991507, 79991508, 79991510, 79991511, 79991600, 79991601, 79991602, 79991603, 79991604, 79999907, 79999911, 79999914"
 TVA,Auxiliary,SIC codes in the range 47240000-47249901
 VID,Auxiliary,SIC codes in the range 78410000-78419902
-WAL,Main,If ACM = 1 or ALM = 1 or AMP = 1 or AMU = 1 or AMW = 1 or ARC = 1 or AVP = 1 or BAR = 1 or BDS = 1 or BEU = 1 or BKN = 1 or BKS = 1 or BNK = 1 or BOK = 1 or CCH = 1 or CFN = 1 or CFS = 1 or CLO = 1 or CMN = 1 or CMS = 1 or CMW = 1 or CND = 1 or CNN = 1 or CNV = 1 or COM = 1 or COS = 1 or CRD = 1 or CSD = 1 or CVP = 1 or DCR = 1 or DDP = 1 or DLR = 1 or DOC = 1 or DPT = 1 or DRG = 1 or DRN = 1 or EAO = 1 or EAP = 1 or EAR = 1 or EAT = 1 or EEP = 1 or EEU = 1 or FCS = 1 or FFS = 1 or FSG = 1 or FSH = 1 or FVM = 1 or FWK = 1 or GHT = 1 or GMM = 1 or GMN = 1 or GNH = 1 or GPA = 1 or GRY = 1 or GUR = 1 or HHG = 1 or HOB = 1 or HTL = 1 or INV = 1 or JCO = 1 or LAU = 1 or LGW = 1 or LIB=1 or LIN = 1 or LIS = 1 or LOT = 1 or MAG = 1 or MAS = 1 or MET = 1 or MIR = 1 or MPC = 1 or MUA = 1 or NAT = 1 or NCL = 1 or NPI = 1 or NSD = 1 or NUT = 1 or OFD = 1 or OFN = 1 or OPT = 1 or PBE = 1 or PET = 1 or PIN = 1 or PIS = 1 or PLO = 1 or POS = 1 or PSC = 1 or QSV = 1 or RBS = 1 or RCC = 1 or REL = 1 or RLG = 1 or RTC = 1 or SCB = 1 or SCC = 1 or SCN = 1 or SCO = 1 or SCT = 1 or SER = 1 or SHP = 1 or SLC = 1 or SMK = 1 or SMN = 1 or SPC = 1 or SPN = 1 or SPR = 1 or SPS = 1 or SRB = 1 or SRC = 1 or SRG = 1 or SRO = 1 or STF = 1 or STL = 1 or TAN = 1 or TAT = 1 or TOB = 1 or TSC = 1 or TVA = 1 or UNI = 1 or URG = 1 or VID = 1 or WOO = 1 or WTL = 1 or ZOO = 1 then WAL = 1
-WLR,Main,If ACM = 1 or AMP = 1 or AMW = 1 or ARC = 1 or AVP = 1 or BAR = 1 or BDS = 1 or BEU = 1 or BKN = 1 or BKS = 1 or BNK = 1 or BOK = 1 or CCH = 1 or CFN = 1 or CFS = 1 or CLO = 1 or CMS = 1 or CMW = 1 or CND = 1 or CNN = 1 or CNV = 1 or COM = 1 or COS = 1 or CRD = 1 or CSD = 1 or CVP = 1 or DCR = 1 or DLR = 1 or DPT = 1 or DRG = 1 or DRN = 1 or EAO = 1 or EAP = 1 or EAT = 1 or EEP = 1 or EEU = 1 or FCS = 1 or FFS = 1 or FSG = 1 or FSH = 1 or FVM = 1 or GRY = 1 or GUR = 1 or HHG = 1 or HOB = 1 or HTL = 1 or LAU = 1 or LIB=1 or LIN = 1 or LIS = 1 or LOT = 1 or MAG = 1 or MAS = 1 or MET = 1 or MIR = 1 or MPC = 1 or MUA = 1 or NAT = 1 or NCL = 1 or NPI = 1 or NSD = 1 or NUT = 1 or OFD = 1 or OFN = 1 or PBE = 1 or PET = 1 or PIN = 1 or PIS = 1 or POS = 1 or PSC = 1 or QSV = 1 or RCC = 1 or REL = 1 or RLG = 1 or RTC = 1 or SCB = 1 or SCC = 1 or SCN = 1 or SER = 1 or SHP = 1 or SLC = 1 or SMK = 1 or SMN = 1 or SPC = 1 or SPN = 1 or SPR = 1 or SRC = 1 or SRG = 1 or SRO = 1 or TAN = 1 or TAT = 1 or TAX = 1 or TOB = 1 or TVA = 1 or UNI = 1 or VID = 1 or WOO = 1 or WTL = 1 then WLR = 1
+WAL,Main,If ACM = 1 or ALM = 1 or AMP = 1 or AMU = 1 or AMW = 1 or ARC = 1 or ART = 1 or AVP = 1 or BAR = 1 or BDS = 1 or BEU = 1 or BKN = 1 or BKS = 1 or BNK = 1 or BOK = 1 or CCH = 1 or CFN = 1 or CFS = 1 or CLO = 1 or CMN = 1 or CMS = 1 or CMW = 1 or CND = 1 or CNN = 1 or CNV = 1 or COM = 1 or COS = 1 or CRD = 1 or CSD = 1 or CVP = 1 or DCR = 1 or DDP = 1 or DLR = 1 or DOC = 1 or DPT = 1 or DRG = 1 or DRN = 1 or EAO = 1 or EAP = 1 or EAR = 1 or EAT = 1 or EEP = 1 or EEU = 1 or FCS = 1 or FFS = 1 or FSG = 1 or FSH = 1 or FVM = 1 or FWK = 1 or GHT = 1 or GMM = 1 or GMN = 1 or GNH = 1 or GPA = 1 or GRY = 1 or GUR = 1 or HHG = 1 or HOB = 1 or HTL = 1 or INV = 1 or JCO = 1 or LAU = 1 or LGW = 1 or LIB = 1 or LIN = 1 or LIS = 1 or LOT = 1 or MAG = 1 or MAS = 1 or MET = 1 or MIR = 1 or MPC = 1 or MUA = 1 or NAT = 1 or NCL = 1 or NPI = 1 or NSD = 1 or NUT = 1 or OFD = 1 or OFN = 1 or OPT = 1 or PBE = 1 or PET = 1 or PIN = 1 or PIS = 1 or PLO = 1 or POS = 1 or PSC = 1 or QSV = 1 or RBS = 1 or RCC = 1 or REL = 1 or RLG = 1 or RTC = 1 or SCB = 1 or SCC = 1 or SCN = 1 or SCT = 1 or SER = 1 or SHP = 1 or SLC = 1 or SMK = 1 or SMN = 1 or SPC = 1 or SPN = 1 or SPR = 1 or SPS = 1 or SRB = 1 or SRC = 1 or SRG = 1 or SRO = 1 or STF = 1 or STL = 1 or TAN = 1 or TAT = 1 or TAX = 1 or TOB = 1 or TSC = 1 or TVA = 1 or UNI = 1 or URG = 1 or VID = 1 or WOO = 1 or WTL = 1 or ZOO = 1 then WAL = 1
+WLR,Main,If ACM = 1 or AMP = 1 or AMW = 1 or ARC = 1 or AVP = 1 or BAR = 1 or BDS = 1 or BEU = 1 or BKN = 1 or BKS = 1 or BNK = 1 or BOK = 1 or CCH = 1 or CFN = 1 or CFS = 1 or CLO = 1 or CMS = 1 or CMW = 1 or CND = 1 or CNN = 1 or CNV = 1 or COM = 1 or COS = 1 or CRD = 1 or CSD = 1 or CVP = 1 or DCR = 1 or DLR = 1 or DPT = 1 or DRG = 1 or DRN = 1 or EAO = 1 or EAP = 1 or EAT = 1 or EEP = 1 or EEU = 1 or FCS = 1 or FFS = 1 or FSG = 1 or FSH = 1 or FVM = 1 or GRY = 1 or GUR = 1 or HHG = 1 or HOB = 1 or HTL = 1 or LAU = 1 or LIB = 1 or LIN = 1 or LIS = 1 or LOT = 1 or MAG = 1 or MAS = 1 or MET = 1 or MIR = 1 or MPC = 1 or MUA = 1 or NAT = 1 or NCL = 1 or NPI = 1 or NSD = 1 or NUT = 1 or OFD = 1 or OFN = 1 or PBE = 1 or PET = 1 or PIN = 1 or PIS = 1 or POS = 1 or PSC = 1 or QSV = 1 or RCC = 1 or REL = 1 or RLG = 1 or SCB = 1 or SCC = 1 or SCN = 1 or SER = 1 or SHP = 1 or SLC = 1 or SMK = 1 or SMN = 1 or SPC = 1 or SPN = 1 or SPR = 1 or SRC = 1 or SRG = 1 or SRO = 1 or TAN = 1 or TAT = 1 or TAX = 1 or TOB = 1 or TVA = 1 or UNI = 1 or VID = 1 or WOO = 1 or WTL = 1 then WLR = 1
 WOO,Auxiliary,"SIC codes 79999902, 79999905, 79999908"
 WTL,Auxiliary,"SIC code 72990102, 79910200, 79910201"
 ZOO,Auxiliary,SIC codes in the range 84220000-84229999 or SIC code 79991515
@@ -272,3 +272,17 @@ SRB,Auxiliary,SIC Code 59329901
 TRS,Auxiliary,SIC codes in the range 07830000-07839904
 WAT,Auxiliary,"SIC codes in the ranges 09120000-09129914, 09130000-09130205, 09190000-09199909, 09210000-09219902"
 WPS,Auxiliary,"SIC codes in the ranges 17990200-17990210, 73420200-73420204 or SIC code 17999926"
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,
+,,

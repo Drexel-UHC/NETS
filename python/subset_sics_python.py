@@ -4,7 +4,9 @@ Created on Wed Feb  8 15:47:08 2023
 
 @author: stf45
 
-This file takes in the classification
+This file takes in the classification input dataset and removes records with SICs 
+that are not used in MESA Neigh Aging NETS categorization. The output is a new subset
+file that will be used in the main NETS classification process (classify.py).
 
 TEST 1: subsetting sics using records with 3ltr cat in "SIC Only Auxiliary Code 1"
 total time: 51.45 minutes
@@ -13,6 +15,7 @@ subset file n = 254,049,195
 TEST 2: subsetting sics using sicset (full ranges)
 total time: 52.6 minutes
 subset file n = 266,535,505
+THIS VERSION WINS^^
 
 TEST 3: subsetting sics using sicset, subset for real sics (from "SICCode" col in 3ltr doc)
 total time: 49.55 minutes
@@ -33,12 +36,13 @@ import nets_functions as nf
 #%% LOAD CONFIG
 
 # load in json config. this has all aux categories and their conditions.
-with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230206.json', 'r') as f:
+with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230329.json', 'r') as f:
     config = json.load(f)
 
-#%% CREATE SET OF ALL SICS IN CONFIG
+#%% CREATE SET OF ALL SICS IN CONFIG (PYTHON PROCESSED)
 
 sicset = set()
+sascats = []
 
 for c,cat in enumerate(config.keys()):
     print(c+1, cat)
@@ -59,6 +63,9 @@ for c,cat in enumerate(config.keys()):
         sics = config[cat]['sic_exclusive']
         sics2 = nf.make_sic_range2(cat,config)
         sicset.update(sics,sics2)
+    elif config[cat]['conditional'] in [14]:
+        sascats.append(cat)
+        print('Processed in SAS')
     else:
         print(f'missing condit for {cat}')
 
@@ -80,7 +87,7 @@ for c,x in enumerate(classification):
     header = (c==0)
     x = x.loc[x['SIC'].isin(sicset)]
     rownum.append(len(x))
-    x.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classification_sicsubset20230220.txt', sep="\t", header=header, mode='a', index=False)
+    x.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classification_sicsubsetyyyymmdd.txt', sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
     time_list.append(t)

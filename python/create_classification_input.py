@@ -26,6 +26,13 @@ import pandas as pd
 import time
 import nets_functions as nf
 from datetime import datetime
+import json
+
+#%% LOAD CONFIG
+
+# load in json config. this has all aux categories and their conditions.
+with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230227.json', 'r') as f:
+    config = json.load(f)
 
 #%% READ IN FILES
 

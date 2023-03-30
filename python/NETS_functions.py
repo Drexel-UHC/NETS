@@ -17,7 +17,7 @@ from datetime import datetime
 
 #%%
 '''
-This function is used in classify.py. Merge the sic, emp, sales, and company datasets. 
+This function is used in create_classification_input.py. Merge the sic, emp, sales, and company datasets. 
 '''
 
 def merge_sic_emp_sales(sic_chunk, emp_chunk, sales_chunk, company_chunk):
@@ -29,7 +29,7 @@ def merge_sic_emp_sales(sic_chunk, emp_chunk, sales_chunk, company_chunk):
     
 #%%
 '''
-This function is used in classify.py. Swings wide dataset 
+This function is used in create_classification_input.py. Swings wide dataset 
 (such as that generated from merge_sic_emp_sales) into long
 format, so that each record has a unique DunsNumber/Year aka "DunsYear". Output columns include:
 ['DunsNumber','DunsYear','YearFull','Company','TradeName','SIC', 'Emp','Sales']
@@ -68,46 +68,81 @@ def normal_to_long(chunk, header):
     long_chunk.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/classification.txt", sep="\t", header=header, mode='a', index=False)
     return long_chunk
 
-#%% FIRST LAST 
+
+#%% GEOCODING WRANGLE 
+
 '''
-This function is used in create_first_last.py.
+This function is used in create_geocoding.py
 
-This function creates a "FirstYear" column depicting a dunsnumber's first year 
-in business, as well as a "LastYear" column depicting its last year in business.
-It takes the long version (sorted in ascending order by dunsnumber and year) 
-of the SIC file as its input, and outputs the data to a new csv.
-
-MUST MAKE SURE THAT DUNSNUMBERS DO NOT OVERLAP CHUNKS. USE:
-    
-chunk1 = pd.concat((x.query("`DunsNumber` <= 100000000") for x in reader), ignore_index=True)
-
-Input: 
-    sic_long_filter.txt: n=564824373
-Output: 
-    first_last.txt n=564824373 
-Runtime: approx ????? (overnight)
+-takes one of the geocoding dataset halves (queried in the next cell as either 
+"DunsNumber <= 100000000" or "DunsNumber > 100000000"), merges it with the 
+first_last dataset so each dunsnumber/address gets a first year ('FirstYear') 
+and last year ('LastYear') that the dunsnumber was in business
+-applies the LastYear to the GcLastYear column for all of the most recent 
+dunsnumber/addresses
+-creates a GcFirstYear for all dunsnumber/addresses using either FirstYear
+(if it is the first address) or the previous address' GcLastYear + 1
+-drop unnecessary columns and reorder
+-write out to csv "geocoding_2"
 '''
 
-def first_last(chunk, header):
+def geocoding_wrangle(geocoding_1_half, first_last, header):
+    geocoding_2 = geocoding_1_half.merge(first_last, on='DunsNumber')
     
-    # group by dunsnumber
-    chunk_grouped = chunk.groupby(['DunsNumber'])
-   
-    # get minimum year and add to new column "FirstYear"
-    # get maximum year and add to new column "LastYear"
-    chunk['FirstYear'] = chunk_grouped.transform('min')
-    chunk['LastYear'] = chunk_grouped.transform('max')
+    # use zfill to replace leading zeros in dunsnumbers
+    geocoding_2['DunsNumber'] = geocoding_2['DunsNumber'].astype(str).str.zfill(9)
     
-    # drop "YearFull" column, drop duplicate dunsnumbers so all that remains
-    #is one first year and last year per dunsnumber
-    chunk.drop(['YearFull'], axis=1, inplace=True)
-    chunk = chunk.drop_duplicates(subset=['DunsNumber'])
+    # create column geocoding_2["MoveNum"] that indicates 0 for most recent address, 
+    #1 for second to last address, 2 for third to last address, etc
+    # create column geocoding_2['DunsMove'] that concatenates 1 + movenum + dunsnumber
+    movenum = []
+    
+    geocoding_2 = geocoding_2.sort_values(by=['DunsNumber', 'GcLastYear'], ascending=[True, False])
+    geocoding_2['dunslag'] = geocoding_2['DunsNumber'].shift(1)
+    for i, row in geocoding_2.iterrows():
+        if row['DunsNumber'] != row['dunslag']:
+            count=0
+            movenum.append(count)
+        else:
+            count += 1
+            movenum.append(count)
+    
+    geocoding_2['MoveNum'] = movenum
+    geocoding_2['DunsMove'] = "1" + geocoding_2['MoveNum'].astype(str) + geocoding_2['DunsNumber']
+    
+    # set values in 'GcLastYear' == 3000 to value in 'LastYear', all other values equal
+    # This applies the last year of a dunsnumber's existence (last year that data
+    #is given) to the 'GcLastYear' for all addresses from the company dataset,
+    #which represent only the most recent addresses. The GcLastYear's for the 
+    #other (move) addresses are derived from move['MoveYear']
+    geocoding_2['GcLastYear'] = np.where(geocoding_2['GcLastYear'] == 3000, geocoding_2['LastYear'], geocoding_2['GcLastYear']).astype(int)
 
-    # add leading zeros back to dunsnumber
-    chunk['DunsNumber'] = chunk['DunsNumber'].astype(str).str.zfill(9)
     
-    chunk.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/first_last.txt", sep="\t", mode='a', header=header, index=False)
+    # group by dunsnumber to find lowest 
+    geocoding_2['min'] = geocoding_2['GcLastYear'].groupby(geocoding_2['DunsNumber']).transform('min')
+    geocoding_2['GcLastLag'] = geocoding_2['GcLastYear'].shift(-1)
     
+    # make this so the last argument is GcLastLag + 1
+    geocoding_2['GcFirstYear'] = np.where(geocoding_2['GcLastYear'] == geocoding_2['min'], geocoding_2['FirstYear'], geocoding_2['GcLastLag'] + 1).astype(int)
+    
+    geocoding_2 = geocoding_2.drop(columns=['dunslag', 'min', 'GcLastLag', 'FirstYear', 'LastYear'])
+    
+
+    geocoding_2 = geocoding_2[['DunsNumber',
+                                    'DunsMove',
+                                    'MoveNum',
+                                    'GcFirstYear',
+                                    'GcLastYear',
+                                    'GcAddress',
+                                    'GcCity',
+                                    'GcState',
+                                    'GcZIP',
+                                    'GcZIP4'
+                                    ]]
+    
+    
+    geocoding_2.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2.txt", sep="\t", mode='a', header=header, index=False)
+ 
 
 #%%  SIC RANGE FUNCTIONS 
 
@@ -434,114 +469,3 @@ def classify(df, config, header):
     final_df = final_df.loc[~(final_df.iloc[:, 1:]==0).all(axis=1)]
     final_df.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/classified.txt", sep="\t", header=header, mode='a', index=False)
 
-
-#%% GEOCODING WRANGLE 
-
-'''
-This function is used in create_geocoding.py
-
--takes one of the geocoding dataset halves (queried in the next cell as either 
-"DunsNumber <= 100000000" or "DunsNumber > 100000000"), merges it with the 
-first_last dataset so each dunsnumber/address gets a first year ('FirstYear') 
-and last year ('LastYear') that the dunsnumber was in business
--applies the LastYear to the GcLastYear column for all of the most recent 
-dunsnumber/addresses
--creates a GcFirstYear for all dunsnumber/addresses using either FirstYear
-(if it is the first address) or the previous address' GcLastYear + 1
--drop unnecessary columns and reorder
--write out to csv "geocoding_2"
-'''
-
-def geocoding_wrangle(geocoding_1_half, first_last, header):
-    geocoding_2 = geocoding_1_half.merge(first_last, on='DunsNumber')
-    
-    # use zfill to replace leading zeros in dunsnumbers
-    geocoding_2['DunsNumber'] = geocoding_2['DunsNumber'].astype(str).str.zfill(9)
-    
-    # create column geocoding_2["MoveNum"] that indicates 0 for most recent address, 
-    #1 for second to last address, 2 for third to last address, etc
-    # create column geocoding_2['DunsMove'] that concatenates 1 + movenum + dunsnumber
-    movenum = []
-    
-    geocoding_2 = geocoding_2.sort_values(by=['DunsNumber', 'GcLastYear'], ascending=[True, False])
-    geocoding_2['dunslag'] = geocoding_2['DunsNumber'].shift(1)
-    for i, row in geocoding_2.iterrows():
-        if row['DunsNumber'] != row['dunslag']:
-            count=0
-            movenum.append(count)
-        else:
-            count += 1
-            movenum.append(count)
-    
-    geocoding_2['MoveNum'] = movenum
-    geocoding_2['DunsMove'] = "1" + geocoding_2['MoveNum'].astype(str) + geocoding_2['DunsNumber']
-    
-    # set values in 'GcLastYear' == 3000 to value in 'LastYear', all other values equal
-    # This applies the last year of a dunsnumber's existence (last year that data
-    #is given) to the 'GcLastYear' for all addresses from the company dataset,
-    #which represent only the most recent addresses. The GcLastYear's for the 
-    #other (move) addresses are derived from move['MoveYear']
-    geocoding_2['GcLastYear'] = np.where(geocoding_2['GcLastYear'] == 3000, geocoding_2['LastYear'], geocoding_2['GcLastYear']).astype(int)
-
-    
-    # group by dunsnumber to find lowest 
-    geocoding_2['min'] = geocoding_2['GcLastYear'].groupby(geocoding_2['DunsNumber']).transform('min')
-    geocoding_2['GcLastLag'] = geocoding_2['GcLastYear'].shift(-1)
-    
-    # make this so the last argument is GcLastLag + 1
-    geocoding_2['GcFirstYear'] = np.where(geocoding_2['GcLastYear'] == geocoding_2['min'], geocoding_2['FirstYear'], geocoding_2['GcLastLag'] + 1).astype(int)
-    
-    geocoding_2 = geocoding_2.drop(columns=['dunslag', 'min', 'GcLastLag', 'FirstYear', 'LastYear'])
-    
-
-    geocoding_2 = geocoding_2[['DunsNumber',
-                                    'DunsMove',
-                                    'MoveNum',
-                                    'GcFirstYear',
-                                    'GcLastYear',
-                                    'GcAddress',
-                                    'GcCity',
-                                    'GcState',
-                                    'GcZIP',
-                                    'GcZIP4'
-                                    ]]
-    
-    
-    geocoding_2.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2.txt", sep="\t", mode='a', header=header, index=False)
-
-#%% SIC
-
-def sic_normal_to_long(chunk, header):
-    # USING JUST SICYY COLUMNS TO FILTER UNNECESSARY SICS:
-    chunk = chunk.drop(columns = ['SIC2', 'SIC3', 'SIC4', 'SIC6', 'SIC8', 'SIC8_2', 'SIC8_3', 'SIC8_4', 'SIC8_5', 'SIC8_6', 'SICChange', 'Industry', 'IndustryGroup'])
-
-    # swing SICYY columns to long, add key column "Year", value column "SIC"
-    long_chunk = pd.wide_to_long(chunk, stubnames="SIC", i="DunsNumber", j= "Year", suffix='\d+')
-    long_chunk = long_chunk.reset_index()
-    print(long_chunk.isnull().sum(axis = 0))
-    long_chunk = long_chunk.dropna(how='any')
-
-    
-    # create list with four digit years 
-    YearFull = []
-    for num in long_chunk["Year"]:
-        if len(str(num)) == 1:
-            YearFull.append("200" + str(num))
-        elif num < 90: 
-            YearFull.append("20" + str(num))        
-        else:
-            YearFull.append("19" + str(num))
-        
-    
-    # for each dataframe, add four digit years to dataframe, add new column with dunsnumber + year
-    long_chunk.drop(['Year'], axis=1, inplace=True)
-    long_chunk["YearFull"] = YearFull
-    long_chunk['DunsYear'] = long_chunk['DunsNumber'] + "_" + long_chunk['YearFull']
-    
-    # sort by dunsnumber
-    long_chunk.sort_values(['DunsNumber', 'YearFull'], inplace=True)
-    
-    # append chunk to csv
-    long_chunk.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/sic_long_filter.txt", sep="\t", header=header,  mode='a', index=False)
-    
-    

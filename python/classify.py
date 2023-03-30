@@ -39,7 +39,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 #%% READ IN FILES
 
 # load in json config. this has all aux categories and their conditions.
-with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230206.json', 'r') as f:
+with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230227.json', 'r') as f:
     config = json.load(f)
 
 # FULL FILE
