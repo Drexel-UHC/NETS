@@ -87,10 +87,10 @@ del chunk
 '''
 
 # for sample
-move = r"C:\Users\stf45\Documents\NETS\Processing\samples\move_sample.txt"
+# move = r"C:\Users\stf45\Documents\NETS\Processing\samples\move_sample.txt"
 
 # for full 
-# move = r"D:\NETS\NETS_2019\RawData\NETS2019_Move.txt"
+move = r"D:\NETS\NETS_2019\RawData\NETS2019_Move.txt"
 
 move_df = pd.read_csv(move, sep = '\t', dtype=object, header=0, 
                           usecols=['DunsNumber',
@@ -128,10 +128,10 @@ columns necessary for geocoding the NETS dataset. Dataframes are deleted when no
 necessary for memory purposes.
 '''
 # for sample
-first_last = r"C:\Users\stf45\Documents\NETS\Processing\samples\first_last_sample.txt"
+# first_last = r"C:\Users\stf45\Documents\NETS\Processing\samples\first_last_sample.txt"
 
 # for full
-# first_last = r"C:\Users\stf45\Documents\NETS\Processing\scratch\first_last.txt"
+first_last = r"C:\Users\stf45\Documents\NETS\Processing\scratch\first_last.txt"
 
 first_last_df = pd.read_csv(first_last, sep = '\t', header=0)
 
