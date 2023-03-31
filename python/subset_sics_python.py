@@ -42,10 +42,8 @@ with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230329
 #%% CREATE SET OF ALL SICS IN CONFIG (PYTHON PROCESSED)
 
 sicset = set()
-sascats = []
 
 for c,cat in enumerate(config.keys()):
-    print(c+1, cat)
     if config[cat]['conditional'] in [2,3,6,10,13,15]:
         sics = nf.make_sic_range(cat,config)
         sicset.update(sics)
@@ -64,10 +62,10 @@ for c,cat in enumerate(config.keys()):
         sics2 = nf.make_sic_range2(cat,config)
         sicset.update(sics,sics2)
     elif config[cat]['conditional'] in [14]:
-        sascats.append(cat)
         print('Processed in SAS')
     else:
         print(f'missing condit for {cat}')
+
 
 #%% FILTER classification.txt FOR SICS IN SET
 
