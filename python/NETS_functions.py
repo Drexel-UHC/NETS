@@ -467,5 +467,5 @@ def classify(df, config, header):
     final_df = pd.concat([df['DunsYear'], out_df],axis=1)
     # get rid of any unclassified rows (has all zeros)
     final_df = final_df.loc[~(final_df.iloc[:, 1:]==0).all(axis=1)]
-    final_df.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/classified.txt", sep="\t", header=header, mode='a', index=False)
+    final_df.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/classifiedYYYYMMDD.txt", sep="\t", header=header, mode='a', index=False)
 
