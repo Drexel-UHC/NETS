@@ -4,9 +4,9 @@ Created on Wed Feb  8 15:47:08 2023
 
 @author: stf45
 
-This file takes in the classification input dataset and removes records with SICs 
+This file takes in the classification input dataset (classification_input20230213.txt, n = 564,824,373) and removes records with SICs 
 that are not used in MESA Neigh Aging NETS categorization. The output is a new subset
-file that will be used in the main NETS classification process (classify.py).
+file (classification_sicsubset20230330.txt, n = 353,116,375) that will be used in the main NETS classification process (classify.py).
 
 TEST 1: subsetting sics using records with 3ltr cat in "SIC Only Auxiliary Code 1"
 total time: 51.45 minutes
@@ -21,6 +21,11 @@ TEST 3: subsetting sics using sicset, subset for real sics (from "SICCode" col i
 total time: 49.55 minutes
 subset file n = 266,535,255
 This method is not much faster and ends up missing two SICs found previously.
+
+
+REAL RUN:
+total time: approx 50 mins
+subset file n = 353,116,375
 """
 
 #%%
