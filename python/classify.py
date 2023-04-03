@@ -39,18 +39,18 @@ warnings.filterwarnings("ignore", category=UserWarning)
 #%% READ IN FILES
 
 # load in json config. this has all aux categories and their conditions.
-with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230227.json', 'r') as f:
+with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230329.json', 'r') as f:
     config = json.load(f)
 
 # FULL FILE
-# chunksize = 5000000
-# n = 564824373
-# file = r'D:\NETS\NETS_2019\ProcessedData\classification_input20230213.txt'
+chunksize = 5000000
+n = 564824373
+file = r'D:\NETS\NETS_2019\ProcessedData\classification_input20230213.txt'
 
 # SAMPLE FILE
-chunksize = 1000
-n = 7681
-file = r'C:\Users\stf45\Documents\NETS\Processing\scratch\classify_samples\classification.txt'
+# chunksize = 1000
+# n = 7681
+# file = r'C:\Users\stf45\Documents\NETS\Processing\scratch\classify_samples\classification.txt'
 
 
 class_long_reader = pd.read_csv(file, sep='\t', dtype={'DunsNumber':str, 'SIC':int, 'Emp':int, 'Sales':int}, 
