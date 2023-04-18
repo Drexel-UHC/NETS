@@ -15,12 +15,14 @@ probably from concat
 
 testing chunksize of 50,000,000 overnight 2/15-2/16:: maxed out after ZOO classified, from concat.
 
-testing chunksize of 30,000,000 overnight 2/16-2/17
+testing chunksize of 25,000,000 overnight 4/3-4/4:: maxed out. use 5,000,000 chunksize
 
 test skipping nrows to start at chunk 2 on sample:: THIS WORKS. just have to run:
     classified_nodups = classified.drop_duplicates() to drop any duplicates.
     make sure to uncomment skiprows, fill with the proper chunksize, and make header=False
     in CLASSIFY cell loop.
+  
+chunksize of 5,000,000 runs at an hour per chunk, 71 chunks.
 """
 
 #%%
@@ -44,8 +46,8 @@ with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230329
 
 # FULL FILE
 chunksize = 5000000
-n = 564824373
-file = r'D:\NETS\NETS_2019\ProcessedData\classification_input20230213.txt'
+n = 353116375
+file = r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\classification_sicsubset20230330.txt'
 
 # SAMPLE FILE
 # chunksize = 1000
