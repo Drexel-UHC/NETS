@@ -30,6 +30,14 @@ import time
 import sys
 import numpy as np
 import nets_functions as nf
+from datetime import datetime
+
+
+#%% LOAD LIST OF RELEVANT DUNSNUMBERS
+
+dunsdf = pd.read_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\classified_long20230418.txt', sep='\t', usecols=(['DunsYear']))
+dunsset = set(dunsdf['DunsYear'].str[:9])
+del dunsdf
 
 #%% ADD COMPANY FILE COLUMNS TO NEW GEOCODING_1 FILE
 
@@ -41,16 +49,15 @@ geocoding dataset
 -output to new csv "geocoding_1.txt"
 '''
 
-
 # for sample
-company = r"C:\Users\stf45\Documents\NETS\Processing\samples\company_sample.txt"
-comp_chunksize=100
-comp_n=1000
+# company = r"C:\Users\stf45\Documents\NETS\Processing\samples\company_sample.txt"
+# comp_chunksize=100
+# comp_n=1000
 
 # for full file
-# company = r"D:\NETS\NETS_2019\RawData\NETS2019_Company.txt"
-# comp_chunksize=10000000
-# comp_n=71498225
+company = r"D:\NETS\NETS_2019\RawData\NETS2019_Company.txt"
+chunksize=10000000
+n=71498225
 
 company_reader = pd.read_csv(company, sep = '\t', dtype=object, header=0,
                                    usecols=['DunsNumber',
@@ -59,22 +66,28 @@ company_reader = pd.read_csv(company, sep = '\t', dtype=object, header=0,
                                             'State',
                                             'ZipCode',
                                             'ZIP4'],
-                                   chunksize=comp_chunksize,
+                                   chunksize=chunksize,
                                    encoding_errors='replace'
                                    )
 
-for i,chunk in enumerate(company_reader):
-    header = (i==0)
-    tic = time.perf_counter()
+print(f"Start Time: {datetime.now()}")
+time_list = [0]
+tic = time.perf_counter()
+
+for c,chunk in enumerate(company_reader):
+    header = (c==0)
+    chunk = chunk.loc[chunk['DunsNumber'].isin(dunsset)]
     chunk['GcLastYear'] = 3000 
-    chunk['ZIP4'].replace('0000', np.nan, inplace=True)
-    chunk.rename(columns = {"Address":"GcAddress", "City":"GcCity", "State":"GcState", "ZipCode":"GcZIP", "ZIP4": "GcZIP4"}, inplace=True)
+    chunk['ZIP4'] = chunk['ZIP4'].replace('0000', np.nan)
+    chunk = chunk.rename(columns={"Address":"GcAddress", "City":"GcCity", "State":"GcState", "ZipCode":"GcZIP", "ZIP4": "GcZIP4"})
     chunk.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1.txt", sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
-    t = toc - tic
-    print('chunk {} completed in {} minutes! {} chunks to go'.format(i+1, round(t/60, 2), comp_n/comp_chunksize-(i+1)))
-    # if i==1:
-    #     break
+    t = toc - (sum(time_list) + tic)
+    time_list.append(t)
+    print('chunk {} completed in {} minutes! {} chunks to go'.format(c+1, round(t/60, 2), n/chunksize-(c+1)))
+
+runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
+print(runtime)
 
 del chunk
 
@@ -85,6 +98,9 @@ del chunk
 -rename columns and arrange to match geocoding_1 csv
 -append to geocoding_1 csv
 '''
+
+print(f"Start Time: {datetime.now()}")
+tic = time.perf_counter()
 
 # for sample
 # move = r"C:\Users\stf45\Documents\NETS\Processing\samples\move_sample.txt"
@@ -102,7 +118,8 @@ move_df = pd.read_csv(move, sep = '\t', dtype=object, header=0,
                           encoding_errors='replace'
                           )
 
-move_df.rename(columns = {"MoveYear": "GcLastYear", "OriginAddress":"GcAddress", "OriginCity":"GcCity", "OriginState":"GcState", "OriginZIP":"GcZIP"}, inplace=True)
+move_df = move_df.loc[move_df['DunsNumber'].isin(dunsset)]
+move_df = move_df.rename(columns={"MoveYear": "GcLastYear", "OriginAddress":"GcAddress", "OriginCity":"GcCity", "OriginState":"GcState", "OriginZIP":"GcZIP"})
 move_df['GcZIP4'] = np.nan
 move_df = move_df[['DunsNumber',
                     'GcAddress',
@@ -116,6 +133,10 @@ move_df = move_df[['DunsNumber',
 move_df.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1.txt", sep="\t", header=False, mode='a', index=False)
 
 del move_df
+del dunsset
+toc = time.perf_counter()
+t = toc - tic
+print('time: {} minutes'.format(round(t/60, 2)))
 
 #%% MERGE FIRST_LAST TO GEOCODING_1 AND WRANGLE
 
@@ -170,10 +191,12 @@ del geo_second_half
 del first_last_df
 
 
-
 #%% DATA CHECK
 
-geocoding_1 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1.txt", dtype={'DunsNumber': str, 'GcZIP4':str}, sep = '\t', header=0, nrows=10000)
+
+
+geocoding_1 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1.txt", dtype={'DunsNumber': str, 'GcZIP4':str}, sep = '\t', header=0, nrows=1000)
+print(geocoding_1.columns)
 
 geocoding_2 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0, nrows=10000)
 
@@ -181,3 +204,4 @@ first_last = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\nets_interme
 
 geocoding_2.GcFirstYear.value_counts()
 
+siclong = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\sic_long_filter.txt',sep='\t', nrows=10000)

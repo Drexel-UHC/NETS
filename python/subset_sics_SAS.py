@@ -68,6 +68,7 @@ print(f"subset file n = {sum(rownum)}")
 
 #%% DATA CHECK
 
+# how many records are there?:: 78,155,083
 classification = pd.read_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\classification_sicsubset_SAS20230330.txt', sep='\t', header=0, usecols=['DunsYear'], chunksize=100000000)
                              
 lenlist = []
