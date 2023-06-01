@@ -35,7 +35,7 @@ from datetime import datetime
 
 #%% LOAD LIST OF RELEVANT DUNSNUMBERS
 
-dunsdf = pd.read_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\classified_long20230418.txt', sep='\t', usecols=(['DunsYear']))
+dunsdf = pd.read_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\classified_long20230526.txt', sep='\t', usecols=(['DunsYear']))
 dunsset = set(dunsdf['DunsYear'].str[:9])
 del dunsdf
 
