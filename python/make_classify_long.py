@@ -4,7 +4,7 @@ Created on Tue Nov  1 14:33:42 2022
 
 @author: stf45
 
-this is a script to convert classified.txt from wide into long. 
+This is a script to convert the Classified Dataset (Python) (classifiedYYYYMMDD.txt) from wide to long. 
 
 
 runtime: ~80 mins
@@ -15,7 +15,7 @@ import time
 import json
 from datetime import datetime
     
-#%% READ FILE
+#%% READ CLASSIFIED DATASET (PYTHON) FILE
 
 # load in json config
 with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230329.json', 'r') as f:
@@ -61,7 +61,7 @@ print(runtime)
 
 #CHECK TO SEE IF N OF CLASSIFED == N OF CLASSIFICATION SIC SUBSET 
 
-classified_long = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classified_long.txt', sep='\t', dtype = object, nrows=30000)
+classified_long = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classified_longYYYYMMDD.txt', sep='\t', dtype = object, nrows=30000)
 dups = classified_long.loc[classified_long.duplicated(subset=['DunsYear'], keep=False)]
 print(classified_long.nunique())
 
