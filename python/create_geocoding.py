@@ -4,21 +4,20 @@ Created on Thu Mar 31 10:41:16 2022
 
 @author: stf45
 
-This script creates the dataset necessary to geocode all of the NETS addresses.
+This script creates the dataset necessary to geocode all of the categorized NETS addresses.
+The geocoding_final dataset will only include locations with DunsNumbers that have 
+been categorized using the Business Data Categorization process.
 
 Inputs:
     NETS2019_Company.txt - original NETS file
     NETS2019_Move.txt - original NETS file
-    first_last.txt - derived from NETS2019_SIC dataset, containing dunsnumber and
-        separate 'FirstYear' and 'LastYear' columns depicting the first and
-        last years that a dunsnumber existed.
         
 Outputs:
-    geocoding_1.txt - intermediate file containing combined Move and Company datasets,
+    geocoding_1_YYYYMMDD.txt - intermediate file containing combined Move and Company datasets,
         only including necessary columns
-    geocoding_2.txt - final dataset to be used for geocoding all NETS addresses
+    geocoding_finalYYYYMMDD.txt - final dataset to be used for geocoding all NETS addresses
     
-Runtime: approx 1.25 hours
+Runtime: approx 45 mins
 
 """
 
@@ -39,6 +38,8 @@ dunsdf = pd.read_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS
 dunsset = set(dunsdf['DunsYear'].str[:9])
 del dunsdf
 
+# takes about 4 mins
+
 #%% ADD COMPANY FILE COLUMNS TO NEW GEOCODING_1 FILE
 
 '''
@@ -51,8 +52,8 @@ geocoding dataset
 
 # for sample
 # company = r"C:\Users\stf45\Documents\NETS\Processing\samples\company_sample.txt"
-# comp_chunksize=100
-# comp_n=1000
+# chunksize=100
+# n=1000
 
 # for full file
 company = r"D:\NETS\NETS_2019\RawData\NETS2019_Company.txt"
@@ -80,7 +81,7 @@ for c,chunk in enumerate(company_reader):
     chunk['GcLastYear'] = 3000 
     chunk['ZIP4'] = chunk['ZIP4'].replace('0000', np.nan)
     chunk = chunk.rename(columns={"Address":"GcAddress", "City":"GcCity", "State":"GcState", "ZipCode":"GcZIP", "ZIP4": "GcZIP4"})
-    chunk.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1.txt", sep="\t", header=header, mode='a', index=False)
+    chunk.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1_YYYYMMDD.txt", sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
     time_list.append(t)
@@ -91,6 +92,8 @@ print(runtime)
 
 del chunk
 
+# takes about 13mins
+
 #%% APPEND MOVE FILE COLUMNS TO GEOCODING_1 FILE
 
 '''
@@ -99,7 +102,6 @@ del chunk
 -append to geocoding_1 csv
 '''
 
-print(f"Start Time: {datetime.now()}")
 tic = time.perf_counter()
 
 # for sample
@@ -130,31 +132,39 @@ move_df = move_df[['DunsNumber',
                     'GcLastYear'
                     ]]
 
-move_df.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1.txt", sep="\t", header=False, mode='a', index=False)
+move_df.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1_YYYYMMDD.txt", sep="\t", header=False, mode='a', index=False)
 
 del move_df
-del dunsset
+# del dunsset
 toc = time.perf_counter()
 t = toc - tic
 print('time: {} minutes'.format(round(t/60, 2)))
 
+# takes about 1.5mins
+
 #%% MERGE FIRST_LAST TO GEOCODING_1 AND WRANGLE
 
 '''
-This cell applies the previous cell's function on the two halves of the geocoding_1
-file. Applying the first half to the function will result in a new csv "geocoding_2".
+This cell applies the nf.geocoding_wrangle function on the two halves of the geocoding_1
+file. Applying the first half to the function will result in a new csv "geocoding_final".
 Applying the second half to the function will result in the second half's data
-being appended to the geocoding_2 file. The geocoding_2 file contains the minimum
+being appended to the geocoding_final file. The geocoding_final file contains the
 columns necessary for geocoding the NETS dataset. Dataframes are deleted when no longer
 necessary for memory purposes.
 '''
-# for sample
-# first_last = r"C:\Users\stf45\Documents\NETS\Processing\samples\first_last_sample.txt"
 
-# for full
-first_last = r"C:\Users\stf45\Documents\NETS\Processing\scratch\first_last.txt"
+# read in ['DunsNumber','FirstYear','LastYear'] columns from NETS2019_Misc.txt and add +1 to all rows in FirstYear col
+#(There are no SIC data for the first year of all records, so the given first year should not
+#be included)
 
-first_last_df = pd.read_csv(first_last, sep = '\t', header=0)
+# # for sample
+# misc = r'C:\Users\stf45\Documents\NETS\Processing\samples\misc_sample.txt'
+
+# # for full
+misc = r"\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\RawData\NETS2019_Misc\NETS2019_Misc.txt"
+
+first_last_df = pd.read_csv(misc, sep = '\t', header=0, usecols=['DunsNumber','FirstYear','LastYear'],encoding_errors='replace')
+first_last_df['FirstYear'] += 1
 
 schema = {'DunsNumber': int,
             'GcAddress': str,
@@ -165,11 +175,11 @@ schema = {'DunsNumber': int,
             'GcLastYear': int}
 
 
-# takes about 30mins
-geocoding_1_reader = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1.txt", sep="\t", dtype=schema, header=0, chunksize=10000000)
+# takes about 11mins
+tic = time.perf_counter()
+geocoding_1_reader = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1_YYYYMMDD.txt", sep="\t", dtype=schema, header=0, chunksize=10000000)
 geo_first_half = pd.concat((x.query("DunsNumber <= 100000000") for x in geocoding_1_reader), ignore_index=True)
 print("{} gigabytes".format(sys.getsizeof(geo_first_half)/1024**3))
-tic = time.perf_counter()
 nf.geocoding_wrangle(geo_first_half, first_last_df, True)
 toc = time.perf_counter()
 t = toc - tic
@@ -177,11 +187,11 @@ print('time: {} minutes'.format(round(t/60, 2)))
         
 del geo_first_half
 
-# takes about 30mins
-geocoding_1_reader = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1.txt", sep="\t", dtype=schema, header=0, chunksize=10000000)
+# takes about 12mins
+tic = time.perf_counter()
+geocoding_1_reader = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1_YYYYMMDD.txt", sep="\t", dtype=schema, header=0, chunksize=10000000)
 geo_second_half = pd.concat((x.query("DunsNumber > 100000000") for x in geocoding_1_reader), ignore_index=True)
 print("{} gigabytes".format(sys.getsizeof(geo_second_half)/1024**3))
-tic = time.perf_counter()
 nf.geocoding_wrangle(geo_second_half, first_last_df, False)
 toc = time.perf_counter()
 t = toc - tic
@@ -190,18 +200,12 @@ del geo_second_half
 
 del first_last_df
 
+# takes about 26mins
 
 #%% DATA CHECK
 
-
-
-geocoding_1 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1.txt", dtype={'DunsNumber': str, 'GcZIP4':str}, sep = '\t', header=0, nrows=1000)
+geocoding_1 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1_YYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP4':str}, sep = '\t', header=0)
 print(geocoding_1.columns)
 
-geocoding_2 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0, nrows=10000)
+geocoding_final = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_finalYYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
 
-first_last = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\nets_intermediate/first_last.txt", dtype={'DunsNumber': str}, sep = '\t', header=0)
-
-geocoding_2.GcFirstYear.value_counts()
-
-siclong = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\sic_long_filter.txt',sep='\t', nrows=10000)
