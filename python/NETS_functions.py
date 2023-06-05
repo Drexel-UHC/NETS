@@ -108,7 +108,8 @@ def geocoding_wrangle(geocoding_1_half, first_last, header):
             movenum.append(count)
     
     geocoding_2['MoveNum'] = movenum
-    geocoding_2['DunsMove'] = "1" + geocoding_2['MoveNum'].astype(str) + geocoding_2['DunsNumber']
+    geocoding_2['DunsMove'] = (10 + geocoding_2['MoveNum']).astype(str)
+    geocoding_2['DunsMove'] = geocoding_2['DunsMove'] + geocoding_2['DunsNumber']
     
     # set values in 'GcLastYear' == 3000 to value in 'LastYear', all other values equal
     # This applies the last year of a dunsnumber's existence (last year that data
@@ -141,7 +142,7 @@ def geocoding_wrangle(geocoding_1_half, first_last, header):
                                     ]]
     
     
-    geocoding_2.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2.txt", sep="\t", mode='a', header=header, index=False)
+    geocoding_2.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_finalYYYYMMDD.txt", sep="\t", mode='a', header=header, index=False)
  
 
 #%%  SIC RANGE FUNCTIONS 
