@@ -80,15 +80,6 @@ for c, class_chunk in enumerate(class_long_reader):
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)
 
-#%%
-classified = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classified.txt', sep='\t',  
-                          nrows=30000
-                         )
-
-#%% DATA CHECK
-
-# print(classification['DunsYear'].nunique()==classified['DunsYear'].nunique())
-
 #%% WRITE OUT REPORT
 
 title = "NETS Classification Report Using classify.py\n"
