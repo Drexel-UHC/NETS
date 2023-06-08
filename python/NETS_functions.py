@@ -10,6 +10,7 @@ for the Drexel MESA Neighborhoods Aging study. Functions are further documented
 individually throughout this file.
 """
 
+#%%
 import pandas as pd
 import numpy as np
 import operator as op
@@ -119,11 +120,12 @@ def geocoding_wrangle(geocoding_1_half, first_last, header):
     geocoding_2['GcLastYear'] = np.where(geocoding_2['GcLastYear'] == 3000, geocoding_2['LastYear'], geocoding_2['GcLastYear']).astype(int)
 
     
-    # group by dunsnumber to find lowest 
+    # group by dunsnumber to find lowest GcLastYear, "min". create a lag of GcLastYear
     geocoding_2['min'] = geocoding_2['GcLastYear'].groupby(geocoding_2['DunsNumber']).transform('min')
     geocoding_2['GcLastLag'] = geocoding_2['GcLastYear'].shift(-1)
     
-    # make this so the last argument is GcLastLag + 1
+    # create GcFirstYear. where a record contains the lowest GcLastYear for that
+    #DunsNumber,  
     geocoding_2['GcFirstYear'] = np.where(geocoding_2['GcLastYear'] == geocoding_2['min'], geocoding_2['FirstYear'], geocoding_2['GcLastLag'] + 1).astype(int)
     
     geocoding_2 = geocoding_2.drop(columns=['dunslag', 'min', 'GcLastLag', 'FirstYear', 'LastYear'])
@@ -142,7 +144,7 @@ def geocoding_wrangle(geocoding_1_half, first_last, header):
                                     ]]
     
     
-    geocoding_2.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_finalYYYYMMDD.txt", sep="\t", mode='a', header=header, index=False)
+    geocoding_2.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2_YYYYMMDD.txt", sep="\t", mode='a', header=header, index=False)
  
 
 #%%  SIC RANGE FUNCTIONS 
