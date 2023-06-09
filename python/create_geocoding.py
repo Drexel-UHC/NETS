@@ -15,9 +15,10 @@ Inputs:
 Outputs:
     geocoding_1_YYYYMMDD.txt - intermediate file containing combined Move and Company datasets,
         only including necessary columns
-    geocoding_finalYYYYMMDD.txt - final dataset to be used for geocoding all NETS addresses
-    
-Runtime: approx 45 mins
+    DunsMoveYYYYMMDD.txt - dataset including DunsMove, AddressID, GcFirstYear, and GcLastYear
+    GeocodingInputYYYYMMDD.txt - dataset including AddressID, GcAddress, GcCity,
+        GcState, GcZIP, and GcZIP4. Used to geocode 
+Runtime: approx 1 hour
 
 """
 
@@ -75,9 +76,12 @@ print(f"Start Time: {datetime.now()}")
 time_list = [0]
 tic = time.perf_counter()
 
+non_contig_us = ['HI','PR','AK','VI']
+
 for c,chunk in enumerate(company_reader):
     header = (c==0)
     chunk = chunk.loc[chunk['DunsNumber'].isin(dunsset)]
+    chunk = chunk.loc[~chunk['State'].isin(non_contig_us)]
     chunk['GcLastYear'] = 3000 
     chunk['ZIP4'] = chunk['ZIP4'].replace('0000', np.nan)
     chunk = chunk.rename(columns={"Address":"GcAddress", "City":"GcCity", "State":"GcState", "ZipCode":"GcZIP", "ZIP4": "GcZIP4"})
@@ -121,6 +125,8 @@ move_df = pd.read_csv(move, sep = '\t', dtype=object, header=0,
                           )
 
 move_df = move_df.loc[move_df['DunsNumber'].isin(dunsset)]
+non_contig_us = ['HI','PR','AK','VI']
+move_df = move_df.loc[~move_df['OriginState'].isin(non_contig_us)]
 move_df = move_df.rename(columns={"MoveYear": "GcLastYear", "OriginAddress":"GcAddress", "OriginCity":"GcCity", "OriginState":"GcState", "OriginZIP":"GcZIP"})
 move_df['GcZIP4'] = np.nan
 move_df = move_df[['DunsNumber',
@@ -142,7 +148,8 @@ print('time: {} minutes'.format(round(t/60, 2)))
 
 # takes about 1.5mins
 
-#%% MERGE FIRST_LAST TO GEOCODING_1 AND WRANGLE
+del dunsset
+#%% APPLY GEOCODING WRANGLE FUNCTION
 
 '''
 This cell applies the nf.geocoding_wrangle function on the two halves of the geocoding_1
@@ -202,10 +209,28 @@ del first_last_df
 
 # takes about 26mins
 
+#%% CREATE ADDRESS ID BY GROUPING BY ADDRESS COLUMNS
+
+# read in geocoding_2 file. drop duplicate addresses (address=all five address columns). 
+#assign address id and export to csv as GeocodingInput file.
+geocoding_2 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2_YYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
+add_id = geocoding_2[['GcAddress', 'GcCity', 'GcState', 'GcZIP', 'GcZIP4']].drop_duplicates(['GcAddress', 'GcCity', 'GcState', 'GcZIP', 'GcZIP4'])
+addressid = range(len(add_id))
+add_id.insert(0, 'AddressID', addressid)
+add_id['AddressID'] = 'A' + add_id['AddressID'].astype(str).str.zfill(9)
+add_id.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch/GeocodingInputYYYYMMDD.txt', index=False, sep='\t')
+
+# join address id to dunsmove, remove address columns, and export to csv as DunsMove file.
+dunsmove = geocoding_2.merge(add_id, on=['GcAddress', 'GcCity', 'GcState', 'GcZIP', 'GcZIP4'])
+dunsmove = dunsmove[['DunsMove','DunsNumber','AddressID','GcFirstYear','GcLastYear']]
+
+dunsmove.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch/DunsMoveYYYYMMDD.txt', index=False, sep='\t')
+
+# takes about 7mins
 #%% DATA CHECK
 
 geocoding_1 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1_YYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP4':str}, sep = '\t', header=0)
-print(geocoding_1.columns)
-
-geocoding_final = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_finalYYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
+geocoding_2 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2_YYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
+dunsmove = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/DunsMoveYYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
+geocodinginput = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/GeocodingInputYYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
 
