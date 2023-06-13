@@ -73,16 +73,5 @@ dn_unique = yearmove['DunsYear'].str[:9].nunique()
 check1 = yearmove.loc[yearmove['DunsYear'].str[:9] == '001017107']
 check11 = dunsmove_reader.loc[dunsmove_reader['DunsNumber'] == '001017107']
 
-# check2019 = yearmove.loc[(yearmove['DunsYear'].str[:-4] == '2019')]
-
-# lens = dunsmove_reader['GcAddress'].str.rstrip()
-# lens = lens.str.len()
-# long = lens.loc[lens == lens.max()].reset_index()
-# longs = dunsmove_reader.iloc[long['index']]
-
-# lens2 = georeader['GcCity'].str.rstrip()
-# lens2 = lens2.str.len()
-# long2 = lens2.loc[lens2 == lens2.max()].reset_index()
-# longs2 = georeader.iloc[long2['index']]
 
 
