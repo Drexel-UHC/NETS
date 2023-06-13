@@ -1,0 +1,256 @@
+category_long	category	domain	type
+All Unhealthy food sources – Restrictive Version	AUR	Food	Thematic Construct
+All Unhealthy Food Sources – Less Restrictive Version	AUU	Food	Thematic Construct
+Small grocers/bodegas	BDS	Food	Base Group
+All Bakery, Candy, Ice Cream (sweets)	BKA	Food	Combination Category
+Bakery, Candy, Ice Cream (sweets) – Chain name based definition	BKN	Food	Base Group
+Bakery, Candy, Ice Cream (sweets) – SIC code based definition	BKS	Food	Base Group
+All Coffee shops	CFA	Food	Combination Category
+Coffee shops - Chain name based definition	CFN	Food	Base Group
+Coffee shops – SIC Code Based definition	CFS	Food	Base Group
+Conventional Mass Merchandise – Chain name based definition	CMN	Food	Base Group
+All Convenience stores	CNA	Food	Combination Category
+Convenience Store/Gas stations - Chain name based definition	CNG	Food	Base Group
+Convenience stores - Chain name based definition	CNN	Food	Base Group
+Convenience stores – SIC code based definition	CNV	Food	Base Group
+Casual Dining - Chain name based definition	CSD	Food	Base Group
+Ethnic Restaurants – Other Asian	EAO	Food	Base Group
+Ethnic Restaurants – Popular Asian	EAP	Food	Base Group
+Other restaurants/eating places	EAT	Food	Base Group
+Ethnic Restaurants – Popular Ethnic	EEP	Food	Base Group
+Ethnic Restaurants – European	EEU	Food	Base Group
+All Ethnic Restaurants	ETA	Food	Combination Category
+Fast food Fast Casual - Chain name based definition	FCS	Food	Base Group
+All Fast food	FFA	Food	Combination Category
+Fast food – SIC code based definition	FFS	Food	Base Group
+All Food Stores	FSA	Food	Combination Category
+Fish markets	FSH	Food	Base Group
+Fruit and vegetable markets	FVM	Food	Base Group
+Medium-sized grocers	GRY	Food	Base Group
+Healthy Food Sales – Restrictive Version	HSR	Food	Thematic Construct
+Healthy Food Sales – Less Restrictive Version	HSU	Food	Thematic Construct
+Meat and dairy (animal fats)	MET	Food	Base Group
+Health food, natural food, vitamins	NAT	Food	Base Group
+Nuts	NUT	Food	Base Group
+Other food stores	OFD	Food	Base Group
+Pizza - Word search based defintion	PIN	Food	Base Group
+Pizza - SIC code based definition	PIS	Food	Base Group
+Pizza	PIZ	Food	Combination Category
+Fast food Quick Service - Chain name based definition	QSV	Food	Base Group
+All restaurants/eating places	RSA	Food	Combination Category
+All especially unhealthy restaurants/eating places	RUA	Food	Thematic Construct
+Supercenters - Chain name based definition	SCT	Food	Base Group
+All Supermarkets	SMA	Food	Combination Category
+Supermarkets – SIC code based definition	SMK	Food	Base Group
+Supermarkets - Chain name based definition	SMN	Food	Base Group
+Unhealthy Food Sales – Restrictive Version	USR	Food	Thematic Construct
+Unhealthy Food Sales – Less Restrictive Version	USU	Food	Thematic Construct
+All Wholesale/Warehouse club stores	WRA	Food	Combination Category
+Wholesale/Warehouse Club Stores – Chain name based definition	WRN	Food	Base Group
+Wholesale/Warehouse Club Stores – SIC code based definition	WRS	Food	Base Group
+All Clinical Treatment	ACT	Healthcare	Thematic Construct
+Acute Episodic Care	AEC	Healthcare	Combination Category
+Ambulatory Care	AMB	Healthcare	Combination Category
+Alternative medicine and other body work	ATR	Healthcare	Combination Category
+All Behavioral Health Care	BHA	Healthcare	Combination Category
+Behavioral Health Hospitals	BHH	Healthcare	Base Group
+Behavioral Health Outpatient and Continuous Care	BHO	Healthcare	Base Group
+Acupuncture and Biofeedback	BIO	Healthcare	Base Group
+Pediatric Dental Care	CDS	Healthcare	Base Group
+Children Hospitals	CHS	Healthcare	Base Group
+Chiropractors	CHR	Healthcare	Base Group
+Community Based Care	CMB	Healthcare	Combination Category
+Offices or clinics of pediatric health practitioners	CPC	Healthcare	Base Group
+Dental Care	DDS	Healthcare	Base Group
+All Pharmacies/Drug Stores	DRA	Healthcare	Combination Category
+Pharmacies/Drug Stores – SIC Code based definition	DRG	Healthcare	Base Group
+Pharmacies/Drug Stores – Chain name based definition	DRN	Healthcare	Base Group
+Hearing aids retail and testing locations	EAR	Healthcare	Base Group
+Emergency medical transport	EMT	Healthcare	Base Group
+Hospital based inpatient care	HOI	Healthcare	Combination Category
+Hospitals and major medical centers	HOS	Healthcare	Base Group
+Offices or clinics of health practitioners	HPC	Healthcare	Base Group
+Kidney Centers	KCT	Healthcare	Base Group
+All Mental and Behavioral Health Care	MBH	Healthcare	Combination Category
+All Mental Health Care	MHA	Healthcare	Combination Category
+Mental Health Hospitals	MHH	Healthcare	Base Group
+Mental Health Outpatient and Continuous Care	MHO	Healthcare	Base Group
+Optical	OPT	Healthcare	Base Group
+Pediatric Specialty All Clinical Treatment	PCT	Healthcare	Thematic Construct
+Physical and Occupational Therapy	PHT	Healthcare	Base Group
+Physical Therapy and Massage	PTM	Healthcare	Combination Category
+Residential facilities with health care	RES	Healthcare	Base Group
+Residential Care	RSC	Healthcare	Base Group
+Retail clinics	RTC	Healthcare	Base Group
+Urgent care	URG	Healthcare	Base Group
+Adult and Child Light/moderate physical activity	ACM	Physical Activity	Base Group
+All Child-based Physical Activity facilities	ACP	Physical Activity	Thematic Construct
+Adult Only Light/moderate physical activity	AMP	Physical Activity	Base Group
+All Physical Activity facilities for adults	APA	Physical Activity	Thematic Construct
+Adult Only Vigorous physical activity	AVP	Physical Activity	Base Group
+Child-based Light/moderate physical activity	CMP	Physical Activity	Combination Category
+Child Multi-use facilities	CMU	Physical Activity	Combination Category
+Adult and Child Multi-use facilities - SIC code based definition	CMS	Physical Activity	Base Group
+Adult and Child Multi-use facilities - Word search based definition	AMW	Physical Activity	Base Group
+Child Multi-use facilities - Word search based definition	CMW	Physical Activity	Base Group
+Camping and RV parks and campsites	CRV	Physical Activity	Base Group
+Adult and Child Vigorous physical activity	CVP	Physical Activity	Base Group
+Adult Light/moderate physical activity	MPA	Physical Activity	Combination Category
+Child Only Light/moderate physical activity	MPC	Physical Activity	Base Group
+Adult Only Multi-use facilities - SIC code based definition	MUA	Physical Activity	Base Group
+Adult Multi-use facilities	MUL	Physical Activity	Combination Category
+Adult Vigorous physical activity	VPA	Physical Activity	Combination Category
+Amusement parks, carnival, rodeo	AMU	Social	Base Group
+Arcades	ARC	Social	Base Group
+All religious institutions and goods	ARL	Social	Combination Category
+Bars and nightclubs serving alcohol	BAR	Social	Base Group
+Beauty shops and barbers	BEU	Social	Base Group
+All Child-based social destinations	CAS	Social	Thematic Construct
+Frequent Social Destinations -- Restrictive Version	FSR	Social	Thematic Construct
+Frequent Social Destinations -- Less Restrictive Version	FSU	Social	Thematic Construct
+Gambling	GAM	Social	Combination Category
+Casino Hotel	GHT	Social	Base Group
+Onsite Gambling that are not hotels	GNH	Social	Base Group
+Nightclubs not serving alcohol	NCL	Social	Base Group
+Nighttime Destinations	NGT	Social	Thematic Construct
+Religious institutions	REL	Social	Base Group
+Strip Clubs/Gentlemen’s Clubs	SCB	Social	Base Group
+Social engagement food and bar	SFC	Social	Combination Category
+Infrequent Social Destinations	SID	Social	Thematic Construct
+Other Social clubs	SLC	Social	Base Group
+Spas	SPA	Social	Combination Category
+Spas - SIC code based definition	SPC	Social	Base Group
+Spas - Word search based definition	SPN	Social	Base Group
+Professional/Semi-professional sports and stadium entertainment	SPS	Social	Base Group
+Artists, art studios, art related services	ART	Cognitive Enrichment	Base Group
+Cognitive Enrichment – Restrictive Version	CER	Cognitive Enrichment	Thematic Construct
+Cognitive Enrichment – Less Restrictive Version	CEU	Cognitive Enrichment	Thematic Construct
+Cultural Destinations	CUL	Cognitive Enrichment	Combination Category
+All Formal Educational Institutions	EDD	Cognitive Enrichment	Combination Category
+Junior, Community, and Technical Colleges	JCO	Cognitive Enrichment	Base Group
+Libraries	LIB	Cognitive Enrichment	Base Group
+Museum and art gallery	MAG	Cognitive Enrichment	Base Group
+Non-Physical Activity Instruction	NPI	Cognitive Enrichment	Base Group
+Performance based entertainment	PBE	Cognitive Enrichment	Base Group
+Political Organizations	PLO	Cognitive Enrichment	Base Group
+Preschool	PSC	Cognitive Enrichment	Base Group
+Colleges/University	UNI	Cognitive Enrichment	Base Group
+Non-Physical Activity Recreation Clubs	RCC	Cognitive Enrichment	Base Group
+Charter elementary and secondary schools	SCC	Cognitive Enrichment	Base Group
+All elementary and secondary schools	SCL	Cognitive Enrichment	Combination Category
+Elementary and secondary schools excluding charter schools	SCN	Cognitive Enrichment	Base Group
+Trade Schools	TSC	Cognitive Enrichment	Base Group
+Banks	BNK	Financial	Base Group
+Check Cashing	CCH	Financial	Base Group
+Credit unions	CRD	Financial	Base Group
+All Financial Institutions	FIN	Financial	Thematic Construct
+Investment advice/investment-related businesses	INV	Financial	Base Group
+Mortgage	MOR	Financial	Base Group
+Other financial services	OFN	Financial	Base Group
+Personal Banking	PBN	Financial	Combination Category
+Tax Services	TAX	Financial	Base Group
+All Alcohol Outlets	AAL	Alcohol, Tobacco, Marijuana, Firearm	Thematic Construct
+Marijuana Stores/Dispensaries	CND	Alcohol, Tobacco, Marijuana, Firearm	Base Group
+Marijuana farm production	CNF	Alcohol, Tobacco, Marijuana, Firearm	Base Group
+Fireworks	FWK	Alcohol, Tobacco, Marijuana, Firearm	Base Group
+Firearm-based physical activity	GPA	Alcohol, Tobacco, Marijuana, Firearm	Base Group
+Firearm-related stores and activities	GUN	Alcohol, Tobacco, Marijuana, Firearm	Thematic Construct
+Firearm Retail Stores	GUR	Alcohol, Tobacco, Marijuana, Firearm	Base Group
+Liquor stores – Word search based definition	LIN	Alcohol, Tobacco, Marijuana, Firearm	Base Group
+Liquor stores	LIQ	Alcohol, Tobacco, Marijuana, Firearm	Combination Category
+Liquor stores – SIC code based definition	LIS	Alcohol, Tobacco, Marijuana, Firearm	Base Group
+Marijuana farm production or dispensaries	THC	Alcohol, Tobacco, Marijuana, Firearm	Thematic Construct
+Tobacco Retailers	TOB	Alcohol, Tobacco, Marijuana, Firearm	Base Group
+All hotels	AHT	Walking	Combination Category
+Home Security Stores	ALM	Walking	Base Group
+BEH Walkable (excluded from current version of walkable)	AWK	Walking	Base Group
+Book Stores	BOK	Walking	Base Group
+Clothing and Jewelry retail, rental, and repair	CLO	Walking	Base Group
+Computer and Electronics retail, rental, and repair	COM	Walking	Base Group
+Cosmetics and personal care retail and repair	COS	Walking	Base Group
+Day care	DCR	Walking	Base Group
+Discount Department Stores	DDP	Walking	Base Group
+All Department Stores	DEP	Walking	Combination Category
+Dollar Stores	DLR	Walking	Base Group
+Document Services	DOC	Walking	Base Group
+All Discount Department Stores	DPA	Walking	Combination Category
+Department Stores	DPT	Walking	Base Group
+Florist/Gift Shops	FSG	Walking	Base Group
+General Merchandise	GMM	Walking	Base Group
+General Mass Merchandise – Chain name based definition	GMN	Walking	Base Group
+Household Goods Retail, rental and repair	HHG	Walking	Base Group
+Hobby Stores, rental, and repair	HOB	Walking	Base Group
+Hotels excluding casino hotels	HTL	Walking	Base Group
+Laundromat/Dry cleaning	LAU	Walking	Base Group
+Lottery tickets and off-site gambling	LOT	Walking	Base Group
+Massage parlors	MAS	Walking	Base Group
+Musical Instrument Retail, rental, and repair	MIR	Walking	Base Group
+Newstands	NSD	Walking	Base Group
+Pet supplies and services	PET	Walking	Base Group
+U.S. Postal Service	POS	Walking	Base Group
+Retail Building Supplies	RBS	Walking	Base Group
+Religious Goods Retail	RLG	Walking	Base Group
+Personal Services	SER	Walking	Base Group
+Shipping, photocopy, photofinish	SHP	Walking	Base Group
+Sporting Goods Retail and repair	SPR	Walking	Base Group
+Geriatric social services	SRG	Walking	Base Group
+Other individual and family social services, not geriatric or children	SRO	Walking	Base Group
+All individual and family social services	SRV	Walking	Combination Category
+Child social services	SRC	Walking	Base Group
+Storage facilities	STF	Walking	Base Group
+Short term living	STL	Walking	Base Group
+Tanning Salons	TAN	Walking	Base Group
+Tattoo parlors	TAT	Walking	Base Group
+Tourist	TOU	Walking	Base Group
+Travel Agents	TVA	Walking	Base Group
+Video Rental	VID	Walking	Base Group
+Walkability - Less Restrictive Version	WAL	Walking	Thematic Construct
+Walkability - Restrictive Version	WLR	Walking	Thematic Construct
+Fortune Tellers	WOO	Walking	Base Group
+Weight Loss	WTL	Walking	Base Group
+Zoo, aquarium, arboretum	ZOO	Walking	Base Group
+Taxicabs	CAB	Transportation	Base Group
+Gas stations – SIC code based definition	GSS	Transportation	Base Group
+Transportation hubs/public transit agencies	TRN	Transportation	Base Group
+Commercial Building Construction	CBC	Disaster/Construction	Base Group
+Cleaning Services	CLS	Disaster/Construction	Base Group
+Carpentry, framing, and windows	CRP	Disaster/Construction	Base Group
+Construction (all types)	CST	Disaster/Construction	Combination Category
+Cleanup 	CUP	Disaster/Construction	Combination Category
+Decontamination services including asbestos	DCS	Disaster/Construction	Base Group
+Demolition and dismantling of debris	DEM	Disaster/Construction	Base Group
+Disaster-related construction, cleaning, and services	DIS	Disaster/Construction	Thematic Construct
+Drywall, interior stucco, walls, floors	DRW	Disaster/Construction	Base Group
+Electrical and energy contractors	ELE	Disaster/Construction	Combination Category
+Electrical work 	ELW	Disaster/Construction	Base Group
+Electrical telephone and communications	ETC	Disaster/Construction	Base Group
+Fire services and stations	FIR	Disaster/Construction	Base Group
+Forestry Services	FOR	Disaster/Construction	Base Group
+Hardware, building supply stores	HWS	Disaster/Construction	Base Group
+Industrial Building Construction	IBC	Disaster/Construction	Base Group
+Infrastructure Construction	IFC	Disaster/Construction	Combination Category
+Land Infrastructure 	ILC	Disaster/Construction	Base Group
+Large public works infrastructure Construction	IPC	Disaster/Construction	Base Group
+Road Infrastructure Construction	IRC	Disaster/Construction	Base Group
+Utilities Infrastructure Construction	IUC	Disaster/Construction	Base Group
+Land/Farm Services & Maintenance (for businesses)	LFS	Disaster/Construction	Base Group
+Lawn/Garden Services & Maintenance (for residences)	LGM	Disaster/Construction	Base Group
+Lawn/Garden Supplies - non-Walkable	LGN	Disaster/Construction	Base Group
+Lawn/Garden Supplies	LGS	Disaster/Construction	Combination Category
+Lawn/Garden Supplies - Walkable	LGW	Disaster/Construction	Base Group
+Multi-Family Construction	MFC	Disaster/Construction	Base Group
+Masonry, stonework, tile	MST	Disaster/Construction	Base Group
+Outdoor and garden/tree/lawn/farm maintenance and supply	OMS	Disaster/Construction	Combination Category
+Painting and cosmetic contractors	PCC	Disaster/Construction	Base Group
+Plumbing, Heating, HVAC	PHV	Disaster/Construction	Base Group
+Police services and stations	POL	Disaster/Construction	Base Group
+Real Estate Agents	REA	Disaster/Construction	Base Group
+Renovations	REN	Disaster/Construction	Combination Category
+Refuse and sanitation	RFS	Disaster/Construction	Base Group
+Roof, insulation, and siding	RSI	Disaster/Construction	Base Group
+Emergency or Safety Services and Stations	SAF	Disaster/Construction	Thematic Construct
+Single Family Construction	SFM	Disaster/Construction	Base Group
+Second Hand Retail Building Supplies	SRB	Disaster/Construction	Base Group
+Tree services	TRS	Disaster/Construction	Base Group
+Fish/Aquaculture	WAT	Disaster/Construction	Base Group
+Weather and animal/pest proofing services	WPS	Disaster/Construction	Base Group

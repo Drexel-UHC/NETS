@@ -1,0 +1,71 @@
+All Unhealthy food sources – Restrictive Version,AUR,Food,Thematic Construct
+All Unhealthy Food Sources – Less Restrictive Version,AUU,Food,Thematic Construct
+"All Bakery, Candy, Ice Cream (sweets)",BKA,Food,Combination Category
+All Coffee shops,CFA,Food,Combination Category
+All Convenience stores,CNA,Food,Combination Category
+All Ethnic Restaurants,ETA,Food,Combination Category
+All Fast food,FFA,Food,Combination Category
+All Food Stores,FSA,Food,Combination Category
+Healthy Food Sales – Restrictive Version,HSR,Food,Thematic Construct
+Healthy Food Sales – Less Restrictive Version,HSU,Food,Thematic Construct
+Pizza,PIZ,Food,Combination Category
+All restaurants/eating places,RSA,Food,Combination Category
+All especially unhealthy restaurants/eating places,RUA,Food,Thematic Construct
+All Supermarkets,SMA,Food,Combination Category
+Unhealthy Food Sales – Restrictive Version,USR,Food,Thematic Construct
+Unhealthy Food Sales – Less Restrictive Version,USU,Food,Thematic Construct
+All Wholesale/Warehouse club stores,WRA,Food,Combination Category
+All Clinical Treatment,ACT,Healthcare,Thematic Construct
+Acute Episodic Care,AEC,Healthcare,Combination Category
+Ambulatory Care,AMB,Healthcare,Combination Category
+Alternative medicine and other body work,ATR,Healthcare,Combination Category
+All Behavioral Health Care,BHA,Healthcare,Combination Category
+Community Based Care,CMB,Healthcare,Combination Category
+All Pharmacies/Drug Stores,DRA,Healthcare,Combination Category
+Hospital based inpatient care,HOI,Healthcare,Combination Category
+All Mental and Behavioral Health Care,MBH,Healthcare,Combination Category
+All Mental Health Care,MHA,Healthcare,Combination Category
+Pediatric Specialty All Clinical Treatment,PCT,Healthcare,Thematic Construct
+Physical Therapy and Massage,PTM,Healthcare,Combination Category
+All Child-based Physical Activity facilities,ACP,Physical Activity,Thematic Construct
+All Physical Activity facilities for adults,APA,Physical Activity,Thematic Construct
+Child-based Light/moderate physical activity,CMP,Physical Activity,Combination Category
+Child Multi-use facilities,CMU,Physical Activity,Combination Category
+Adult Light/moderate physical activity,MPA,Physical Activity,Combination Category
+Adult Multi-use facilities,MUL,Physical Activity,Combination Category
+Adult Vigorous physical activity,VPA,Physical Activity,Combination Category
+All religious institutions and goods,ARL,Social,Combination Category
+All Child-based social destinations,CAS,Social,Thematic Construct
+Frequent Social Destinations -- Restrictive Version,FSR,Social,Thematic Construct
+Frequent Social Destinations -- Less Restrictive Version,FSU,Social,Thematic Construct
+Gambling,GAM,Social,Combination Category
+Nighttime Destinations,NGT,Social,Thematic Construct
+Social engagement food and bar,SFC,Social,Combination Category
+Infrequent Social Destinations,SID,Social,Thematic Construct
+Spas,SPA,Social,Combination Category
+Cognitive Enrichment – Restrictive Version,CER,Cognitive Enrichment,Thematic Construct
+Cognitive Enrichment – Less Restrictive Version,CEU,Cognitive Enrichment,Thematic Construct
+Cultural Destinations,CUL,Cognitive Enrichment,Combination Category
+All Formal Educational Institutions,EDD,Cognitive Enrichment,Combination Category
+All elementary and secondary schools,SCL,Cognitive Enrichment,Combination Category
+All Financial Institutions,FIN,Financial,Thematic Construct
+Personal Banking,PBN,Financial,Combination Category
+All Alcohol Outlets,AAL,"Alcohol, Tobacco, Marijuana, Firearm",Thematic Construct
+Firearm-related stores and activities,GUN,"Alcohol, Tobacco, Marijuana, Firearm",Thematic Construct
+Liquor stores,LIQ,"Alcohol, Tobacco, Marijuana, Firearm",Combination Category
+Marijuana farm production or dispensaries,THC,"Alcohol, Tobacco, Marijuana, Firearm",Thematic Construct
+All hotels,AHT,Walking,Combination Category
+All Department Stores,DEP,Walking,Combination Category
+All Discount Department Stores,DPA,Walking,Combination Category
+All individual and family social services,SRV,Walking,Combination Category
+Walkability - Less Restrictive Version,WAL,Walking,Thematic Construct
+Walkability - Restrictive Version,WLR,Walking,Thematic Construct
+Construction (all types),CST,Disaster/Construction,Combination Category
+Cleanup ,CUP,Disaster/Construction,Combination Category
+"Disaster-related construction, cleaning, and services",DIS,Disaster/Construction,Thematic Construct
+Electrical and energy contractors,ELE,Disaster/Construction,Combination Category
+Infrastructure Construction,IFC,Disaster/Construction,Combination Category
+Lawn/Garden Supplies,LGS,Disaster/Construction,Combination Category
+Outdoor and garden/tree/lawn/farm maintenance and supply,OMS,Disaster/Construction,Combination Category
+Renovations,REN,Disaster/Construction,Combination Category
+Emergency or Safety Services and Stations,SAF,Disaster/Construction,Thematic Construct

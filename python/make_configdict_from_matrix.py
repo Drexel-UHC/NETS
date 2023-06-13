@@ -7,13 +7,13 @@ Created on Wed Dec 21 15:19:50 2022
 #%%
 import pandas as pd
 import json
-import re
+# import re
 
 #%% LOAD MATRIX, CONVERT TO LONG
 
-matrix = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\config\main_cat_matrix20230217.csv')
+matrix = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\config\main_cat_matrix20230612.csv')
 matrix = matrix.rename(columns = {'Unnamed: 0': 'aux'})
-matrix = matrix.drop(columns=['Unnamed: 1'])
+# matrix = matrix.drop(columns=['Unnamed: 1'])
 
 matrix_long = pd.melt(matrix, id_vars=['aux'])
 matrix_long = matrix_long.loc[matrix_long['value']==1]
@@ -85,5 +85,8 @@ for row in matrix_long_lead.iterrows():
 
 with open(r"C:\Users\stf45\Documents\NETS\Processing\scratch\main_cat_config20230217.json","w") as outfile:
     json.dump(mdict, outfile, indent=2)
-    
-    
+
+#%% MAKE MAIN CAT DESCRIPTIONS TABLE
+
+desc = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\config\main_cat_descriptions20230612.csv', encoding='cp1252', header=None)
+desc.columns = ['Category_Long', 'Category', 'Domain', 'Type']

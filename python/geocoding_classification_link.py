@@ -33,7 +33,7 @@ time_list = [0]
 tic = time.perf_counter()
 
 dunsmove_reader = pd.read_csv(dunsmove, sep = '\t', dtype={'DunsNumber':str, 'DunsMove':str}, 
-                          chunksize=chunksize,
+                          # chunksize=chunksize,
                           header=0
                           )
 
@@ -70,9 +70,8 @@ dy_unique = yearmove['DunsYear'].nunique()
 dm_unique = yearmove['DunsMove'].nunique()
 dn_unique = yearmove['DunsYear'].str[:9].nunique()
 
-# check1 = yearmove.loc[yearmove['DunsYear'].str[:9] == '001017107']
-# check11 = dunsmove_reader.loc[dunsmove_reader['DunsNumber'] == '001017107']
-
+check1 = yearmove.loc[yearmove['DunsYear'].str[:9] == '001017107']
+check11 = dunsmove_reader.loc[dunsmove_reader['DunsNumber'] == '001017107']
 
 # check2019 = yearmove.loc[(yearmove['DunsYear'].str[:-4] == '2019')]
 
