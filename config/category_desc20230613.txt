@@ -1,4 +1,4 @@
-category_long	category	domain	type
+CategoryLong	Category	Domain	Type
 All Unhealthy food sources – Restrictive Version	AUR	Food	Thematic Construct
 All Unhealthy Food Sources – Less Restrictive Version	AUU	Food	Thematic Construct
 Small grocers/bodegas	BDS	Food	Base Group

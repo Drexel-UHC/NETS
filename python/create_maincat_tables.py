@@ -13,7 +13,7 @@ dict_df = pd.read_excel(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\N
 # Get DataFrame from Dict
 desc = dict_df.get('NETS_Catalogue_3LTR_Code')
 desc = desc.iloc[1:,:4]
-desc.columns = ['category_long', 'category', 'domain', 'type']
+desc.columns = ['CategoryLong', 'Category', 'Domain', 'Type']
 
 matrix = dict_df.get('Current Matrix')
 matrix = matrix.iloc[1:]
@@ -28,4 +28,4 @@ matrix_long = matrix_long.sort_values(['BaseGroup', 'HighLevel'])
 #%% EXPORT TABLES TO TXT
 
 desc.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\category_descYYYYMMDD.txt', sep='\t', index=False)
-matrix_long.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\basegroup_highlevel_xwalkYYYYMMDD.txt', sep='\t', index=False)
+matrix_long.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\BaseGroup_ComboCat_ThematicConstruct_XwalkYYYYMMDD.txt', sep='\t', index=False)
