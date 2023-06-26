@@ -55,7 +55,7 @@ for c,x in enumerate(classification):
     header = (c==0)
     x = x.loc[x['SIC'].isin(sicset)]
     rownum.append(len(x))
-    x.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classification_sicsubset_SASyyyymmdd.txt', sep="\t", header=header, mode='a', index=False)
+    x.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\BusinessInfo_SASYYYYMMDD.txt', sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
     time_list.append(t)

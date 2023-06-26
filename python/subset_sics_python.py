@@ -76,7 +76,7 @@ for c,cat in enumerate(config.keys()):
 
 chunksize=75000000
 n=564824373
-classification = pd.read_csv(r'D:\NETS\NETS_2019\ProcessedData\classification_input20230213.txt', sep='\t', header=0, dtype={'DunsNumber':str},
+classification = pd.read_csv(r'D:\NETS\NETS_2019\ProcessedData\BusinessInfoYYYYMMDD.txt', sep='\t', header=0, dtype={'DunsNumber':str},
                                chunksize=chunksize,
                               # nrows=100000
                               )
@@ -90,7 +90,7 @@ for c,x in enumerate(classification):
     header = (c==0)
     x = x.loc[x['SIC'].isin(sicset)]
     rownum.append(len(x))
-    x.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classification_sicsubsetyyyymmdd.txt', sep="\t", header=header, mode='a', index=False)
+    x.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\BusinessInfo_PythonYYYYMMDD.txt', sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
     time_list.append(t)

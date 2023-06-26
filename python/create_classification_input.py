@@ -14,7 +14,7 @@ Inputs:
     sales = r'D:\NETS\NETS_2019\RawData\NETS2019_Sales.txt'
 
 Output:
-    classification.txt (tab separated)
+    BusinessInfoYYYYMMDD.txt (tab separated)
         cols: ['DunsNumber','DunsYear','YearFull','Company','TradeName','SIC', 'Emp','Sales']
         n = 564,824,373
 """
@@ -176,7 +176,7 @@ print(runtime)
 
 #%%
 
-classification = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classification.txt', sep='\t', header=0, usecols=['DunsYear'],
+classification = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\BusinessInfoYYYYMMDD.txt', sep='\t', header=0, usecols=['DunsYear'],
                               chunksize=100000000)
                              
 lenlist = []
