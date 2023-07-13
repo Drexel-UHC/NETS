@@ -33,7 +33,7 @@ time_list = [0]
 tic = time.perf_counter()
 
 dunsmove_reader = pd.read_csv(dunsmove, sep = '\t', dtype={'DunsNumber':str, 'DunsMove':str}, 
-                          # chunksize=chunksize,
+                          chunksize=chunksize,
                           header=0
                           )
 
@@ -43,11 +43,11 @@ yearmovelen = []
 for c, chunk in enumerate(dunsmove_reader):
     header = (c==0)
     yearmove = chunk.merge(classified_long, on='DunsNumber', how='left')
-    yearmove = yearmove.drop(columns=['DunsNumber'])
+    # yearmove = yearmove.drop(columns=['DunsNumber'])
     yearmove = yearmove.loc[~yearmove['DunsYear'].isna()]
-    yearmove['YearFull'] = yearmove['DunsYear'].str[-4:].astype(int)
-    yearmove = yearmove.loc[(yearmove['YearFull'] >= yearmove['GcFirstYear']) & (yearmove['YearFull'] <= yearmove['GcLastYear'])]
-    yearmove = yearmove[['DunsYear','DunsMove']]
+    yearmove['Year'] = yearmove['DunsYear'].str[-4:].astype(int)
+    yearmove = yearmove.loc[(yearmove['Year'] >= yearmove['GcFirstYear']) & (yearmove['Year'] <= yearmove['GcLastYear'])]
+    yearmove = yearmove[['DunsYear','DunsMove','DunsNumber','AddressID','Year']]
     yearmove.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\DunsMove_DunsYear_KeyYYYYMMDD.txt', sep='\t', mode='a', index=False, header=header,)
     yearmovelen.append(len(yearmove))
     toc = time.perf_counter()
@@ -61,17 +61,18 @@ print(f'DunsMove_DunsYear_KeyYYYYMMDD has {sum(yearmovelen)} records')
 
 del chunk
 del classified_long
-yearmove = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\DunsMove_DunsYear_KeyYYYYMMDD.txt', sep = '\t', dtype=str, header=0)
+yearmove = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\DunsMove_DunsYear_Key20230711.txt', sep = '\t', dtype=str, header=0)
 
-dups = yearmove.loc[yearmove.duplicated(subset='DunsYear', keep=False)]
-dupshead = dups.head(1000)
 
-dy_unique = yearmove['DunsYear'].nunique()
-dm_unique = yearmove['DunsMove'].nunique()
-dn_unique = yearmove['DunsYear'].str[:9].nunique()
+# dups = yearmove.loc[yearmove.duplicated(subset='DunsYear', keep=False)]
+# dupshead = dups.head(1000)
 
-check1 = yearmove.loc[yearmove['DunsYear'].str[:9] == '001017107']
-check11 = dunsmove_reader.loc[dunsmove_reader['DunsNumber'] == '001017107']
+# dy_unique = yearmove['DunsYear'].nunique()
+# dm_unique = yearmove['DunsMove'].nunique()
+# dn_unique = yearmove['DunsYear'].str[:9].nunique()
+
+# check1 = yearmove.loc[yearmove['DunsYear'].str[:9] == '001017107']
+# check11 = dunsmove_reader.loc[dunsmove_reader['DunsNumber'] == '001017107']
 
 
 
