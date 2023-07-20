@@ -31,11 +31,6 @@ chunksize = 5000000
 n = 353116375
 file = r'C:\Users\stf45\Documents\NETS\Processing\scratch\classify_samples\classification_input_PythonYYYYMMDD.txt'
 
-# SAMPLE FILE
-# chunksize = 1000
-# n = 7681
-# file = r'C:\Users\stf45\Documents\NETS\Processing\scratch\classify_samples\classification.txt'
-
 
 class_long_reader = pd.read_csv(file, sep='\t', dtype={'DunsNumber':str, 'SIC':int, 'Emp':int, 'Sales':int}, 
                                 chunksize=chunksize,
@@ -61,22 +56,3 @@ for c, class_chunk in enumerate(class_long_reader):
 
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)
-
-#%% GET FREQS 
-
-# get sum of each record's total category count
-# get unique values to show how many records were not flagged (0), flagged once (1), etc
-classified['cat_counts'] = classified.iloc[:,8:].sum(axis=1)
-uniques = classified['cat_counts'].value_counts()
-uniques = pd.DataFrame(uniques)
-
-
-# get sum of each category's total record count
-catcounts = classified.iloc[:,8:].sum(axis=0)
-catcounts = pd.DataFrame(catcounts, columns=['count'])
-
-#%% WRITE EXCEL REPORT
-
-with pd.ExcelWriter('../reports/NETS_classify_report20220509.xlsx') as writer:
-    uniques.to_excel(writer, sheet_name='unique_values')
-    catcounts.to_excel(writer, sheet_name='cat_counts')    
