@@ -4,7 +4,7 @@ Created on Thu Mar 30 15:16:22 2023
 
 @author: stf45
 
-This file takes in 
+This file takes in classification_inputYYYYMMDD.txt and filters for SICs used in SAS processing.
 """
 
 
