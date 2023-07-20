@@ -29,7 +29,7 @@ with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230329
 # FULL FILE
 chunksize = 5000000
 n = 353116375
-file = r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\classification_sicsubset20230330.txt'
+file = r'C:\Users\stf45\Documents\NETS\Processing\scratch\classify_samples\classification_input_PythonYYYYMMDD.txt'
 
 # SAMPLE FILE
 # chunksize = 1000
