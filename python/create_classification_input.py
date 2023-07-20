@@ -14,7 +14,7 @@ Inputs:
     sales = r'D:\NETS\NETS_2019\RawData\NETS2019_Sales.txt'
 
 Output:
-    BusinessInfoYYYYMMDD.txt (tab separated)
+    classification_inputYYYYMMDD.txt (tab separated)
         cols: ['DunsNumber','DunsYear','YearFull','Company','TradeName','SIC', 'Emp','Sales']
         n = 564,824,373
 """
