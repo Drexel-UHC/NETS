@@ -4,7 +4,7 @@ Created on Thu Mar 30 15:16:22 2023
 
 @author: stf45
 
-This file 
+This file takes in 
 """
 
 
@@ -41,7 +41,7 @@ for c,cat in enumerate(config.keys()):
 
 chunksize=75000000
 n=564824373
-classification = pd.read_csv(r'D:\NETS\NETS_2019\ProcessedData\classification_input20230213.txt', sep='\t', header=0, dtype={'DunsNumber':str},
+classification = pd.read_csv(r'D:\NETS\NETS_2019\ProcessedData\classification_inputYYYYMMDD.txt', sep='\t', header=0, dtype={'DunsNumber':str},
                                chunksize=chunksize,
                               # nrows=100000
                               )
@@ -55,7 +55,7 @@ for c,x in enumerate(classification):
     header = (c==0)
     x = x.loc[x['SIC'].isin(sicset)]
     rownum.append(len(x))
-    x.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\BusinessInfo_SASYYYYMMDD.txt', sep="\t", header=header, mode='a', index=False)
+    x.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classification_input_SASYYYYMMDD.txt', sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
     time_list.append(t)
@@ -69,7 +69,7 @@ print(f"subset file n = {sum(rownum)}")
 #%% DATA CHECK
 
 # how many records are there?:: 78,155,083
-classification = pd.read_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\classification_sicsubset_SAS20230330.txt', sep='\t', header=0, usecols=['DunsYear'], chunksize=100000000)
+classification = pd.read_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\classification_input_SASYYYYMMDD.txt', sep='\t', header=0, usecols=['DunsYear'], chunksize=100000000)
                              
 lenlist = []
 
