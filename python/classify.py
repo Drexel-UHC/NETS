@@ -4,25 +4,7 @@ Created on Thu Mar 31 10:41:16 2022
 
 @author: stf45
 
-testing with chunksize 100,000, 1 chunk takes 1.54 mins, expected time for full (non-subset) file = 6.03 days.
-we can't subset the input classification file because of CMU category (requires name search over all sics)'
-
-
-testing chunksize of 100,000,000 overnight 02/13-02/14:: maxed out close to end.
-
-testing chunksize of 85,000,000 overnight 2/14-2/15:: maxed out after ZOO classified. 
-probably from concat
-
-testing chunksize of 50,000,000 overnight 2/15-2/16:: maxed out after ZOO classified, from concat.
-
-testing chunksize of 25,000,000 overnight 4/3-4/4:: maxed out. use 5,000,000 chunksize
-
-test skipping nrows to start at chunk 2 on sample:: THIS WORKS. just have to run:
-    classified_nodups = classified.drop_duplicates() to drop any duplicates.
-    make sure to uncomment skiprows, fill with the proper chunksize, and make header=False
-    in CLASSIFY cell loop.
-  
-chunksize of 5,000,000 runs at an hour per chunk, 71 chunks.
+This script is used to categorized establishments into health-related Base Group categories (n=176). 
 """
 
 #%%
