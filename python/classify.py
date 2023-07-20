@@ -62,17 +62,7 @@ for c, class_chunk in enumerate(class_long_reader):
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)
 
-#%% WRITE OUT REPORT
-
-title = "NETS Classification Report Using classify.py\n"
-
-lines = [title, runtime]
-with open('classify_report.txt', 'w') as f:
-    for line in lines:
-        f.write(line)
-        f.write('\n')
-
-#%% GET FREQS something is deprecated here, this needs to be rewritten
+#%% GET FREQS 
 
 # get sum of each record's total category count
 # get unique values to show how many records were not flagged (0), flagged once (1), etc
