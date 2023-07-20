@@ -174,9 +174,9 @@ for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk) in enumerate(readers):
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)
 
-#%%
+#%% PRINT NUMBER OF RECORDS
 
-classification = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\BusinessInfoYYYYMMDD.txt', sep='\t', header=0, usecols=['DunsYear'],
+classification = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classification_inputYYYYMMDD.txt', sep='\t', header=0, usecols=['DunsYear'],
                               chunksize=100000000)
                              
 lenlist = []

@@ -66,7 +66,7 @@ def normal_to_long(chunk, header):
     long_chunk = long_chunk.astype({'Sales': int, 'Emp': int, 'SIC': int})
     long_chunk = long_chunk[['DunsNumber','DunsYear','YearFull','Company','TradeName','SIC', 'Emp','Sales']]
     # output to csv
-    long_chunk.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/BusinessInfoYYYYMMDD.txt", sep="\t", header=header, mode='a', index=False)
+    long_chunk.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/classification_inputYYYYMMDD.txt", sep="\t", header=header, mode='a', index=False)
     return long_chunk
 
 
