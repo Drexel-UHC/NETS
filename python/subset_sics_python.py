@@ -6,26 +6,10 @@ Created on Wed Feb  8 15:47:08 2023
 
 This file takes in the classification input dataset (classification_input20230213.txt, n = 564,824,373) and removes records with SICs 
 that are not used in MESA Neigh Aging NETS categorization. The output is a new subset
-file (classification_sicsubset20230330.txt, n = 353,116,375) that will be used in the main NETS classification process (classify.py).
-
-TEST 1: subsetting sics using records with 3ltr cat in "SIC Only Auxiliary Code 1"
-total time: 51.45 minutes
-subset file n = 254,049,195
-
-TEST 2: subsetting sics using sicset (full ranges)
-total time: 52.6 minutes
-subset file n = 266,535,505
-THIS VERSION WINS^^
-
-TEST 3: subsetting sics using sicset, subset for real sics (from "SICCode" col in 3ltr doc)
-total time: 49.55 minutes
-subset file n = 266,535,255
-This method is not much faster and ends up missing two SICs found previously.
+file (classification_sicsubsetYYYYMMDD.txt) that will be used in the main NETS classification process (classify.py).
 
 
-REAL RUN:
 total time: approx 50 mins
-subset file n = 353,116,375
 """
 
 #%%
@@ -76,7 +60,7 @@ for c,cat in enumerate(config.keys()):
 
 chunksize=75000000
 n=564824373
-classification = pd.read_csv(r'D:\NETS\NETS_2019\ProcessedData\BusinessInfoYYYYMMDD.txt', sep='\t', header=0, dtype={'DunsNumber':str},
+classification = pd.read_csv(r'D:\NETS\NETS_2019\ProcessedData\classification_inputYYYYMMDD.txt', sep='\t', header=0, dtype={'DunsNumber':str},
                                chunksize=chunksize,
                               # nrows=100000
                               )
@@ -90,7 +74,7 @@ for c,x in enumerate(classification):
     header = (c==0)
     x = x.loc[x['SIC'].isin(sicset)]
     rownum.append(len(x))
-    x.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\BusinessInfo_PythonYYYYMMDD.txt', sep="\t", header=header, mode='a', index=False)
+    x.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classification_input_PythonYYYYMMDD.txt', sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
     time_list.append(t)
