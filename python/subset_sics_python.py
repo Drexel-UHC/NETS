@@ -6,7 +6,7 @@ Created on Wed Feb  8 15:47:08 2023
 
 This file takes in the classification input dataset (classification_input20230213.txt, n = 564,824,373) and removes records with SICs 
 that are not used in MESA Neigh Aging NETS categorization. The output is a new subset
-file (classification_sicsubsetYYYYMMDD.txt) that will be used in the main NETS classification process (classify.py).
+file (classification_input_PythonYYYYMMDD.txt) that will be used in the main NETS classification process (classify.py).
 
 
 total time: approx 50 mins
