@@ -65,17 +65,3 @@ for c,x in enumerate(classification):
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)
 print(f"subset file n = {sum(rownum)}")
-
-#%% DATA CHECK
-
-# how many records are there?:: 78,155,083
-classification = pd.read_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\classification_input_SASYYYYMMDD.txt', sep='\t', header=0, usecols=['DunsYear'], chunksize=100000000)
-                             
-lenlist = []
-
-for x in classification:
-    lenlist.append(len(x))
-    print(len(x))      
-
-
-print(sum(lenlist))
