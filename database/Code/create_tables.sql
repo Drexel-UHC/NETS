@@ -20,12 +20,12 @@ IF EXISTS(SELECT * FROM sysobjects WHERE name='Category' and xtype='U')
 GO
 
 CREATE TABLE Address (
-	AddressID		VARCHAR(10) PRIMARY KEY,
-	Address			VARCHAR(50),
-	City			VARCHAR(30),
-	State			VARCHAR(2),
-	Zip				VARCHAR(5),
-	Zip4			VARCHAR(4),
+	AddressID		VARCHAR(256) PRIMARY KEY,
+	Address			VARCHAR(max),
+	City			VARCHAR(max),
+	State			VARCHAR(max),
+	Zip				VARCHAR(max),
+	Zip4			VARCHAR(max),
 
 )
 
@@ -51,7 +51,7 @@ CREATE TABLE DunsMove (
 	DunsYear		VARCHAR(14) PRIMARY KEY,
 	DunsMove		VARCHAR(11),
 	DunsNumber		VARCHAR(9),
-	AddressID		VARCHAR(10),
+	AddressID		VARCHAR(256),
 	Year			SMALLINT,
 	
 
@@ -94,7 +94,7 @@ CREATE TABLE BG_CC_TC_Xwalk (
 CREATE TABLE DunsLocation (
 	
 	DunsLocationId		INTEGER PRIMARY KEY IDENTITY,
-	AddressID			VARCHAR(10),
+	AddressID			VARCHAR(256),
 	Xcoord				REAL,
 	Ycoord				REAL,
 	DisplayX			REAL,
