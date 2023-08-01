@@ -10,14 +10,14 @@ from sas7bdat import SAS7BDAT
 import seaborn as sns
 from matplotlib import pyplot as plt
 
-#%% LOAD PHILLY 2000 & 2010
+#%% LOAD NETS2019 PHILLY DATA 2000 & 2010
 
 philly = pd.read_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\NETS_tr10_measure_philly20230731.txt', sep='\t')
 
 philly00 = philly.loc[(philly['Year'] == 2000)]
 philly10 = philly.loc[philly['Year'] == 2010]
 
-#%% LOAD PEDIATRIC BIG DATA NETS 2014 DATASET
+#%% LOAD PEDIATRIC BIG DATA NETS2014 PHILLY 2000 & 2010
 
 with SAS7BDAT(r'Z:\UHC_Data\NETS_UHC\SAS\panjdemdnetsv5_uhc_den_122018.sas7bdat') as file:
     pbd = file.to_data_frame()
@@ -82,10 +82,26 @@ pbd10 = pbd[['geoid10',
              'net_aur_uhc_den_2010',
              'net_hsr_uhc_den_2010']]
 
-#%% REORDER COLUMNS
+#%% REORDER COLUMN FUNCTION
 
 # reorder columns alphabetically
 def colsort(df, nosort=None):
+    """
+    
+    Parameters
+    ----------
+    df : Dataframe
+        DataFrame whose columns need resorting in alphabetical order.
+    nosort : List; optional
+        List of columns not to sort. These columns will be placed back into df
+        in order of list. The default is None.
+
+    Returns
+    -------
+    df : Dataframe
+        Sorted Dataframe.
+
+    """
     cols = list(df.columns)
     [cols.remove(col) for col in nosort]
     cols.sort()
@@ -93,12 +109,14 @@ def colsort(df, nosort=None):
     df = df[cols]
     return df
 
+#%% reorder columns
+
 philly00 = colsort(philly00, nosort=['tract10','Year'])
 philly10 = colsort(philly10, nosort=['tract10','Year'])
 pbd00 = colsort(pbd00, nosort=['geoid10'])
 pbd10 = colsort(pbd10, nosort=['geoid10'])
 
-#%% PLOT HISTOGRAMS
+#%% PLOT HISTOGRAMS AND SAVE
 
 ############ AUR ###############
 #%% NETS2019 2000 "AUR" category
