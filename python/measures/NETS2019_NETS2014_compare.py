@@ -9,17 +9,18 @@ import pandas as pd
 from sas7bdat import SAS7BDAT
 import seaborn as sns
 from matplotlib import pyplot as plt
+from sklearn.metrics import r2_score
 
 #%% LOAD NETS2019 PHILLY DATA 2000 & 2010
 
-philly = pd.read_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\NETS_tr10_measure_philly20230731.txt', sep='\t')
+philly = pd.read_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\NETS_tr10_measure_philly20230731.txt', sep='\t', dtype={'tract10':str})
 
 philly00 = philly.loc[(philly['Year'] == 2000)]
 philly10 = philly.loc[philly['Year'] == 2010]
 
 #%% LOAD PEDIATRIC BIG DATA NETS2014 PHILLY 2000 & 2010
 
-with SAS7BDAT(r'Z:\UHC_Data\NETS_UHC\SAS\panjdemdnetsv5_uhc_den_122018.sas7bdat') as file:
+with SAS7BDAT(r'Z:\UHC_Data\NETS_UHC\NETS2014\SAS\panjdemdnetsv5_uhc_den_122018.sas7bdat') as file:
     pbd = file.to_data_frame()
 
 pbd = pbd.loc[pbd['geoid10'].str[:5] == '42101']
@@ -186,4 +187,179 @@ p4.set(xlabel='Density (units/sqkm)', title='NETS2014 USR TRACT DENSITY IN 2010'
 pic = p4.get_figure()
 pic.savefig(r"Downloads\NETS2014_USR2010_hist.png", format="png", dpi=300)
 
+
+#%% PLOT SCATTERPLOTS AND SAVE
+
+# merge NETS2014 and NETS2019 data to create scatterplots
+alldata00 = pbd00.merge(philly00, left_on='geoid10',right_on='tract10')
+alldata10 = pbd10.merge(philly10, left_on='geoid10',right_on='tract10')
+
+#%% NETS 2000 AUR
+
+cat = 'aur'
+year = '00'
+x = f'net_{cat}_uhc_den_20{year}'
+y = f't10_net_{cat}_d'
+data = alldata00
+
+sns.regplot(x=x, y=y, data=data)
+xmin, xmax, ymin, ymax = plt.axis()
+r2 = round(r2_score(data[x],data[y]),3)
+textpos = ((xmax-xmin)*.01, (ymax-ymin)*.85)
+
+plt.annotate('Rsquared: {}'.format(r2),(textpos))
+
+plt.xlabel(f'{cat.upper()} NETS2014')
+plt.ylabel(f'{cat.upper()} NETS2019')
+plt.title(f'NETS2014/NETS2019 COMPARISON {cat.upper()} 20{year}')
+plt.savefig(fr"Downloads\NETS_{cat}{year}scat.png", format="png", dpi=300)
+plt.show()
+
+
+#%% NETS 2010 AUR
+
+cat = 'aur'
+year = '10'
+x = f'net_{cat}_uhc_den_20{year}'
+y = f't10_net_{cat}_d'
+data = alldata10
+
+sns.regplot(x=x, y=y, data=data)
+xmin, xmax, ymin, ymax = plt.axis()
+r2 = round(r2_score(data[x],data[y]),3)
+textpos = ((xmax-xmin)*.01, (ymax-ymin)*.85)
+
+plt.annotate('Rsquared: {}'.format(r2), (textpos))
+
+plt.xlabel(f'{cat.upper()} NETS2014')
+plt.ylabel(f'{cat.upper()} NETS2019')
+plt.title(f'NETS2014/NETS2019 COMPARISON {cat.upper()} 20{year}')
+plt.savefig(fr"Downloads\NETS_{cat}{year}scat.png", format="png", dpi=300)
+plt.show()
+
+#%% NETS 2000 HSR
+
+cat = 'hsr'
+year = '00'
+x = f'net_{cat}_uhc_den_20{year}'
+y = f't10_net_{cat}_d'
+data = alldata00
+
+sns.regplot(x=x, y=y, data=data)
+xmin, xmax, ymin, ymax = plt.axis()
+r2 = round(r2_score(data[x],data[y]),3)
+textpos = ((xmax-xmin)*.01, (ymax-ymin)*.85)
+
+plt.annotate('Rsquared: {}'.format(r2), (textpos))
+
+plt.xlabel(f'{cat.upper()} NETS2014')
+plt.ylabel(f'{cat.upper()} NETS2019')
+plt.title(f'NETS2014/NETS2019 COMPARISON {cat.upper()} 20{year}')
+plt.savefig(fr"Downloads\NETS_{cat}{year}scat.png", format="png", dpi=300)
+plt.show()
+
+#%% NETS 2010 HSR
+
+cat = 'hsr'
+year = '10'
+x = f'net_{cat}_uhc_den_20{year}'
+y = f't10_net_{cat}_d'
+data = alldata10
+
+sns.regplot(x=x, y=y, data=data)
+xmin, xmax, ymin, ymax = plt.axis()
+r2 = round(r2_score(data[x],data[y]),3)
+textpos = ((xmax-xmin)*.01, (ymax-ymin)*.85)
+
+plt.annotate('Rsquared: {}'.format(r2), (textpos))
+
+plt.xlabel(f'{cat.upper()} NETS2014')
+plt.ylabel(f'{cat.upper()} NETS2019')
+plt.title(f'NETS2014/NETS2019 COMPARISON {cat.upper()} 20{year}')
+plt.savefig(fr"Downloads\NETS_{cat}{year}scat.png", format="png", dpi=300)
+plt.show()
+
+#%% NETS 2000 CVP
+
+cat = 'cvp'
+year = '00'
+x = f'net_{cat}_uhc_den_20{year}'
+y = f't10_net_{cat}_d'
+data = alldata00
+
+sns.regplot(x=x, y=y, data=data)
+xmin, xmax, ymin, ymax = plt.axis()
+r2 = round(r2_score(data[x],data[y]),3)
+textpos = ((xmax-xmin)*.01, (ymax-ymin)*.85)
+
+plt.annotate('Rsquared: {}'.format(r2), (textpos))
+
+plt.xlabel(f'{cat.upper()} NETS2014')
+plt.ylabel(f'{cat.upper()} NETS2019')
+plt.title(f'NETS2014/NETS2019 COMPARISON {cat.upper()} 20{year}')
+plt.savefig(fr"Downloads\NETS_{cat}{year}scat.png", format="png", dpi=300)
+plt.show()
+
+#%% NETS 2010 CVP
+
+cat = 'cvp'
+year = '10'
+x = f'net_{cat}_uhc_den_20{year}'
+y = f't10_net_{cat}_d'
+data = alldata10
+
+sns.regplot(x=x, y=y, data=data)
+xmin, xmax, ymin, ymax = plt.axis()
+r2 = round(r2_score(data[x],data[y]),3)
+textpos = ((xmax-xmin)*.01, (ymax-ymin)*.85)
+
+plt.annotate('Rsquared: {}'.format(r2), (textpos))
+
+plt.xlabel(f'{cat.upper()} NETS2014')
+plt.ylabel(f'{cat.upper()} NETS2019')
+plt.title(f'NETS2014/NETS2019 COMPARISON {cat.upper()} 20{year}')
+plt.savefig(fr"Downloads\NETS_{cat}{year}scat.png", format="png", dpi=300)
+plt.show()
+
+#%% NETS 2000 USR
+
+cat = 'usr'
+year = '00'
+x = f'net_{cat}_uhc_den_20{year}'
+y = f't10_net_{cat}_d'
+data = alldata00
+
+sns.regplot(x=x, y=y, data=data)
+xmin, xmax, ymin, ymax = plt.axis()
+r2 = round(r2_score(data[x],data[y]),3)
+textpos = ((xmax-xmin)*.01, (ymax-ymin)*.85)
+
+plt.annotate('Rsquared: {}'.format(r2), (textpos))
+
+plt.xlabel(f'{cat.upper()} NETS2014')
+plt.ylabel(f'{cat.upper()} NETS2019')
+plt.title(f'NETS2014/NETS2019 COMPARISON {cat.upper()} 20{year}')
+plt.savefig(fr"Downloads\NETS_{cat}{year}scat.png", format="png", dpi=300)
+plt.show()
+
+#%% NETS 2010 USR
+
+cat = 'usr'
+year = '10'
+x = f'net_{cat}_uhc_den_20{year}'
+y = f't10_net_{cat}_d'
+data = alldata10
+
+sns.regplot(x=x, y=y, data=data)
+xmin, xmax, ymin, ymax = plt.axis()
+r2 = round(r2_score(data[x],data[y]),3)
+textpos = ((xmax-xmin)*.01, (ymax-ymin)*.85)
+
+plt.annotate('Rsquared: {}'.format(r2), (textpos))
+
+plt.xlabel(f'{cat.upper()} NETS2014')
+plt.ylabel(f'{cat.upper()} NETS2019')
+plt.title(f'NETS2014/NETS2019 COMPARISON {cat.upper()} 20{year}')
+plt.savefig(fr"Downloads\NETS_{cat}{year}scat.png", format="png", dpi=300)
+plt.show()
 

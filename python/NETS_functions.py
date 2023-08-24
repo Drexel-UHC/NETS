@@ -33,7 +33,7 @@ def merge_sic_emp_sales(sic_chunk, emp_chunk, sales_chunk, company_chunk):
 This function is used in create_classification_input.py. Swings wide dataset 
 (such as that generated from merge_sic_emp_sales) into long
 format, so that each record has a unique DunsNumber/Year aka "DunsYear". Output columns include:
-['DunsNumber','DunsYear','YearFull','Company','TradeName','SIC', 'Emp','Sales']
+['DunsNumber','DunsYear','Year','Company','TradeName','SIC', 'Emp','Sales']
 DunsYear's with null SIC values are dropped.
 '''
 
@@ -62,9 +62,10 @@ def normal_to_long(chunk, header):
     long_chunk["DunsYear"] = long_chunk["DunsNumber"] + "_" + long_chunk["YearFull"]
     
     # merge dataframes keeping only necessary columns and removing duplicates; removing rows with null values in "Sales" column
-    long_chunk.drop(columns=['Year'], inplace=True)
+    long_chunk = long_chunk.drop(columns=['Year'])
+    long_chunk = long_chunk.rename(columns={'YearFull':'Year'})
     long_chunk = long_chunk.astype({'Sales': int, 'Emp': int, 'SIC': int})
-    long_chunk = long_chunk[['DunsNumber','DunsYear','YearFull','Company','TradeName','SIC', 'Emp','Sales']]
+    long_chunk = long_chunk[['DunsYear','DunsNumber','Year','Company','TradeName','SIC', 'Emp','Sales']]
     # output to csv
     long_chunk.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/classification_inputYYYYMMDD.txt", sep="\t", header=header, mode='a', index=False)
     return long_chunk

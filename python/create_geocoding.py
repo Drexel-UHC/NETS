@@ -212,21 +212,24 @@ del first_last_df
 #%% CREATE ADDRESS ID BY GROUPING BY ADDRESS COLUMNS
 
 # read in geocoding_2 file. drop duplicate addresses (address=all five address columns). 
-#assign address id and export to csv as GeocodingInput file.
+#assign address id and export to csv as Addresses file.
 geocoding_2 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2_YYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
 add_id = geocoding_2[['GcAddress', 'GcCity', 'GcState', 'GcZIP', 'GcZIP4']].drop_duplicates(['GcAddress', 'GcCity', 'GcState', 'GcZIP', 'GcZIP4'])
 addressid = range(len(add_id))
 add_id.insert(0, 'AddressID', addressid)
 add_id['AddressID'] = 'A' + add_id['AddressID'].astype(str).str.zfill(9)
-add_id.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch/GeocodingInputYYYYMMDD.txt', index=False, sep='\t')
+str_cols = add_id.select_dtypes(["object"])
+add_id[str_cols.columns] = str_cols.apply(lambda x: x.str.strip()) 
+add_id.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch/AddressesYYYYMMDD.txt', index=False, sep='\t')
 
 # join address id to dunsmove, remove address columns, and export to csv as DunsMove file.
 dunsmove = geocoding_2.merge(add_id, on=['GcAddress', 'GcCity', 'GcState', 'GcZIP', 'GcZIP4'])
 dunsmove = dunsmove[['DunsMove','DunsNumber','AddressID','GcFirstYear','GcLastYear']]
 
-dunsmove.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch/DunsMoveYYYYMMDD.txt', index=False, sep='\t')
+dunsmove.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch/DunsMove_1_YYYYMMDD.txt', index=False, sep='\t')
 
 # takes about 7mins
+
 #%% DATA CHECK
 
 geocoding_1 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1_YYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP4':str}, sep = '\t', header=0)

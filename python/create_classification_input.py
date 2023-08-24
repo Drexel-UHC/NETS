@@ -15,7 +15,7 @@ Inputs:
 
 Output:
     classification_inputYYYYMMDD.txt (tab separated)
-        cols: ['DunsNumber','DunsYear','YearFull','Company','TradeName','SIC', 'Emp','Sales']
+        cols: ['DunsNumber','DunsYear','Year','Company','TradeName','SIC', 'Emp','Sales']
         n = 564,824,373
 """
 #%%

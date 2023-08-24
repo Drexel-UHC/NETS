@@ -25,7 +25,12 @@ matrix_long = matrix_long.drop(columns='value')
 matrix_long = matrix_long.rename(columns={'variable':'HighLevel'})
 matrix_long = matrix_long.sort_values(['BaseGroup', 'HighLevel'])
 
+# create unique int id for highlevel values
+matrix_long['BGHighLevelID'] = range(1, (len(matrix_long)+1))
+
+matrix_long = matrix_long[['BGHighLevelID','BaseGroup','HighLevel']]
+
 #%% EXPORT TABLES TO TXT
 
 desc.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\category_descYYYYMMDD.txt', sep='\t', index=False)
-matrix_long.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\BaseGroup_ComboCat_ThematicConstruct_XwalkYYYYMMDD.txt', sep='\t', index=False)
+matrix_long.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\BG_CC_TC_XwalkYYYYMMDD.txt', sep='\t', index=False)

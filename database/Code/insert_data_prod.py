@@ -119,6 +119,19 @@ address[str_cols.columns] = str_cols.apply(lambda x: x.str.strip())
 address.to_csv(r"\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python/Addresses20230726.txt", sep="\t", index=False)
 
 #%%
+xwalk = pd.read_csv(r"\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python/BG_CC_TC_Xwalk20230613.txt", sep="\t",
+                      # dtype={"GcZIP4": str, "GcZIP": str}, 
+                      #chunksize=chunksize
+                      # nrows=10
+                      )
+
+str_cols = xwalk.select_dtypes(["object"])
+
+xwalk[str_cols.columns] = str_cols.apply(lambda x: x.str.strip())    
+
+xwalk.to_csv(r"\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python/BG_CC_TC_Xwalk20230802.txt", sep="\t", index=False)
+
+#%%
 
 cnxn = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};Server=tcp:netsdata.database.windows.net,1433;Database=NETS;Initial Catalog=NETS;Persist Security Info=False;User ID=stf45@drexel.edu;MultipleActiveResultSets=False;Encrypt=yes;TrustServerCertificate=no;Authentication=ActiveDirectoryInteractive;')
 cn = cnxn.cursor()
