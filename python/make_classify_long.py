@@ -6,7 +6,6 @@ Created on Tue Nov  1 14:33:42 2022
 
 This is a script to convert the Classified Dataset (Python) (classifiedYYYYMMDD.txt) from wide to long. 
 
-
 runtime: ~80 mins
 """
 #%% 
@@ -21,23 +20,23 @@ from datetime import datetime
 with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230329.json', 'r') as f:
     config = json.load(f)
     
-    
-n = 254288461
-chunksize = 5000000
+# create list of columns that includes all columns other than those 
 cats = []
 for cat in config.keys():
     if config[cat]['conditional'] not in [14]:
         cats.append(cat)
     else: pass
 cats.insert(0,'DunsYear')
-coded_reader = pd.read_csv(r'D:\NETS\NETS_2019\ProcessedData\classified20230410.txt', sep = '\t', encoding_errors='replace', header=0, 
-                              chunksize=chunksize,
-                              usecols=cats)
+
+# load reader
+n = 254288461
+chunksize = 5000000
+coded_reader = pd.read_csv(r'D:\NETS\NETS_2019\ProcessedData\classified_python20230410.txt', sep = '\t', encoding_errors='replace', header=0, 
+                              # chunksize=chunksize,
+                              # usecols=cats,
+                              nrows=10)
 
 #%% CREATE CATEGORY/CODE TABLE
-
-# cat_table = pd.DataFrame({'cat_name':config.keys(), 'cat_id': pd.Series(range(len(config)))})
-##this is probably not necessary^^^
 
 print(f"Start Time: {datetime.now()}")
 time_list = [0]
@@ -56,16 +55,4 @@ for c, x in enumerate(coded_reader):
 
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)
-
-#%% DATA CHECK
-
-#CHECK TO SEE IF N OF CLASSIFED == N OF CLASSIFICATION SIC SUBSET 
-
-classified_long = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classified_longYYYYMMDD.txt', sep='\t', dtype = object, nrows=30000)
-dups = classified_long.loc[classified_long.duplicated(subset=['DunsYear'], keep=False)]
-print(classified_long.nunique())
-
-# what variables are missing from config (no records flagged)
-print(f"Base Groups not flagged: {set(config.keys()).difference(set(classified_long['BaseGroup'].unique()))}")
-
 

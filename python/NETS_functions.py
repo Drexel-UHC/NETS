@@ -191,17 +191,16 @@ def make_sic_ex_range2(cat,config):
 This function is used in classify.py.
 
 This function takes in the long version of the NETS 2019 dataset and classifies
-each DunsYear into a MESA 3 letter (3LTR) category. Each category has different
+each DunsYear into a 3 letter (3LTR) category. Each category has different
 conditions, utilizing various combinations of the SIC, Emp, Sales, Company, 
-and TradeName Variables. There are 13 conditional code categories, which group 
-3 letter categories based on the combination of variables used. 
+and TradeName Variables. 
 
-Output from this file is the input file 
-with binary variables for each 3LTR category marking whether or not a record
-falls in that category. Most, but not all categories are mutually exclusive. 
-As of 06/21/2022 this function (and classify.py) ONLY CATEGORIZES AUXILIARY
-CATEGORIES. Main categories will be classified based on auxiliary category status
-later.
+The output is eight files with two columns each, one as DunsYear, and the other 
+as the category name, with a value of 1 indicating category status. DunsYears 
+not flagged in category are absent from the output. Most, but not all categories are mutually exclusive. 
+This function (and classify.py) ONLY CATEGORIZES BASE GROUPS. Thematic Constructs 
+and Combination Categories will be classified based on Base Group status at a 
+later step.
 
 "symbols" variable is used to change out conditions marked in the config file (less than, 
 greater than or equal to, etc). Code using symbols may need to be reworked if 
@@ -471,5 +470,5 @@ def classify(df, config, header):
     final_df = pd.concat([df['DunsYear'], out_df],axis=1)
     # get rid of any unclassified rows (has all zeros)
     final_df = final_df.loc[~(final_df.iloc[:, 1:]==0).all(axis=1)]
-    final_df.to_csv(r"D:\NETS\NETS_2019\ProcessedData/classifiedYYYYMMDD.txt", sep="\t", header=header, mode='a', index=False)
+    final_df.to_csv(r"D:\NETS\NETS_2019\ProcessedData/classified_pythonYYYYMMDD.txt", sep="\t", header=header, mode='a', index=False)
 
