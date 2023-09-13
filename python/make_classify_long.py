@@ -11,30 +11,14 @@ runtime: ~80 mins
 #%% 
 import pandas as pd
 import time
-import json
 from datetime import datetime
     
 #%% READ CLASSIFIED DATASET (PYTHON) FILE
 
-# load in json config
-with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230329.json', 'r') as f:
-    config = json.load(f)
-    
-# create list of columns that includes all columns other than those 
-cats = []
-for cat in config.keys():
-    if config[cat]['conditional'] not in [14]:
-        cats.append(cat)
-    else: pass
-cats.insert(0,'DunsYear')
-
-# load reader
 n = 254288461
 chunksize = 5000000
 coded_reader = pd.read_csv(r'D:\NETS\NETS_2019\ProcessedData\classified_python20230410.txt', sep = '\t', encoding_errors='replace', header=0, 
-                              # chunksize=chunksize,
-                              # usecols=cats,
-                              nrows=10)
+                               chunksize=chunksize)
 
 #%% CREATE CATEGORY/CODE TABLE
 
