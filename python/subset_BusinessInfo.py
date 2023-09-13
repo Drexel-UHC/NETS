@@ -55,10 +55,6 @@ bi_reader = pd.read_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\N
                                 chunksize=chunksize,
                                 # nrows=100000
                               )
-# bi_reader2 = pd.read_csv(r'C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/BusinessInfoYYYYMMDD.txt', sep='\t', header=0, dtype={'DunsNumber':str, 'SIC':str},
-#                                 # chunksize=chunksize,
-#                                 nrows=100000
-#                               )
 
 print(f"Start Time: {datetime.now()}")
 time_list = [0]

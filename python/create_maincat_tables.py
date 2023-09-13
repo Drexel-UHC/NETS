@@ -8,7 +8,7 @@ Created on Mon Jun 12 14:09:16 2023
 import pandas as pd
 
 # Read excel file with sheet name
-dict_df = pd.read_excel(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Documentation\SIC_Code_Sorting_JAH/NETS_Catalogue_3LTR_Variables_20230516.xlsx', sheet_name=['NETS_Catalogue_3LTR_Code','Current Matrix'])
+dict_df = pd.read_excel(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Documentation\SIC_Code_Sorting_JAH/NETS_Catalogue_3LTR_Variables_20230807.xlsx', sheet_name=['NETS_Catalogue_3LTR_Code','Current Matrix'])
 
 # Get DataFrame from Dict
 desc = dict_df.get('NETS_Catalogue_3LTR_Code')

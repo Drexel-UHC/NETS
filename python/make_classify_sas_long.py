@@ -22,25 +22,22 @@ classified = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\clas
 melted = pd.melt(classified, id_vars=['DunsYear'], var_name='BaseGroup')
 melted = melted.loc[melted['value']==1]
 melted = melted.drop(columns=['value'])
-melted.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/classified_long20230526.txt", sep="\t", header=False, mode='a', index=False)
+melted.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/ClassifiedLongYYYYMMDD.txt", sep="\t", header=False, mode='a', index=False)
 
 len(melted)
 del classified
 
 #%% DATA CHECK
 
-#CHECK TO SEE IF N OF CLASSIFED == N OF CLASSIFICATION SIC SUBSET 
-
-classified_long = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classified_long20230526.txt', sep='\t', dtype = object)
-dups = classified_long.loc[classified_long.duplicated(subset=['DunsYear'], keep=False)]
-print(classified_long.nunique())
+# CHECK TO SEE IF N OF CLASSIFED == N OF CLASSIFICATION SIC SUBSET 
+dups = melted.loc[melted.duplicated(subset=['DunsYear'], keep=False)]
+print(melted.nunique())
 
 #%% GET VALUE COUNTS AND REFORMAT
 
-counts = classified_long['BaseGroup'].value_counts()
+counts = melted['BaseGroup'].value_counts()
 counts.loc['total']= counts.sum()
 counts = counts.reset_index().rename(columns={'index':'BaseGroup', 'BaseGroup':'Count'}).sort_values(by='BaseGroup')
-
 
 #%% WRITE EXCEL REPORT
 
