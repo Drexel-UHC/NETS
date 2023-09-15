@@ -50,13 +50,7 @@ df2.head()
 # export to csv
 df2.to_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\NETS_tr10_measures20230914.txt', sep='\t', index=False)
 
-
 #%%
-
-alltracts['GEOID10'].compare(alltracts10['GEOID10'])
-
-notin19 = alltracts.loc[~alltracts['GEOID10'].isin(alltracts10['GEOID10'])]
-notin10 = alltracts10.loc[~alltracts10['GEOID10'].isin(alltracts['GEOID10'])]
 
 notin19.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\tracts2010_notin2019.csv', index=False)
 notin10.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\tracts2019_notin2010.csv', index=False)
