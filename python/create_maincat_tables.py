@@ -7,6 +7,8 @@ Created on Mon Jun 12 14:09:16 2023
 
 import pandas as pd
 
+#%%
+
 # Read excel file with sheet name
 dict_df = pd.read_excel(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Documentation\SIC_Code_Sorting_JAH/NETS_Catalogue_3LTR_Variables_20230807.xlsx', sheet_name=['NETS_Catalogue_3LTR_Code','Current Matrix'])
 
@@ -32,5 +34,5 @@ matrix_long = matrix_long[['BGHighLevelID','BaseGroup','HighLevel']]
 
 #%% EXPORT TABLES TO TXT
 
-desc.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\category_descYYYYMMDD.txt', sep='\t', index=False)
+desc.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\CategoryDescriptionsYYYYMMDD.txt', sep='\t', index=False)
 matrix_long.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\BG_CC_TC_XwalkYYYYMMDD.txt', sep='\t', index=False)
