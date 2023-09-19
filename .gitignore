@@ -7,8 +7,8 @@ R_scripts/.RData
 R_scripts/.RDataTmp
 R_scripts/.RDataTmp1
 R_scripts/.Rhistory
-data_checks/
+/data_checks/
 reports/
 scratch/
 python/nets_samples.py
-jquinn_geo2020_check/
+python/jquinn_geo2020_check/
