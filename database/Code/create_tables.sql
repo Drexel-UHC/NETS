@@ -109,3 +109,15 @@ CREATE TABLE DunsLocation (
 
 	CONSTRAINT FQ_DunsLocation_Address_AddressId FOREIGN KEY (AddressID) REFERENCES Address (AddressID)
 )
+
+
+-- tried first query, canceled after over an hour
+ALTER TABLE DunsLocation
+ALTER COLUMN Xcoord FLOAT;
+ALTER TABLE DunsLocation
+ALTER COLUMN Ycoord FLOAT;
+ALTER TABLE DunsLocation
+ALTER COLUMN DisplayX FLOAT;
+ALTER TABLE DunsLocation
+ALTER COLUMN DisplayY FLOAT;
+
