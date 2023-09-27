@@ -146,7 +146,7 @@ toc = time.perf_counter()
 t = toc - tic
 print('time: {} minutes'.format(round(t/60, 2)))
 
-# takes about 1.5mins
+# takes about 2mins
 
 del dunsset
 #%% APPLY GEOCODING WRANGLE FUNCTION
