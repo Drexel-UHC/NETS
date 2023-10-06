@@ -222,11 +222,11 @@ str_cols = add_id.select_dtypes(["object"])
 add_id[str_cols.columns] = str_cols.apply(lambda x: x.str.strip()) 
 add_id.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch/AddressesYYYYMMDD.txt', index=False, sep='\t')
 
-# join address id to dunsmove, remove address columns, and export to csv as DunsMove file.
+# join address id to dunsmove, remove address columns, and export to csv as dunsmove_1 file.
 dunsmove = geocoding_2.merge(add_id, on=['GcAddress', 'GcCity', 'GcState', 'GcZIP', 'GcZIP4'])
 dunsmove = dunsmove[['DunsMove','DunsNumber','AddressID','GcFirstYear','GcLastYear']]
 
-dunsmove.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch/DunsMove_1_YYYYMMDD.txt', index=False, sep='\t')
+dunsmove.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch/duns_move_1_YYYYMMDD.txt', index=False, sep='\t')
 
 # takes about 7mins
 
@@ -235,5 +235,5 @@ dunsmove.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch/DunsMove_1_YY
 geocoding_1 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1_YYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP4':str}, sep = '\t', header=0)
 geocoding_2 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2_YYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
 dunsmove = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/DunsMoveYYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
-geocodinginput = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/GeocodingInputYYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
+geocodinginput = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/AddressesYYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
 
