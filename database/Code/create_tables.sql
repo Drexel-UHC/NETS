@@ -19,19 +19,20 @@ IF EXISTS(SELECT * FROM sysobjects WHERE name='Category' and xtype='U')
 	DROP TABLE Category;
 GO
 
-CREATE TABLE Address (
-	AddressID		VARCHAR(256) PRIMARY KEY,
-	Address			VARCHAR(max),
-	City			VARCHAR(max),
-	State			VARCHAR(max),
-	Zip				VARCHAR(max),
-	Zip4			VARCHAR(max),
-
-)
-
 IF EXISTS(SELECT * FROM sysobjects WHERE name='BusinessInfo' and xtype='U')
 	DROP TABLE BusinessInfo;
 GO
+
+CREATE TABLE Address (
+	AddressID		VARCHAR(10) PRIMARY KEY,
+	Address			VARCHAR(50),
+	City			VARCHAR(30),
+	State			VARCHAR(2),
+	Zip				VARCHAR(5),
+	Zip4			VARCHAR(4),
+
+)
+
 CREATE TABLE BusinessInfo (
 
   DunsYear			VARCHAR(14) PRIMARY KEY,
@@ -45,13 +46,12 @@ CREATE TABLE BusinessInfo (
 
 )
 
-
 CREATE TABLE DunsMove (
 	
 	DunsYear		VARCHAR(14) PRIMARY KEY,
 	DunsMove		VARCHAR(11),
 	DunsNumber		VARCHAR(9),
-	AddressID		VARCHAR(256),
+	AddressID		VARCHAR(10),
 	Year			SMALLINT,
 	
 
@@ -60,7 +60,7 @@ CREATE TABLE DunsMove (
 )
 
 
-CREATE TABLE Category (
+CREATE TABLE CategoryDescriptions (
 	
 	CategoryLong		VARCHAR(100) PRIMARY KEY,
 	Category			VARCHAR(3) UNIQUE,
@@ -70,7 +70,7 @@ CREATE TABLE Category (
 
 )
 
-CREATE TABLE Classification(
+CREATE TABLE ClassifiedLong(
 
 	ClassificationId	INTEGER PRIMARY KEY IDENTITY,
 	DunsYear			VARCHAR(14),
@@ -94,11 +94,11 @@ CREATE TABLE BG_CC_TC_Xwalk (
 CREATE TABLE DunsLocation (
 	
 	DunsLocationId		INTEGER PRIMARY KEY IDENTITY,
-	AddressID			VARCHAR(256),
-	Xcoord				REAL,
-	Ycoord				REAL,
-	DisplayX			REAL,
-	DisplayY			REAL,
+	AddressID			VARCHAR(10),
+	Xcoord				FLOAT,
+	Ycoord				FLOAT,
+	DisplayX			FLOAT,
+	DisplayY			FLOAT,
 	GEOID10				VARCHAR(11),
 	AreaLand			REAL,
 	TotalArea			REAL,
@@ -109,15 +109,3 @@ CREATE TABLE DunsLocation (
 
 	CONSTRAINT FQ_DunsLocation_Address_AddressId FOREIGN KEY (AddressID) REFERENCES Address (AddressID)
 )
-
-
--- tried first query, canceled after over an hour
-ALTER TABLE DunsLocation
-ALTER COLUMN Xcoord FLOAT;
-ALTER TABLE DunsLocation
-ALTER COLUMN Ycoord FLOAT;
-ALTER TABLE DunsLocation
-ALTER COLUMN DisplayX FLOAT;
-ALTER TABLE DunsLocation
-ALTER COLUMN DisplayY FLOAT;
-
