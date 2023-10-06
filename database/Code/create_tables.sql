@@ -4,8 +4,8 @@ GO
 IF EXISTS(SELECT * FROM sysobjects WHERE name='BG_CC_TC_Xwalk' and xtype='U')
 	DROP TABLE BG_CC_TC_Xwalk;
 GO
-IF EXISTS(SELECT * FROM sysobjects WHERE name='Classification' and xtype='U')
-	DROP TABLE Classification;
+IF EXISTS(SELECT * FROM sysobjects WHERE name='ClassifiedLong' and xtype='U')
+	DROP TABLE ClassifiedLong;
 GO
 IF EXISTS(SELECT * FROM sysobjects WHERE name='DunsMove' and xtype='U')
 	DROP TABLE DunsMove;
@@ -15,8 +15,8 @@ IF EXISTS(SELECT * FROM sysobjects WHERE name='Address' and xtype='U')
 	DROP TABLE Address;
 GO
 
-IF EXISTS(SELECT * FROM sysobjects WHERE name='Category' and xtype='U')
-	DROP TABLE Category;
+IF EXISTS(SELECT * FROM sysobjects WHERE name='CategoryDescriptions' and xtype='U')
+	DROP TABLE CategoryDescriptions;
 GO
 
 IF EXISTS(SELECT * FROM sysobjects WHERE name='BusinessInfo' and xtype='U')
@@ -28,7 +28,7 @@ CREATE TABLE Address (
 	Address			VARCHAR(50),
 	City			VARCHAR(30),
 	State			VARCHAR(2),
-	Zip				VARCHAR(5),
+	Zip			VARCHAR(5),
 	Zip4			VARCHAR(4),
 
 )
@@ -36,7 +36,7 @@ CREATE TABLE Address (
 CREATE TABLE BusinessInfo (
 
   DunsYear			VARCHAR(14) PRIMARY KEY,
-  DunsNumber		VARCHAR(9),
+  DunsNumber			VARCHAR(9),
   Year				SMALLINT,
   Company			VARCHAR(50),
   TradeName			VARCHAR(50),
@@ -62,7 +62,7 @@ CREATE TABLE DunsMove (
 
 CREATE TABLE CategoryDescriptions (
 	
-	CategoryLong		VARCHAR(100) PRIMARY KEY,
+	CategoryFullName		VARCHAR(100) PRIMARY KEY,
 	Category			VARCHAR(3) UNIQUE,
 	Domain				VARCHAR(40),
 	Type				VARCHAR(20),
@@ -76,8 +76,8 @@ CREATE TABLE ClassifiedLong(
 	DunsYear			VARCHAR(14),
 	BaseGroup			VARCHAR(3),
 
-	CONSTRAINT FQ_Classification_BusinessInfo_DunsYear FOREIGN KEY (DunsYear) REFERENCES BusinessInfo (DunsYear),
-	CONSTRAINT FQ_Classification_Category_BaseGroup FOREIGN KEY (BaseGroup) REFERENCES Category (Category),
+	CONSTRAINT FQ_ClassifiedLong_BusinessInfo_DunsYear FOREIGN KEY (DunsYear) REFERENCES BusinessInfo (DunsYear),
+	CONSTRAINT FQ_ClassifiedLong_Category_BaseGroup FOREIGN KEY (BaseGroup) REFERENCES CategoryDescriptions (Category),
 )
 
 CREATE TABLE BG_CC_TC_Xwalk (
@@ -86,8 +86,8 @@ CREATE TABLE BG_CC_TC_Xwalk (
 	BaseGroup		VARCHAR(3),
 	HighLevel		VARCHAR(3),
 
-	CONSTRAINT FQ_BGCCTCXwalk_Category_BaseGroup FOREIGN KEY (BaseGroup) REFERENCES Category (Category),
-	CONSTRAINT FQ_BGCCTCXwalk_Category_HighLevel FOREIGN KEY (HighLevel) REFERENCES Category (Category)
+	CONSTRAINT FQ_BGCCTCXwalk_Category_BaseGroup FOREIGN KEY (BaseGroup) REFERENCES CategoryDescriptions (Category),
+	CONSTRAINT FQ_BGCCTCXwalk_Category_HighLevel FOREIGN KEY (HighLevel) REFERENCES CategoryDescriptions (Category)
 )
 
 
@@ -105,7 +105,7 @@ CREATE TABLE DunsLocation (
 	Addr_type			VARCHAR(20),
 	Status				VARCHAR(1),
 	Score				REAL,
-	UHCMatchCodeRank	SMALLINT
+	UHCMatchCodeRank		SMALLINT
 
 	CONSTRAINT FQ_DunsLocation_Address_AddressId FOREIGN KEY (AddressID) REFERENCES Address (AddressID)
 )
