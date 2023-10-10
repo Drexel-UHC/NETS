@@ -48,7 +48,7 @@ del dunsdf
 -create new column "GcLastYear"; fill with 3000 as a filler for most recent year
 -add "Gc" to start of column names to show that they are associated with the
 geocoding dataset
--output to new csv "geocoding_1.txt"
+-output to new csv "geocoding_1_YYYYMMDD.txt"
 '''
 
 # for sample
