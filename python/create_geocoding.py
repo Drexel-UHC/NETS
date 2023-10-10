@@ -232,8 +232,8 @@ dunsmove.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch/duns_move_1_Y
 
 #%% DATA CHECK
 
-geocoding_1 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1_YYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP4':str}, sep = '\t', header=0)
-geocoding_2 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2_YYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
-dunsmove = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/DunsMoveYYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
-geocodinginput = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/AddressesYYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
+# geocoding_1 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_1_YYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP4':str}, sep = '\t', header=0)
+# geocoding_2 = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2_YYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
+# dunsmove = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/duns_move_1_YYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
+# geocodinginput = pd.read_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/AddressesYYYYMMDD.txt", dtype={'DunsNumber': str, 'GcZIP': str, 'GcZIP4': str}, sep = '\t', header=0)
 

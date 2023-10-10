@@ -21,7 +21,7 @@ from datetime import datetime
 # FULL FILES
 chunksize = 10000000
 n = 32967561
-dunsmove = r'C:\Users\stf45\Documents\NETS\Processing\scratch\DunsMove_1_YYYYMMDD.txt'
+dunsmove = r'C:\Users\stf45\Documents\NETS\Processing\scratch\duns_move_1_YYYYMMDD.txt'
 classfile = r'C:\Users\stf45\Documents\NETS\Processing\scratch\ClassifiedLongYYYYMMDD.txt'
 classified_long = pd.read_csv(classfile, sep = '\t', dtype={'DunsYear':str, 'DunsMove':str}, usecols = ['DunsYear'], header=0)
 classified_long = classified_long.drop_duplicates(subset='DunsYear')
@@ -54,6 +54,6 @@ for c, chunk in enumerate(dunsmove_reader):
     time_list.append(t)
     print('{}: chunk {} completed in {} minutes! {} chunks to go'.format(datetime.now().strftime("%H:%M:%S"),c+1, round(t/60, 2), round(n/chunksize-(c+1),2)))    
 
-print(f'DunsMove_DunsYear_KeyYYYYMMDD has {sum(yearmovelen)} records')
+print(f'DunsMoveYYYYMMDD has {sum(yearmovelen)} records')
 
 
