@@ -18,7 +18,7 @@ Output:
         cols: ['DunsNumber','DunsYear','Year','Company','TradeName','SIC', 'Emp','Sales']
         n = 564,824,373
 """
-#%%
+#%% test
 
 import os
 os.chdir(r"C:\Users\stf45\Documents\NETS\Processing\python")
