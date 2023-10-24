@@ -36,8 +36,6 @@ for c,cat in enumerate(config.keys()):
     else:
         pass
     
-
-
 #%% FILTER classification.txt FOR SICS IN SET
 
 chunksize=75000000
