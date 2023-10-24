@@ -5,6 +5,7 @@ Created on Thu Mar 30 15:16:22 2023
 @author: stf45
 
 This file takes in classification_inputYYYYMMDD.txt and filters for SICs used in SAS processing.
+runtime: ~40mins
 """
 
 
@@ -40,8 +41,8 @@ for c,cat in enumerate(config.keys()):
 #%% FILTER classification.txt FOR SICS IN SET
 
 chunksize=75000000
-n=564824373
-classification = pd.read_csv(r'D:\NETS\NETS_2019\ProcessedData\classification_inputYYYYMMDD.txt', sep='\t', header=0, dtype={'DunsNumber':str},
+n=694019684
+classification = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\classification_inputYYYYMMDD.txt', sep='\t', header=0, dtype={'DunsNumber':str},
                                chunksize=chunksize,
                               # nrows=100000
                               )
@@ -55,7 +56,7 @@ for c,x in enumerate(classification):
     header = (c==0)
     x = x.loc[x['SIC'].isin(sicset)]
     rownum.append(len(x))
-    x.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classification_input_SASYYYYMMDD.txt', sep="\t", header=header, mode='a', index=False)
+    x.to_csv(r'D:\NETS\NETS_2022\ProcessedData\classification_input_SASYYYYMMDD.txt', sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
     time_list.append(t)
@@ -64,4 +65,7 @@ for c,x in enumerate(classification):
 
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)
-print(f"subset file n = {sum(rownum)}")
+print(f"subset file n = {sum(rownum)}") #91,369,403
+
+#%%
+class_input = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData/classification_input_SASYYYYMMDD.txt', sep='\t', dtype={'DunsNumber':str}, skiprows=90000000)

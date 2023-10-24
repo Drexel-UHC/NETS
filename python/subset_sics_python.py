@@ -9,7 +9,7 @@ that are not used in MESA Neigh Aging NETS categorization. The output is a new s
 file (classification_input_PythonYYYYMMDD.txt) that will be used in the main NETS classification process (classify.py).
 
 
-total time: approx 50 mins
+total time: approx 67 mins
 """
 
 #%%
@@ -51,7 +51,7 @@ for c,cat in enumerate(config.keys()):
         sics2 = nf.make_sic_range2(cat,config)
         sicset.update(sics,sics2)
     elif config[cat]['conditional'] in [14]:
-        print('Processed in SAS')
+        print(f'{cat}: Processed in SAS')
     else:
         print(f'missing condit for {cat}')
 
@@ -59,8 +59,8 @@ for c,cat in enumerate(config.keys()):
 #%% FILTER classification.txt FOR SICS IN SET
 
 chunksize=75000000
-n=564824373
-classification = pd.read_csv(r'D:\NETS\NETS_2019\ProcessedData\classification_inputYYYYMMDD.txt', sep='\t', header=0, dtype={'DunsNumber':str},
+n=694019684
+classification = pd.read_csv(r'D:\scratch\classification_inputYYYYMMDD.txt', sep='\t', header=0, dtype={'DunsNumber':str},
                                chunksize=chunksize,
                               # nrows=100000
                               )
@@ -69,12 +69,14 @@ print(f"Start Time: {datetime.now()}")
 time_list = [0]
 tic = time.perf_counter()
 
-rownum=[]
+input_rownum = []
+output_rownum = []
 for c,x in enumerate(classification):
     header = (c==0)
+    input_rownum.append(len(x))
     x = x.loc[x['SIC'].isin(sicset)]
-    rownum.append(len(x))
-    x.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classification_input_PythonYYYYMMDD.txt', sep="\t", header=header, mode='a', index=False)
+    output_rownum.append(len(x))
+    x.to_csv(r'D:\scratch\classification_input_PythonYYYYMMDD.txt', sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
     time_list.append(t)
@@ -83,5 +85,6 @@ for c,x in enumerate(classification):
 
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)
-print(f"subset file n = {sum(rownum)}")
+print(f"input file n = {sum(input_rownum)}") #694,019,684
+print(f"output file n = {sum(output_rownum)}") #435,928,419
 

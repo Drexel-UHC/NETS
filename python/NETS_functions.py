@@ -21,8 +21,7 @@ from datetime import datetime
 This function is used in create_classification_input.py. Merge the sic, emp, sales, and company datasets. 
 '''
 
-def merge_sic_emp_sales(sic_chunk, emp_chunk, sales_chunk, company_chunk):
-    
+def merge_sic_emp_sales(sic_chunk, emp_chunk, sales_chunk, company_chunk):  
     sic_merge = sic_chunk.merge(company_chunk, on='DunsNumber')
     emp_merge = sic_merge.merge(emp_chunk, on='DunsNumber')
     classification_wide = pd.merge(emp_merge, sales_chunk, on='DunsNumber', how='left')
@@ -67,7 +66,7 @@ def normal_to_long(chunk, header):
     long_chunk = long_chunk.astype({'Sales': int, 'Emp': int, 'SIC': int})
     long_chunk = long_chunk[['DunsYear','DunsNumber','Year','Company','TradeName','SIC', 'Emp','Sales']]
     # output to csv
-    long_chunk.to_csv(r"C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/classification_inputYYYYMMDD.txt", sep="\t", header=header, mode='a', index=False)
+    long_chunk.to_csv(r"D:\scratch/classification_inputYYYYMMDD.txt", sep="\t", header=header, mode='a', index=False)
     return long_chunk
 
 
@@ -145,7 +144,7 @@ def geocoding_wrangle(geocoding_1_half, first_last, header):
                                     ]]
     
     
-    geocoding_2.to_csv(r"C:\Users\stf45\Documents\NETS\Processing\scratch/geocoding_2_YYYYMMDD.txt", sep="\t", mode='a', header=header, index=False)
+    geocoding_2.to_csv(r"D:\scratch/geocoding_2_YYYYMMDD.txt", sep="\t", mode='a', header=header, index=False)
  
 
 #%%  SIC RANGE FUNCTIONS 
@@ -470,5 +469,5 @@ def classify(df, config, header):
     final_df = pd.concat([df['DunsYear'], out_df],axis=1)
     # get rid of any unclassified rows (has all zeros)
     final_df = final_df.loc[~(final_df.iloc[:, 1:]==0).all(axis=1)]
-    final_df.to_csv(r"D:\NETS\NETS_2019\ProcessedData/classified_pythonYYYYMMDD.txt", sep="\t", header=header, mode='a', index=False)
+    final_df.to_csv(r"D:\scratch/classified_pythonYYYYMMDD.txt", sep="\t", header=header, mode='a', index=False)
 

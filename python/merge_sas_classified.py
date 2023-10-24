@@ -9,14 +9,14 @@ import pandas as pd
 
 #%%
 
-df1 = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\cmassmerch.csv')
-df2 = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\conv_gas.csv')
-df3 = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\conv_other.csv')
-df4 = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\drug.csv')
-df5 = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\grocery.csv')
-df6 = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\supercenter.csv')
-df7 = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\gmassmerch.csv')
-df8 = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\warehouse.csv')
+df1 = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\SAS_output\cmassmerch.csv')
+df2 = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\SAS_output\conv_gas.csv')
+df3 = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\SAS_output\conv_other.csv')
+df4 = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\SAS_output\drug.csv')
+df5 = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\SAS_output\grocery.csv')
+df6 = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\SAS_output\supercenter.csv')
+df7 = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\SAS_output\gmassmerch.csv')
+df8 = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\SAS_output\warehouse.csv')
 
 #%% MERGE INDIVIDUAL SAS CLASSIFIED DATASETS
 
@@ -48,6 +48,6 @@ sum(lenlist) - (len(dups) + len(dfmain) )
 
 dfmainhead = dfmain.head(500000)
 
-dfmain.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classified_sas20230526.txt', sep='\t', index=False)
+dfmain.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classified_SASYYYYMMDD.txt', sep='\t', index=False)
 
 

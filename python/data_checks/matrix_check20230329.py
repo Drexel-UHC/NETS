@@ -22,7 +22,7 @@ included in “Matrix” and vice versa
 #%% LOAD MATRIX, CONVERT TO LONG
 
 # just paste matrix into new excel csv and remove description column, no need to rename columns in excel
-matrix = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\config\main_cat_matrix20230329.csv')
+matrix = pd.read_csv(r'C:\Users\stf45\Documents\NETS\Processing\config\main_cat_matrix20230612.csv')
 matrix.columns.values[0] = 'aux'
 matrix_long = pd.melt(matrix, id_vars=['aux'])
 matrix_long = matrix_long.loc[matrix_long['value']==1]

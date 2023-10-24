@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Mar 31 10:41:16 2022
+edited 10/16/2023 for NETS2022
 
 @author: stf45
 
@@ -16,7 +17,7 @@ Inputs:
 Output:
     classification_inputYYYYMMDD.txt (tab separated)
         cols: ['DunsNumber','DunsYear','Year','Company','TradeName','SIC', 'Emp','Sales']
-        n = 564,824,373
+        n = 694,019,684
 """
 #%%
 
@@ -31,28 +32,28 @@ import json
 #%% LOAD CONFIG
 
 # load in json config. this has all aux categories and their conditions.
-with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230227.json', 'r') as f:
+with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230329.json', 'r') as f:
     config = json.load(f)
 
 #%% READ IN FILES
 
 # FULL FILES
-n = 71498225
-chunksize = 6000000
+# n = 87564680
+# chunksize = 6000000
 
-company = r'D:\NETS\NETS_2019\RawData\NETS2019_Company.txt'
-sic = r'D:\NETS\NETS_2019\RawData\NETS2019_SIC.txt'
-emp = r'D:\NETS\NETS_2019\RawData\NETS2019_Emp.txt'
-sales = r'D:\NETS\NETS_2019\RawData\NETS2019_Sales.txt'
+# company = r'Z:\UHC_Data\NETS_UHC\NETS2022\Raw Data\ASCII\NETS2022_Company.txt'
+# sic = r'Z:\UHC_Data\NETS_UHC\NETS2022\Raw Data\ASCII\NETS2022_SIC.txt'
+# emp = r'Z:\UHC_Data\NETS_UHC\NETS2022\Raw Data\ASCII\NETS2022_Emp.txt'
+# sales = r'Z:\UHC_Data\NETS_UHC\NETS2022\Raw Data\ASCII\NETS2022_Sales.txt'
 
-# # SAMPLE FILES
-# n = 1000
-# chunksize = 100
+# SAMPLE FILES
+n = 1000
+chunksize = 100
 
-# company = r'C:\Users\stf45\Documents\NETS\Processing\samples\company_sample.txt'
-# sic = r'C:\Users\stf45\Documents\NETS\Processing\samples\sic_sample.txt'
-# emp = r'C:\Users\stf45\Documents\NETS\Processing\samples\emp_sample.txt'
-# sales = r'C:\Users\stf45\Documents\NETS\Processing\samples\sales_sample.txt'
+company = r'D:\NETS\NETS_2022\ProcessedData\Samples\company_sample.txt'
+sic = r'D:\NETS\NETS_2022\ProcessedData\Samples\sic_sample.txt'
+emp = r'D:\NETS\NETS_2022\ProcessedData\Samples\emp_sample.txt'
+sales = r'D:\NETS\NETS_2022\ProcessedData\Samples\sales_sample.txt'
 
 
 company_reader = pd.read_csv(company, sep = '\t', dtype={"DunsNumber": str}, encoding_errors='replace', header=0, 
@@ -88,7 +89,10 @@ sic_reader = pd.read_csv(sic, sep = '\t', dtype={"DunsNumber": str}, encoding_er
                                                                                                                                                                 "SIC16",
                                                                                                                                                                 "SIC17",
                                                                                                                                                                 "SIC18",
-                                                                                                                                                                "SIC19"])
+                                                                                                                                                                "SIC19",
+                                                                                                                                                                "SIC20",
+                                                                                                                                                                "SIC21",
+                                                                                                                                                                "SIC22"])
 
 emp_reader = pd.read_csv(emp, sep = '\t', dtype={"DunsNumber": str}, encoding_errors='replace', header=0, chunksize=chunksize, usecols=["DunsNumber",
                                                                                                                                                                 "Emp90",
@@ -120,7 +124,10 @@ emp_reader = pd.read_csv(emp, sep = '\t', dtype={"DunsNumber": str}, encoding_er
                                                                                                                                                                 "Emp16",
                                                                                                                                                                 "Emp17",
                                                                                                                                                                 "Emp18",
-                                                                                                                                                                "Emp19"])
+                                                                                                                                                                "Emp19",
+                                                                                                                                                                "Emp20",
+                                                                                                                                                                "Emp21",
+                                                                                                                                                                "Emp22"])
 
 sales_reader = pd.read_csv(sales, sep = '\t', dtype={"DunsNumber": str}, encoding_errors='replace', header=0, chunksize=chunksize, usecols=["DunsNumber",
                                                                                                                                                                     "Sales90",
@@ -152,7 +159,10 @@ sales_reader = pd.read_csv(sales, sep = '\t', dtype={"DunsNumber": str}, encodin
                                                                                                                                                                     "Sales16",
                                                                                                                                                                     "Sales17",
                                                                                                                                                                     "Sales18",
-                                                                                                                                                                    "Sales19"])
+                                                                                                                                                                    "Sales19",
+                                                                                                                                                                    "Sales20",
+                                                                                                                                                                    "Sales21",
+                                                                                                                                                                    "Sales22"])
 
 #%% CREATE CLASSIFICATION INPUT
 
@@ -169,7 +179,11 @@ for c, (sic_chunk, emp_chunk, sales_chunk, company_chunk) in enumerate(readers):
     t = toc - (sum(time_list) + tic)
     time_list.append(t)
     print('chunk {} completed in {} minutes! {} chunks to go'.format(c+1, round(t/60, 2), n/chunksize-(c+1)))
-    
 
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)
+
+
+#%% data check
+
+class_input = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData/classification_inputYYYYMMDD.txt', sep='\t', dtype={'DunsNumber':str})
