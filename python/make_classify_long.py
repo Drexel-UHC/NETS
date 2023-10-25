@@ -32,7 +32,7 @@ for c, x in enumerate(coded_reader):
     x = pd.melt(x, id_vars=['DunsYear'], var_name='BaseGroup')
     x = x.loc[x['value']==1]
     x = x.drop(columns=['value'])
-    x.to_csv(r"D:/scratch/classified_longYYYYMMDD.txt", sep="\t", header=header, mode='a', index=False)
+    x.to_csv(r"D:/scratch/ClassifiedLongYYYYMMDD.txt", sep="\t", header=header, mode='a', index=False)
     output_rownum.append(len(x))
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
