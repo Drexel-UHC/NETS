@@ -38,7 +38,7 @@ for c,bi in enumerate(bi_reader):
     #rearraging columns to match database
     bi = bi[['DunsYear','DunsNumber','Year','Company','TradeName', 'Emp','Sales','SIC']]
     rownum.append(len(bi))
-    bi.to_csv(r'C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/BusinessInfoYYYYMMDD.txt', sep="\t", header=header, mode='a', index=False)
+    bi.to_csv(r'D:/scratch/BusinessInfoYYYYMMDD.txt', sep="\t", header=header, mode='a', index=False)
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
     time_list.append(t)
@@ -47,11 +47,11 @@ for c,bi in enumerate(bi_reader):
 
 runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)
-print(f"BusinessInfoYYYYMMDD n = {sum(rownum)}")
+print(f"BusinessInfoYYYYMMDD n = {sum(rownum)}") # 303,014,511
 
 #%% 
 
 
-df = pd.read_csv(r'C:\\Users\\stf45\\Documents\\NETS\\Processing/scratch/BusinessInfoYYYYMMDD.txt', sep="\t", dtype={'DunsNumber':str, 'SIC':str})
+df = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData/BusinessInfoYYYYMMDD.txt', sep="\t", dtype={'DunsNumber':str, 'SIC':str}, nrows=10)
 
 

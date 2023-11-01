@@ -38,22 +38,22 @@ with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230329
 #%% READ IN FILES
 
 # FULL FILES
-# n = 87564680
-# chunksize = 6000000
+n = 87564680
+chunksize = 6000000
 
-# company = r'Z:\UHC_Data\NETS_UHC\NETS2022\Raw Data\ASCII\NETS2022_Company.txt'
-# sic = r'Z:\UHC_Data\NETS_UHC\NETS2022\Raw Data\ASCII\NETS2022_SIC.txt'
-# emp = r'Z:\UHC_Data\NETS_UHC\NETS2022\Raw Data\ASCII\NETS2022_Emp.txt'
-# sales = r'Z:\UHC_Data\NETS_UHC\NETS2022\Raw Data\ASCII\NETS2022_Sales.txt'
+company = r'Z:\UHC_Data\NETS_UHC\NETS2022\Raw Data\ASCII\NETS2022_Company.txt'
+sic = r'Z:\UHC_Data\NETS_UHC\NETS2022\Raw Data\ASCII\NETS2022_SIC.txt'
+emp = r'Z:\UHC_Data\NETS_UHC\NETS2022\Raw Data\ASCII\NETS2022_Emp.txt'
+sales = r'Z:\UHC_Data\NETS_UHC\NETS2022\Raw Data\ASCII\NETS2022_Sales.txt'
 
-# SAMPLE FILES
-n = 1000
-chunksize = 100
+# # SAMPLE FILES
+# n = 1000
+# chunksize = 100
 
-company = r'D:\NETS\NETS_2022\ProcessedData\Samples\company_sample.txt'
-sic = r'D:\NETS\NETS_2022\ProcessedData\Samples\sic_sample.txt'
-emp = r'D:\NETS\NETS_2022\ProcessedData\Samples\emp_sample.txt'
-sales = r'D:\NETS\NETS_2022\ProcessedData\Samples\sales_sample.txt'
+# company = r'D:\NETS\NETS_2022\ProcessedData\Samples\company_sample.txt'
+# sic = r'D:\NETS\NETS_2022\ProcessedData\Samples\sic_sample.txt'
+# emp = r'D:\NETS\NETS_2022\ProcessedData\Samples\emp_sample.txt'
+# sales = r'D:\NETS\NETS_2022\ProcessedData\Samples\sales_sample.txt'
 
 
 company_reader = pd.read_csv(company, sep = '\t', dtype={"DunsNumber": str}, encoding_errors='replace', header=0, 

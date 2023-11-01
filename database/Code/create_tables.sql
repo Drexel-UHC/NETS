@@ -25,11 +25,11 @@ GO
 
 CREATE TABLE Address (
 	AddressID		VARCHAR(10) PRIMARY KEY,
-	Address			VARCHAR(50),
-	City			VARCHAR(30),
-	State			VARCHAR(2),
-	Zip			VARCHAR(5),
-	Zip4			VARCHAR(4),
+	GcAddress		VARCHAR(50),
+	GcCity			VARCHAR(30),
+	GcState			VARCHAR(2),
+	GcZip			VARCHAR(5),
+	GcZip4			VARCHAR(4),
 
 )
 

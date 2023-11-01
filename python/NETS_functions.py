@@ -79,10 +79,10 @@ This function is used in create_geocoding.py
 "DunsNumber <= 100000000" or "DunsNumber > 100000000"), merges it with the 
 first_last dataset so each dunsnumber/address gets a first year ('FirstYear') 
 and last year ('LastYear') that the dunsnumber was in business
--applies the LastYear to the GcLastYear column for all of the most recent 
+-applies the LastYear to the LastYear column for all of the most recent 
 dunsnumber/addresses
--creates a GcFirstYear for all dunsnumber/addresses using either FirstYear
-(if it is the first address) or the previous address' GcLastYear + 1
+-creates a FirstYear for all dunsnumber/addresses using either FirstYear
+(if it is the first address) or the previous address' LastYear + 1
 -drop unnecessary columns and reorder
 -write out to csv "geocoding_2"
 '''
