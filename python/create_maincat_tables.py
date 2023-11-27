@@ -7,10 +7,12 @@ Created on Mon Jun 12 14:09:16 2023
 
 import pandas as pd
 
+
+## ADJUSTING THIS TO JOIN THE HIERARCHY COLUMN TO CATEGORY DESCRIPTIONS TABLE.
 #%%
 
 # Read excel file with sheet name
-dict_df = pd.read_excel(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Documentation\SIC_Code_Sorting_JAH/NETS_Catalogue_3LTR_Variables_20231023.xlsx', sheet_name=['NETS_Catalogue_3LTR_Code','Current Matrix'])
+dict_df = pd.read_excel(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Documentation\SIC_Code_Sorting_JAH/NETS_Catalogue_3LTR_Variables_20231023.xlsx', sheet_name=['NETS_Catalogue_3LTR_Code','Current Matrix', 'Hierarchy'])
 
 # Get DataFrame from Dict
 desc = dict_df.get('NETS_Catalogue_3LTR_Code')

@@ -7,6 +7,10 @@ Created on Mon Nov 13 09:45:53 2023
 
 import pandas as pd
 
+###############################################################################
+# FINAL
+###############################################################################
+
 #%% ADDRESS
 
 address = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\Addresses20231027.txt', sep='\t', dtype={'GcZIP':str, 'GcZIP4':str})
@@ -34,11 +38,12 @@ for col in address.columns:
     
 #%% CLASSIFIED LONG
 
-classifiedlong = pd.read_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\ClassifiedLongDB20230822.txt', sep='\t')
+classifiedlong = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\ClassifiedLong20231024.txt', sep='\t')
 
 # get # of records
 rownum = pd.DataFrame([len(classifiedlong)], columns=['n'])
 unique_dunsyears = classifiedlong['DunsYear'].nunique()
+unique_dunsnums = classifiedlong['DunsYear'].str[:9].nunique()
 unique_dunsyears_df = pd.DataFrame([unique_dunsyears], columns=['n'])
 # get sum of each record's total category count, then:
 #get unique values to show how many records were not categorized (0), categorized once (1), etc
@@ -49,6 +54,7 @@ triplecats = catcounts.loc[catcounts['catcount'] > 2]
 # get sum of each category's total record count
 cat_freqs = classifiedlong['BaseGroup'].value_counts().reset_index().rename(columns={'index':'BaseGroup','BaseGroup':'count'}).sort_values('BaseGroup')
 
+print(f"{rownum['n']}\n{unique_dunsyears}")
 ##
 
 with pd.ExcelWriter(r'D:\scratch/NETS_classified_long_report.xlsx') as writer:
@@ -59,5 +65,57 @@ with pd.ExcelWriter(r'D:\scratch/NETS_classified_long_report.xlsx') as writer:
     unique_dunsyears_df.to_excel(writer, sheet_name='Unique DunsYears', index=False)
     
     
+del classifiedlong
+del catcounts
+del triplecats
+del writer
+#%% BUSINESS INFO
+
+business = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\BusinessInfo20231025.txt', sep='\t', usecols=['DunsYear'])
+
+business_stats = business.describe()
 
 
+###############################################################################
+# INTERMEDIATE
+###############################################################################
+
+#%% CLASSIFICATION INPUT PYTHON
+classinputpy = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\classification_input_Python20231017.txt', sep='\t', usecols=['DunsYear', 'DunsNumber'])
+classinputpy_stats = classinputpy.describe()
+del classinputpy
+
+#%% CLASSIFICATION INPUT SAS
+classinputsas = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\classification_input_SAS20231016.txt', sep='\t', usecols=['DunsYear', 'DunsNumber'])
+classinputsas_stats = classinputsas.describe()
+del classinputsas
+
+#%% CLASSIFICATION INPUT 
+classinput = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\classification_input20231016.txt', sep='\t', usecols=['DunsYear', 'DunsNumber'])
+classinput_stats = classinput.describe()
+del classinput
+
+#%% CLASSIFIED PYTHON
+classpy = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\classified_python20231024.txt', sep='\t', usecols=['DunsYear'])
+classpy_stats = classpy.describe()
+del classpy
+
+#%% CLASSIFIED SAS
+classsas = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\classified_SAS20231018.txt', sep='\t', usecols=['DunsYear'])
+classsas_stats = classsas.describe()
+del classsas
+
+#%% DUNSMOVE 1
+dunsmove1 = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\dunsmove_1_20231027.txt', sep='\t', usecols=['DunsNumber', 'DunsMove'])
+dunsmove1_stats = dunsmove1.describe()
+del dunsmove1
+
+#%% GEOCODING INPUT 1
+geo1 = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\geocoding_1_20231027.txt', sep='\t', usecols=['DunsNumber', 'DunsMove'])
+geo1_stats = geo1.describe()
+del geo1
+
+#%% GEOCODING INPUT 2
+geo2 = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\geocoding_2_20231027.txt', sep='\t', usecols=['DunsNumber', 'DunsMove'])
+geo2_stats = geo2.describe()
+del geo2
