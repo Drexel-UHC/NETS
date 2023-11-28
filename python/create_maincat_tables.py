@@ -18,6 +18,11 @@ dict_df = pd.read_excel(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\N
 desc = dict_df.get('NETS_Catalogue_3LTR_Code')
 desc = desc.iloc[1:,:4]
 desc.columns = ['CategoryLong', 'Category', 'Domain', 'Type']
+hierarchy = dict_df.get('Hierarchy')
+hierarchy = hierarchy.rename(columns={'Code':'Category','Order in Hierarchy':'Hierarchy'})
+hierarchy = hierarchy[['Category','Hierarchy']]
+desc = desc.merge(hierarchy, how='left')
+
 
 matrix = dict_df.get('Current Matrix')
 matrix = matrix.iloc[1:]
