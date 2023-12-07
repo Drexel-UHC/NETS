@@ -21,8 +21,8 @@ from datetime import datetime
 # FULL FILES
 chunksize = 10000000
 n = 32967561
-dunsmove = r'C:\Users\stf45\Documents\NETS\Processing\scratch\duns_move_1_YYYYMMDD.txt'
-classfile = r'C:\Users\stf45\Documents\NETS\Processing\scratch\ClassifiedLongYYYYMMDD.txt'
+dunsmove = r'D:\NETS\NETS_2022\ProcessedData\duns_move_1_20231027.txt'
+classfile = r'D:\NETS\NETS_2022\ProcessedData\ClassifiedLong20231127.txt'
 classified_long = pd.read_csv(classfile, sep = '\t', dtype={'DunsYear':str, 'DunsMove':str}, usecols = ['DunsYear'], header=0)
 classified_long = classified_long.drop_duplicates(subset='DunsYear')
 
@@ -47,7 +47,7 @@ for c, chunk in enumerate(dunsmove_reader):
     yearmove['Year'] = yearmove['DunsYear'].str[-4:].astype(int)
     yearmove = yearmove.loc[(yearmove['Year'] >= yearmove['GcFirstYear']) & (yearmove['Year'] <= yearmove['GcLastYear'])]
     yearmove = yearmove[['DunsYear','DunsMove','DunsNumber','AddressID','Year']]
-    yearmove.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\DunsMoveYYYYMMDD.txt', sep='\t', mode='a', index=False, header=header,)
+    yearmove.to_csv(r'D:\scratch\DunsMoveYYYYMMDD.txt', sep='\t', mode='a', index=False, header=header,)
     yearmovelen.append(len(yearmove))
     toc = time.perf_counter()
     t = toc - (sum(time_list) + tic)
