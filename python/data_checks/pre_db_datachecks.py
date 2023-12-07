@@ -36,6 +36,12 @@ for col in address.columns:
     else: 
         pass
     
+#%% BUSINESS INFO
+
+business = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\BusinessInfo20231025.txt', sep='\t', usecols=['DunsYear'])
+
+business_stats = business.describe()
+
 #%% CLASSIFIED LONG
 
 classifiedlong = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\ClassifiedLong20231024.txt', sep='\t')
@@ -69,12 +75,35 @@ del classifiedlong
 del catcounts
 del triplecats
 del writer
-#%% BUSINESS INFO
 
-business = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\BusinessInfo20231025.txt', sep='\t', usecols=['DunsYear'])
+#%% DUNS MOVE
 
-business_stats = business.describe()
+dunsmove = pd.read_csv(r'D:\scratch\DunsMove20231201.txt', sep='\t', usecols=['DunsYear','DunsMove','Year','AddressID'])
 
+unique_dunsyears = dunsmove['DunsYear'].nunique()
+unique_dunsnums = dunsmove['DunsYear'].str[:9].nunique()
+unique_dunsyears = dunsmove['AddressID'].nunique()
+dunsmove_stats = dunsmove.describe()
+
+
+
+
+#%% DUNS MOVE
+
+dunsmove = pd.read_csv(r'D:\scratch\DunsMove20231201.txt', sep='\t', usecols=['DunsYear','DunsMove','Year','AddressID'])
+
+unique_dunsyears = dunsmove['DunsYear'].nunique()
+unique_dunsnums = dunsmove['DunsYear'].str[:9].nunique()
+unique_addressids = dunsmove['AddressID'].nunique()
+unique_dunsmoves = dunsmove['DunsMove'].nunique()
+dunsmove_stats = dunsmove.describe()
+
+#%% TRACT LEVEL MEASURES
+
+tractlevel = pd.read_csv(r'D:\scratch\NETS_tr10measures20231206.txt', sep='\t', dtype={'tract10':str})
+
+nrows = len(tractlevel)
+nrows/33
 
 ###############################################################################
 # INTERMEDIATE
