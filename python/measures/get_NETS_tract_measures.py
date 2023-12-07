@@ -7,7 +7,7 @@ Created on Wed Jul 26 12:11:47 2023
 This script generates NETS category counts per census tract-year. It creates 
 wide and long versions, output to tab-delimited text files.
 """
-
+ 
 import pandas as pd
 import numpy as np
 
@@ -22,26 +22,25 @@ import numpy as np
 # dropcols = ['AddressID']
 
 # FULL FILES
-cl_file = r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\ClassifiedLong20230526.txt'
-dunsmove_file = r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\DunsMove_DunsYear_Key20230711.txt'
-dunslocs_file = r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\DunsLocations20230628.csv'
-dlsep=','
-right_on = 'USER_AddressID'
-dropcols = ['USER_AddressID','AddressID']
+cl_file = r'D:\NETS\NETS_2022\ProcessedData\ClassifiedLong20231127.txt'
+dunsmove_file = r'D:\NETS\NETS_2022\ProcessedData\DunsMove20231201.txt'
+dunslocs_file = r'D:\NETS\NETS_2022\ProcessedData\DunsLocation20231207.txt'
 
 # load dunsmove key and dunslocations files
-dunsmove = pd.read_csv(dunsmove_file, usecols=['AddressID', 'DunsYear','Year'], sep='\t') #n=252,088,222
-dunslocs = pd.read_csv(dunslocs_file, usecols=['USER_AddressID', 'GEOID10', 'ALAND10km'], sep=dlsep, dtype={'GEOID10':str}) #n=23,354,660
+dunsmove = pd.read_csv(dunsmove_file, usecols=['AddressID', 'DunsYear','Year'], sep='\t') #n=300,476,419
+dunslocs = pd.read_csv(dunslocs_file, usecols=['AddressID', 'GEOID10', 'TractLandArea'], sep='\t', dtype={'GEOID10':str}) #n=25,959,371
 
 # merge dunsmove and dunslocation, then delete the pre-merge files
-movelocs = dunsmove.merge(dunslocs[['USER_AddressID', 'GEOID10']], left_on='AddressID', right_on=right_on).drop(columns=dropcols) #252,088,222
+movelocs = dunsmove.merge(dunslocs[['AddressID', 'GEOID10']], left_on='AddressID', right_on='AddressID').drop(columns=['AddressID']) #300,451,306
 del dunsmove
 
 #%% LOAD FILES, MERGE 2
 
 #load classifiedlong file, merge to movelocs, delete classifiedlong
-cl = pd.read_csv(cl_file, sep='\t') #n=264,008,387
-merged = cl.merge(movelocs) # n= 261,747,380
+cl = pd.read_csv(cl_file, sep='\t') #n=314,233,817
+print('cl:',len(cl))
+merged = cl.merge(movelocs) # n=311,611,271 
+print('merged:',len(merged))
 del cl, movelocs
 
 #%% GET TRACT BASEGROUP COUNTS, PIVOT TO WIDE
@@ -49,17 +48,16 @@ del cl, movelocs
 # get counts of basegroups per tract-year
 tractcounts = pd.DataFrame(merged.groupby(['GEOID10','Year'])['BaseGroup'].value_counts())
 del merged
-tractcounts = tractcounts.rename(columns={'BaseGroup':'Count'}).reset_index() #n= 101,954,952
+tractcounts = tractcounts.rename(columns={'BaseGroup':'Count'}).reset_index() #n= 116,217,583
 
 # pivot to wide. option to export here if you just want basegroup counts by tract-year
-basegroupwide = pd.pivot(tractcounts, index=['GEOID10','Year'], columns=['BaseGroup'], values='Count') #n=2,160,967
+basegroupwide = pd.pivot(tractcounts, index=['GEOID10','Year'], columns=['BaseGroup'], values='Count') #n= 2,377,534
 basegroupwide = basegroupwide.reset_index()
 basegroupwidehead = basegroupwide.head(100)
 
 #%%  LOAD XWALK, JOIN TO TRACTCOUNTS, GET TRACT HIGHLEVEL COUNTS  
 
-xwalk = pd.read_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\BG_CC_TC_Xwalk20230613.txt', sep='\t')
-# catdesc = pd.read_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\CategoryDescriptions20230613.txt', sep='\t', usecols=['Category','Type'])
+xwalk = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\\BG_CC_TC_Xwalk20231023.txt', sep='\t')
 walkwide = xwalk.groupby('HighLevel')['BaseGroup'].unique().reset_index()
 
 # merge xwalk into tractcounts to get high level categories. drop basegroup
@@ -67,13 +65,13 @@ walkwide = xwalk.groupby('HighLevel')['BaseGroup'].unique().reset_index()
 #categories by year and tract
 tractcounts = tractcounts.merge(xwalk) #n=355,382,528
 tractcounts = tractcounts.drop(columns=['BaseGroup'])
-tractcounts = pd.DataFrame(tractcounts.groupby(['GEOID10','Year','HighLevel'])['Count'].sum()) #n=86,174,834
+tractcounts = pd.DataFrame(tractcounts.groupby(['GEOID10','Year','HighLevel'])['Count'].sum()) #n=97,169,232
 tractcounts = tractcounts.reset_index() 
 tracthead = tractcounts.head(100)
 tractcounts['HighLevel'].nunique() #number of unique HighLevel Categories: n=71
 
 # pivot to get wide version: counts by tract, year, and highlevel category
-highlevelwide = pd.pivot(tractcounts, index=['GEOID10','Year'], columns=['HighLevel'], values='Count') #n=2,160,706 (do some basegroups not belong to a highlevel cat?)
+highlevelwide = pd.pivot(tractcounts, index=['GEOID10','Year'], columns=['HighLevel'], values='Count') #n=2,377,263 (do some basegroups not belong to a highlevel cat?)
 highlevelwide = highlevelwide.reset_index()
 highlevelwidehead = highlevelwide.head(100)
 
@@ -113,15 +111,15 @@ for hl in walkwide['HighLevel']:
     eqcheck = sumofbasegroupcols.equals(highlevelcol)
     print(f'{hl} column equals sum of basegroups: {eqcheck}')
     
-# all true as of 07/27/2023 SF
+# all true as of 12/05/2023
 
 #%% GET DENSITIES
 
 # make sure there are no duplicate tracts
-tractareas = dunslocs[['GEOID10', 'ALAND10km']].drop_duplicates()
+tractareas = dunslocs[['GEOID10', 'TractLandArea']].drop_duplicates()
 # merge counts with tract land area col
 fullwide = fullwide.merge(tractareas, left_on='tract10', right_on='GEOID10', how="left").drop(columns=['GEOID10'])
-fullwidefirstcols = ['tract10', 'Year', 'ALAND10km']
+fullwidefirstcols = ['tract10', 'Year', 'TractLandArea']
 fullwidehead = fullwide.head(100)
 fullwide = fullwide.fillna(0)
 
@@ -133,7 +131,7 @@ for col in fullwide.columns:
         fullwide[col] = fullwide[col].astype(int)
         newcolname = col[:-1] + 'd'
         print(newcolname)
-        fullwide[newcolname] = fullwide[col] / fullwide['ALAND10km']
+        fullwide[newcolname] = fullwide[col] / fullwide['TractLandArea']
 
 
 # reorder columns alphabetically
@@ -144,7 +142,6 @@ colsort2.insert(0,'Year')
 colsort2.insert(0,'tract10')
 fullwide = fullwide[colsort2]
 fullwidehead = fullwide.head(100)
-
 
 #%% SUBSET FOR PHILLY FOR DATACHECK
 
@@ -169,5 +166,6 @@ phillywide = phillywide[['tract10',
 
 #%% EXPORT TO CSV
 
-phillywide.to_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\NETS_tr10_measure_philly20230731.txt', sep='\t', index=False)
-fullwide.to_csv(r'\\files.drexel.edu\colleges\SOPH\Shared\UHC\Projects\NETS\Data\NETS2019_Python\NETS_tr10_measures20230731.txt', sep='\t', index=False)
+phillywide.to_csv(r'D:\scratch\NETS_tr10_measures_phillyYYYYMMDD.txt', sep='\t', index=False)
+fullwide.to_csv(r'D:\scratch\NETS_tr10_measuresYYYYMMDD.txt', sep='\t', index=False)
+
