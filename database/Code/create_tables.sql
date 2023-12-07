@@ -100,12 +100,15 @@ CREATE TABLE DunsLocation (
 	DisplayX			FLOAT,
 	DisplayY			FLOAT,
 	GEOID10				VARCHAR(11),
-	AreaLand			REAL,
-	TotalArea			REAL,
+	TractAreaLand		REAL,
+	TractTotalArea		REAL,
+	ZCTA5CE10			VARCHAR(5),
+	ZCTAAreaLand		REAL,
+	ZCTATotalArea		REAL,
 	Addr_type			VARCHAR(20),
 	Status				VARCHAR(1),
 	Score				REAL,
-	UHCMatchCodeRank		SMALLINT
+	UHCMatchCodeRank	SMALLINT
 
 	CONSTRAINT FQ_DunsLocation_Address_AddressId FOREIGN KEY (AddressID) REFERENCES Address (AddressID)
 )
