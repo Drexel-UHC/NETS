@@ -164,8 +164,13 @@ phillywide = phillywide[['tract10',
                          't10_net_scl_d',
                          't10_net_psc_d']]
 
+phillywide10 = phillywide.loc[phillywide['Year'] == 2010]
+phillywide22 = phillywide.loc[phillywide['Year'] == 2022]
+
 #%% EXPORT TO CSV
 
-phillywide.to_csv(r'D:\scratch\NETS_tr10_measures_phillyYYYYMMDD.txt', sep='\t', index=False)
+phillywide10.to_csv(r'D:\scratch\NETS_tr10_phl2010YYYYMMDD.txt', sep='\t', index=False)
+phillywide22.to_csv(r'D:\scratch\NETS_tr10_phl2022YYYYMMDD.txt', sep='\t', index=False)
+
 fullwide.to_csv(r'D:\scratch\NETS_tr10_measuresYYYYMMDD.txt', sep='\t', index=False)
 

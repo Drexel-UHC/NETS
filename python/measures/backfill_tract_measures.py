@@ -25,7 +25,7 @@ for year in years:
 
 #%% MERGE TRACT MEASURES TO ALL TRACTS ALL YEARS TO ADD TRACT-YEARS WITH NO VALUES THAT WERE DROPPED
 
-df2 = tractyear.merge(df, how='left', left_on=['GEOID10','Year'], right_on=['tract10','Year'])
+df2 = tractyear.merge(df, how='left', left_on=['GEOID10','Year'], right_on=['tract10','Year']) # n=2,384,118
 
 # replace nans with 0s
 df2 = df2.fillna(0)

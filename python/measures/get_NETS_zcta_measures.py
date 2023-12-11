@@ -55,17 +55,17 @@ walkwide = xwalk.groupby('HighLevel')['BaseGroup'].unique().reset_index()
 # merge xwalk into zctacounts to get high level categories. drop basegroup
 #then groupby zcta, year, and highlevel and sum count column to get counts of highlevel
 #categories by year and zcta
-zctacounts = zctacounts.merge(xwalk) #n=199,386,122
+zctacounts = zctacounts.merge(xwalk) #n=199,370,756
 print('zctacounts:',len(zctacounts))
 zctacounts = zctacounts.drop(columns=['BaseGroup'])
-zctacounts = pd.DataFrame(zctacounts.groupby(['ZCTA5CE10','Year','HighLevel'])['Count'].sum()) #n=40,836,757
+zctacounts = pd.DataFrame(zctacounts.groupby(['ZCTA5CE10','Year','HighLevel'])['Count'].sum()) #n=40,832,805
 print('zctacounts grouped:',len(zctacounts))
 zctacounts = zctacounts.reset_index() 
 zctahead = zctacounts.head(100)
 print(zctacounts['HighLevel'].nunique()) #number of unique HighLevel Categories: n=71
 
 # pivot to get wide version: counts by zcta, year, and highlevel category
-highlevelwide = pd.pivot(zctacounts, index=['ZCTA5CE10','Year'], columns=['HighLevel'], values='Count') #n=1,062,177 (do some basegroups not belong to a highlevel cat?)
+highlevelwide = pd.pivot(zctacounts, index=['ZCTA5CE10','Year'], columns=['HighLevel'], values='Count') #n=1,062,082 (do some basegroups not belong to a highlevel cat?)
 highlevelwide = highlevelwide.reset_index()
 highlevelwidehead = highlevelwide.head(100)
 print('highlevelwide:',len(highlevelwide))
@@ -106,7 +106,7 @@ for hl in walkwide['HighLevel']:
     eqcheck = sumofbasegroupcols.equals(highlevelcol)
     print(f'{hl} column equals sum of basegroups: {eqcheck}')
     
-# all true as of 
+# all true as of 12/08/2023
 
 #%% GET DENSITIES
 
@@ -139,14 +139,14 @@ fullwide = fullwide[colsort2]
 fullwidehead = fullwide.head(100)
 
 
-#%% SUBSET FOR PHILLY FOR DATACHECK
+#%% SUBSET FOR PHILLY 2010, 2022 FOR DATACHECK
 
 metrozcta = pd.read_csv(r'Z:\UHC_Data\MetroPHL\tblZCTA10_MetroPHL.csv', dtype={'ZCTA5CE10':str}, usecols=['ZCTA5CE10', 'PHL'])
-metrozcta = metrozcta.loc[metrozcta['PHL']==1]
+phlzcta = metrozcta['ZCTA5CE10'].loc[metrozcta['PHL']==1]
 
 
-# subset philly county and columns recommended by steve 
-phillywide = fullwide.loc[fullwide['zcta10'].isin(metrozcta['ZCTA5CE10'])]
+# subset philly county and columns recommended by steve (food & communities)
+phillywide = fullwide.loc[fullwide['zcta10'].isin(phlzcta)]
 phillywide = phillywide[['zcta10', 
                          'Year', 
                          'z10_net_bar_d',
@@ -164,9 +164,13 @@ phillywide = phillywide[['zcta10',
                          'z10_net_scl_d',
                          'z10_net_psc_d']]
 
+phillywide10 = phillywide.loc[phillywide['Year'] == 2010]
+phillywide22 = phillywide.loc[phillywide['Year'] == 2022]
+
 #%% EXPORT TO CSV
 
-phillywide.to_csv(r'D:\scratch\NETS_z10_measure_phillyYYYYMMDD.txt', sep='\t', index=False)
+phillywide10.to_csv(r'D:\scratch\NETS_z10_phl2010_YYYYMMDD.txt', sep='\t', index=False)
+phillywide22.to_csv(r'D:\scratch\NETS_z10_phl2022_YYYYMMDD.txt', sep='\t', index=False)
 
 #%% BACKFILL MISSING ZCTAS
 
@@ -183,7 +187,7 @@ for year in years:
 
 #%% MERGE ZCTA MEASURES TO ALL ZCTAS ALL YEARS TO ADD ZCTA-YEARS WITH NO VALUES THAT WERE DROPPED
 
-df2 = zctayear.merge(fullwide, how='left', left_on=['ZCTA5CE10','Year'], right_on=['ZCTA5CE10','Year'])
+df2 = zctayear.merge(fullwide, how='left', left_on=['ZCTA5CE10','Year'], right_on=['zcta10','Year'])
 
 # replace nans with 0s
 df2 = df2.fillna(0)
