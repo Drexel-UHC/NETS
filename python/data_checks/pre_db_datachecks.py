@@ -147,4 +147,6 @@ del geo1
 #%% GEOCODING INPUT 2
 geo2 = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\geocoding_2_20231027.txt', sep='\t', usecols=['DunsNumber', 'DunsMove'])
 geo2_stats = geo2.describe()
-del geo2
+check = geo2['DunsMove'].nunique()
+check2 = geo2['DunsNumber'].nunique()
+# del geo2
