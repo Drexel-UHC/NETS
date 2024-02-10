@@ -3,6 +3,10 @@
 Created on Mon Jun 12 14:09:16 2023
 
 @author: stf45
+
+
+This file generates the CategoryDescriptions and BG_CC_TC_Xwalk files used in
+the NETS2022/BEDDN2022 database.
 """
 
 import pandas as pd
