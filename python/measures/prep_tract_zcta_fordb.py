@@ -9,7 +9,7 @@ import pandas as pd
 
 #%% LOAD TRACT FILE
 
-tract = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\NETS_tr10_measures20231207.txt', sep='\t', dtype={'tract10':str})
+tract = pd.read_csv(r'D:\scratch\NETS_tr10_measuresYYYYMMDD.txt', sep='\t', dtype={'tract10':str})
 
 #%%
 tractcopy = tract[['tract10','Year']]
@@ -42,7 +42,7 @@ dens[0:0] = startcols
 
 # export counts table
 tractcounts = tract2[counts]
-tractcounts.to_csv(r'D:\scratch\NETS_tr10_countsYYYYMMDD.txt', sep='\t', index=False)
+tractcounts.to_csv(r'D:\scratch\NETS_t10_countsYYYYMMDD.txt', sep='\t', index=False)
 
 # export tract id table
 tract10id.to_csv(r'D:\scratch\Tracts.txt', sep='\t', index=False)
@@ -54,7 +54,7 @@ tractdens = tract2[dens]
 datacols = dens[3:]
 tractdens[datacols] = tractdens[datacols].round(2)
 tractdenshead = tractdens.head(10)
-tractdens.to_csv(r'D:\scratch\NETS_tr10_densitiesYYYYMMDD.txt', sep='\t', index=False)
+tractdens.to_csv(r'D:\scratch\NETS_t10_densitiesYYYYMMDD.txt', sep='\t', index=False)
 
 del tract, tractcounts, tractdens
 

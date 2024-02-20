@@ -35,7 +35,7 @@ print(len(dunslocs))
 # merge dunsmove and dunslocation, then delete the pre-merge files
 movelocs = dunsmove.merge(dunslocs[['AddressID', 'GEOID10']], left_on='AddressID', right_on='AddressID').drop(columns=['AddressID']) #300,451,306
 print(len(movelocs))
-del dunsmove
+del dunsmove, dunslocs
 
 #%% LOAD FILES, MERGE 2
 

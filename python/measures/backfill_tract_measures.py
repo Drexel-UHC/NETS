@@ -9,7 +9,7 @@ import pandas as pd
 
 #%% READ IN TRACT LEVEL MEASURES FILE
 
-df = pd.read_csv(r'D:\scratch\NETS_tr10_measures20231207.txt', sep='\t', dtype={'tract10':str})
+df = pd.read_csv(r'D:\scratch\NETS_tr10_measuresYYYYMMDD.txt', sep='\t', dtype={'tract10':str})
 
 # load file with all census tracts in the contiguous us.
 alltracts10 = pd.read_csv(r'Z:\UHC_Data\Census2010\Geodatabases\tblCT_2010_ContUSLandRepairAlbers.csv', usecols=['GEOID10'], dtype={'GEOID10':str})
