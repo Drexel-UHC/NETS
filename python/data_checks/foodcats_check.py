@@ -9,7 +9,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 #%% LOAD AND REFORMAT DATA
 
-desc = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\CategoryDescriptions20231023.txt', sep='\t')
+desc = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\CategoryDescriptions20231127.txt', sep='\t')
 
 # assign healthcare columns to usecols to subset beddn upon load
 fooddesc = desc['Category'].loc[(desc['Domain'] == 'Food') & (desc['Type'] == 'Base Group')]  
