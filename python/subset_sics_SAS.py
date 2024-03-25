@@ -65,5 +65,3 @@ runtime = 'total time: {} minutes'.format(round(sum(time_list)/60,2))
 print(runtime)
 print(f"subset file n = {sum(rownum)}") #91,369,403
 
-#%%
-class_input = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData/classification_input_SASYYYYMMDD.txt', sep='\t', dtype={'DunsNumber':str}, skiprows=90000000)
