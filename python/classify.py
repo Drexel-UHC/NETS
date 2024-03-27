@@ -25,14 +25,14 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 #%% READ IN FILES
 
-# load in json config. this has all aux categories and their conditions.
+# load in json config. this has all base group categories and their conditions.
 with open(r'C:\Users\stf45\Documents\NETS\Processing\config/nets_config_20230329.json', 'r') as f:
     config = json.load(f)
 
 # FULL FILE
 chunksize = 5000000
 n = 435928419
-file = r'D:\NETS\NETS_2022\ProcessedData\classification_input_PythonYYYYMMDD.txt'
+file = r'D:\scratch\classification_input_PythonYYYYMMDD.txt'
 
 
 class_long_reader = pd.read_csv(file, sep='\t', dtype={'DunsNumber':str, 'SIC':int, 'Emp':int, 'Sales':int}, 
@@ -65,8 +65,8 @@ print(runtime)
 print(f'input n = : {sum(input_rownum)}')
 
 #%%
-
-classreader = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\classified_python20231024.txt', sep='\t', usecols=['ACM'], chunksize=50000000, header=0)
+del class_chunk
+classreader = pd.read_csv(r'D:\scratch\classified_pythonYYYYMMDD.txt', sep='\t', usecols=['ACM'], chunksize=50000000, header=0)
 
 rownum = []
 
