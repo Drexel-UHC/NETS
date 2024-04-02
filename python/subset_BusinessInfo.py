@@ -18,7 +18,7 @@ del classified
  #%% FILTER classification.txt FOR SICS IN SET
 
 chunksize=60000000
-n=564824373
+n=694019684
 bi_reader = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData/classification_input20231016.txt', sep='\t', header=0, dtype={'DunsNumber':str, 'SIC':str},
                                 chunksize=chunksize,
                                 # nrows=100
