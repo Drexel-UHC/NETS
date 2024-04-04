@@ -24,6 +24,7 @@ DROP CONSTRAINT FQ_DunsLocation_Address_AddressId;
 ALTER TABLE DunsMove
 DROP CONSTRAINT FQ_DunsMove_Address_AddressId;
 
+-- EVERYTHING BEFORE THIS HAS ALREADY BE RUN
 BEGIN TRANSACTION;
 UPDATE ClassifiedLong
 SET ClassifiedLong.DunsYearId = BusinessInfo.DunsYearId
@@ -92,10 +93,8 @@ ALTER COLUMN DunsLocationId INTEGER NOT NULL;
 ALTER TABLE Dunslocation2
 ADD CONSTRAINT UQ_Dunslocation_DunsLocationId UNIQUE (DunsLocationId);
 
-
 ALTER TABLE Dunslocation2
 ADD CONSTRAINT PK_DunsLocationId PRIMARY KEY(DunsLocationId);
-
 
 -- TEST TO MAKE SURE THERE ARE DISCREPANCIES
 SELECT cl.*, bi.DunsYear FROM ClassifiedLong cl
@@ -112,6 +111,7 @@ SELECT dm.*, dl.AddressID FROM DunsMove dm
 INNER JOIN DunsLocation dl ON dl.DunsLocationId=dm.DunsLocationId
 WHERE dm.AddressID <> dl.AddressID;
 
+-- STOP HERE AND WAIT IF YOU DON'T FEEL COMFORTABLE DROPPING DATA
 -- CHECK NUMBER OF ROWS IN DunsLocation2 SHOULD BE EQUAL TO NUMBER OF ROWS IN Address
 
 ALTER TABLE ClassifiedLong
