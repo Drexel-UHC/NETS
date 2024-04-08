@@ -48,6 +48,6 @@ sum(lenlist) - (len(dups) + len(dfmain) )
 
 dfmainhead = dfmain.head(500000)
 
-dfmain.to_csv(r'C:\Users\stf45\Documents\NETS\Processing\scratch\classified_SASYYYYMMDD.txt', sep='\t', index=False)
+dfmain.to_csv(r'D:\scratch\classified_SASYYYYMMDD.txt', sep='\t', index=False)
 
 # nrows of output = 3,280,919
