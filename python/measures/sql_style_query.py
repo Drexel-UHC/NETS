@@ -5,12 +5,18 @@ Created on Thu Apr 11 10:01:29 2024
 @author: stf45
 
 a sql-style script to pull records from the final BEDDN flat files.
+
+
+this needs to be reformatted so it takes the output of a generate near table, with addressids.
 """
 
 import pandas as pd
 import os
 from datetime import datetime
 import time
+
+
+#%% START SCRIPT TIMER
 
 print(f"Start Time: {datetime.now()}")
 tic = time.perf_counter()
@@ -21,6 +27,7 @@ tic = time.perf_counter()
 classifiedlong_file = r'Z:\UHC_Data\NETS_UHC\NETS2022\Data\Final\ClassifiedLong20231127.txt'
 dunsmove_file = r'Z:\UHC_Data\NETS_UHC\NETS2022\Data\Final\DunsMove20231201.txt'
 cat_descriptions_file = r'Z:\UHC_Data\NETS_UHC\NETS2022\Data\Final\CategoryDescriptions20231127.txt'
+# this is either the entire dunslocation file or a subset of the file that is linked to participants
 dunslocation_file = r'Z:\UHC_Data\NETS_UHC\NETS2022\Data\Final\DunsLocation20231207.txt'
 xwalk_file = r'Z:\UHC_Data\NETS_UHC\NETS2022\Data\Final\BG_CC_TC_Xwalk20231023.txt'
 output_folder = r'D:\scratch'
@@ -101,7 +108,6 @@ if hierarchy == True:
 else: 
     pass
 
-
 #%% ADD FOR LOOP THROUGH YEARS TO SPLIT INTO SEPARATE YEAR FILES 
 
 for year in years:
@@ -109,6 +115,8 @@ for year in years:
     temp = measures.loc[measures['Year'] == year]
     output_file = os.path.join(output_folder, f'beddn_businesslevel_measures{year}.txt')
     temp.to_csv(output_file, sep='\t', index=False)
+
+#%% END SCRIPT TIMER 
 
 toc = time.perf_counter()
 t = toc - tic
