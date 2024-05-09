@@ -44,6 +44,9 @@ diff2010.columns = measure_cols
 # are there any negative values? 
 (diff2010 < 0).values.any() # as of 05/06/2024: no
 
+# export diff file
+diff2010.to_csv(r'D:\scratch\diff2010.csv', index=False)
+
 #%% 2022: ARE ALL HIERARCHY VALUES LOWER THAN REGULAR?
 
 # get measure columns (first level of index)
@@ -56,5 +59,6 @@ diff2022.columns = measure_cols
 # are there any negative values? 
 (diff2022 < 0).values.any() # as of 05/06/2024: no
 
-
+# export diff file
+diff2022.to_csv(r'D:scratch\diff2022.csv', index=False)
 
