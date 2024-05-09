@@ -9,7 +9,7 @@ import pandas as pd
 
 #%% READ IN TRACT LEVEL MEASURES FILE
 
-df = pd.read_csv(r'D:\scratch\NETS_tr10_measuresYYYYMMDD.txt', sep='\t', dtype={'tract10':str})
+df = pd.read_csv(r'D:\scratch\BEDDN_t10_measures_hier20240506.txt', sep='\t', dtype={'tract10':str})
 
 # load file with all census tracts in the contiguous us.
 alltracts10 = pd.read_csv(r'Z:\UHC_Data\Census2010\Geodatabases\tblCT_2010_ContUSLandRepairAlbers.csv', usecols=['GEOID10'], dtype={'GEOID10':str})
@@ -34,5 +34,8 @@ df2 = df2.drop(columns='tract10')
 df2 = df2.rename(columns={'GEOID10':'tract10'})
 df2head = df2.head()
 
+# are there 33 * the number of tracts?
+len(df2)/len(alltracts10) == 33
+
 # export to csv
-df2.to_csv(r'D:\scratch\NETS_tr10_measuresYYYYMMDD.txt', sep='\t', index=False)
+df2.to_csv(r'D:\scratch\BEDDN_t10_measures_hier20240506_filled.txt', sep='\t', index=False)

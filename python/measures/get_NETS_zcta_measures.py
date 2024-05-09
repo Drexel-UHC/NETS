@@ -17,7 +17,11 @@ import numpy as np
 cl_file = r'D:\NETS\NETS_2022\ProcessedData\ClassifiedLong20231127.txt'
 dunsmove_file = r'D:\NETS\NETS_2022\ProcessedData\DunsMove20231201.txt'
 dunslocs_file = r'D:\NETS\NETS_2022\ProcessedData\DunsLocation20231207.txt'
+desc_file = r'D:\NETS\NETS_2022\ProcessedData\CategoryDescriptions20231127.txt'
 
+# load category descriptions file
+desc = pd.read_csv(desc_file, sep='\t')
+ 
 # load dunsmove key and dunslocations files
 dunsmove = pd.read_csv(dunsmove_file, usecols=['AddressID', 'DunsYear','Year'], sep='\t') #n=300,476,419
 dunslocs = pd.read_csv(dunslocs_file, usecols=['AddressID', 'ZCTA5CE10'], sep='\t', dtype={'ZCTA5CE10':str}) #n=25,959,371
@@ -26,14 +30,35 @@ dunslocs = pd.read_csv(dunslocs_file, usecols=['AddressID', 'ZCTA5CE10'], sep='\
 movelocs = dunsmove.merge(dunslocs[['AddressID', 'ZCTA5CE10']], left_on='AddressID', right_on='AddressID').drop(columns=['AddressID']) #300,451,306
 del dunsmove, dunslocs
 
-#%% LOAD FILES, MERGE 2
+#%% LOAD FILES
 
 #load classifiedlong file, merge to movelocs, delete classifiedlong
 cl = pd.read_csv(cl_file, sep='\t', usecols=['DunsYear','BaseGroup']) #n=314,233,817
 print('cl:',len(cl))
-merged = cl.merge(movelocs) # n=311,611,271 
-print('merged:',len(merged))
+
+#%% APPLY HIERARCHY
+
+# join hierarchy
+cl = (cl
+        .merge(desc[['Category', 'Hierarchy']], left_on='BaseGroup', right_on='Category')
+        .drop(columns=['Category'])
+        )
+
+# sort by hierarchy, then drop all duplicates of dunsyear, keep first instance
+cl = (cl
+        .sort_values(by='Hierarchy')
+        .drop_duplicates(subset=['DunsYear'], keep='first')
+        .drop(columns=['Hierarchy'])
+        )
+
+print('cl:', len(cl)) # 303,014,511
+# merge to movelocs, delete classifiedlong
+merged = cl.merge(movelocs) # n=300,451,306
+print('merged:',len(merged)) 
 del cl, movelocs
+
+# merged will have a smaller rowcount than cl because businesses outside of the 
+##contiguous US were classified, but won't be further processed.
 
 #%% GET ZCTA BASEGROUP COUNTS, PIVOT TO WIDE
 
@@ -76,8 +101,27 @@ del dunsmove, dunslocs
 #load classifiedlong file, merge to movelocs, delete classifiedlong
 cl = pd.read_csv(cl_file, sep='\t', usecols=['DunsYear','BaseGroup']) #n=314,233,817
 print('cl:',len(cl))
-merged = cl.merge(movelocs) # n=311,611,271 
-print('merged:',len(merged))
+
+
+#%% APPLY HIERARCHY
+
+# join hierarchy
+cl = (cl
+        .merge(desc[['Category', 'Hierarchy']], left_on='BaseGroup', right_on='Category')
+        .drop(columns=['Category'])
+        )
+
+# sort by hierarchy, then drop all duplicates of dunsyear, keep first instance
+cl = (cl
+        .sort_values(by='Hierarchy')
+        .drop_duplicates(subset=['DunsYear'], keep='first')
+        .drop(columns=['Hierarchy'])
+        )
+
+print('cl:', len(cl)) # 303,014,511
+# merge to movelocs, delete classifiedlong
+merged = cl.merge(movelocs) # n=300,451,306
+print('merged:',len(merged)) 
 del cl, movelocs
 
 # merged will have a smaller rowcount than cl because businesses outside of the 
@@ -244,8 +288,8 @@ phillywide22 = phillywide.loc[phillywide['Year'] == 2022]
 
 #%% EXPORT TO CSV
 
-phillywide10.to_csv(r'D:\scratch\NETS_z10_phl2010_YYYYMMDD.txt', sep='\t', index=False)
-phillywide22.to_csv(r'D:\scratch\NETS_z10_phl2022_YYYYMMDD.txt', sep='\t', index=False)
+phillywide10.to_csv(r'D:\scratch\BEDDN_z10_phl2010_hierYYYYMMDD.txt', sep='\t', index=False)
+phillywide22.to_csv(r'D:\scratch\BEDDN_z10_phl2022_hierYYYYMMDD.txt', sep='\t', index=False)
 
 #%% BACKFILL MISSING ZCTAS
 
@@ -272,9 +316,5 @@ df2head = df2.head(50)
 
 #%% EXPORT TO CSV
 
-df2.to_csv(r'D:\scratch\NETS_z10_measuresYYYYMMDD.txt', sep='\t', index=False)
-
-
-
-
+df2.to_csv(r'D:\scratch\BEDDN_z10_measures_hierYYYYMMDD.txt', sep='\t', index=False)
 
