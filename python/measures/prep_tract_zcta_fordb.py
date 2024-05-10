@@ -9,9 +9,10 @@ import pandas as pd
 
 #%% LOAD TRACT FILE
 
-tract = pd.read_csv(r'D:\scratch\NETS_tr10_measuresYYYYMMDD.txt', sep='\t', dtype={'tract10':str})
+tract = pd.read_csv(r'Z:\UHC_Data\NETS_UHC\NETS2022\Data\Final\Tract_ZCTA_Hierarchy\BEDDN_t10_measures_hier20240506.txt', sep='\t', dtype={'tract10':str})
 
-#%%
+#%% CREATE UNIQUE INTEGER IDS FOR TRACT AND TRACT-YEAR
+
 tractcopy = tract[['tract10','Year']]
 tractcopy['TractYearId'] = range(len(tractcopy))
 tract10id = pd.DataFrame(tractcopy['tract10'].unique(),columns=['tract10'])
@@ -42,10 +43,10 @@ dens[0:0] = startcols
 
 # export counts table
 tractcounts = tract2[counts]
-tractcounts.to_csv(r'D:\scratch\NETS_t10_countsYYYYMMDD.txt', sep='\t', index=False)
+tractcounts.to_csv(r'D:\scratch\BEDDN_t10_counts_hierYYYYMMDD.txt', sep='\t', index=False)
 
-# export tract id table
-tract10id.to_csv(r'D:\scratch\Tracts.txt', sep='\t', index=False)
+# export tract id table. DONT NEED FOR HIERACHY, IDS ARE SAME AS NON HIERARCHY
+# tract10id.to_csv(r'D:\scratch\Tracts.txt', sep='\t', index=False)
 
 #%% CREATE DENSITIES TABLE AND EXPORT
 
@@ -54,7 +55,7 @@ tractdens = tract2[dens]
 datacols = dens[3:]
 tractdens[datacols] = tractdens[datacols].round(2)
 tractdenshead = tractdens.head(10)
-tractdens.to_csv(r'D:\scratch\NETS_t10_densitiesYYYYMMDD.txt', sep='\t', index=False)
+tractdens.to_csv(r'D:\scratch\BEDDN_t10_densities_hierYYYYMMDD.txt', sep='\t', index=False)
 
 del tract, tractcounts, tractdens
 
@@ -65,7 +66,7 @@ del tract, tractcounts, tractdens
 ##################################################
 #%% LOAD ZCTA FILE
 
-zcta = pd.read_csv(r'D:\NETS\NETS_2022\ProcessedData\BEDDN_z10_measures20231208.txt', sep='\t', dtype={'zcta10':str})
+zcta = pd.read_csv(r'Z:\UHC_Data\NETS_UHC\NETS2022\Data\Final\Tract_ZCTA_Hierarchy\BEDDN_z10_measures_hier20240506.txt', sep='\t', dtype={'zcta10':str})
 
 #%% CREATE ZCTA10ID AND ZCTAYEARID
 
@@ -97,10 +98,11 @@ dens[0:0] = startcols
 
 #%% CREATE COUNTS AND ZCTA ID TABLES AND EXPORT
 
-zcta10id.to_csv(r'D:\scratch\ZCTAsYYYYMMDD.txt', sep='\t', index=False)
+# export ZCTA id table. DONT NEED FOR HIERACHY, IDS ARE SAME AS NON HIERARCHY
+# zcta10id.to_csv(r'D:\scratch\ZCTAsYYYYMMDD.txt', sep='\t', index=False)
 
 zcounts = zcta2[counts]
-zcounts.to_csv(r'D:\scratch\NETS_z10_countsYYYYMMDD.txt', sep='\t', index=False)
+zcounts.to_csv(r'D:\scratch\BEDDN_z10_counts_hierYYYYMMDD.txt', sep='\t', index=False)
 
 #%% CREATE DENSITIES TABLE AND EXPORT
 
@@ -110,10 +112,4 @@ datacols = dens[3:]
 zdens[datacols] = zdens[datacols].round(2)
 zdenshead = zdens.head()
 
-zdens.to_csv(r'D:\scratch\NETS_z10_densitiesYYYYMMDD.txt', sep='\t', index=False)
-
-#%%
-
-for col in dens:
-    col = 'z' + col[1:]
-    print(f'{col} \t \t REAL,')
+zdens.to_csv(r'D:\scratch\BEDDN_z10_densities_hierYYYYMMDD.txt', sep='\t', index=False)
