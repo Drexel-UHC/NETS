@@ -1,3 +1,4 @@
+
 DROP TABLE DunsMove;
 DROP TABLE DunsLocation;
 DROP TABLE Address;
@@ -32,7 +33,7 @@ CREATE TABLE DunsLocation (
 
 CREATE TABLE DunsMove (
 	
-	DunsYearId		        VARCHAR(14) PRIMARY KEY,
+	DunsYearId		        INTEGER PRIMARY KEY,
 	DunsMove				VARCHAR(11),
 	DunsNumber				VARCHAR(9),
 	DunsLocationId			INTEGER,
