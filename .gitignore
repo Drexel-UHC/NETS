@@ -12,3 +12,5 @@ reports/
 scratch/
 python/nets_samples.py
 python/jquinn_geo2020_check/
+*.txt
+*.csv
