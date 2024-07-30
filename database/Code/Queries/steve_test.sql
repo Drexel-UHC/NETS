@@ -41,7 +41,7 @@ AND (dbo.ClassifiedLong.BaseGroup IN ('ACM','ALM','AMP','AMU','AMW','ARC',
 
 --runtime: canceled at 40mins
 --nrows: NA
-
+---------------------------------------------------------------------------------------------
 
 --without basegroup list in WHERE:
 SELECT 
@@ -68,9 +68,9 @@ WHERE (Loc.State10 = '42')
 AND (dbo.DunsMove.Year > 2005) 
 AND (Loc.UHCMatchCodeRank < 9);
 
---runtime:
---nrows:
-
+--runtime: canceled at 58min
+--nrows: NA
+---------------------------------------------------------------------------------------------
 
 
 --without basegroup list in WHERE AND without category descriptions table:
@@ -96,5 +96,34 @@ WHERE (Loc.State10 = '42')
 AND (dbo.DunsMove.Year > 2005) 
 AND (Loc.UHCMatchCodeRank < 9);
 
---runtime:
---nrows:
+--runtime: canceled at 28 minutes. 
+--nrows: NA
+---------------------------------------------------------------------------------------------
+
+
+
+
+--without basegroup list in WHERE AND without category descriptions table AND without BusinessInfo:
+SELECT 
+Loc.DunsLocationID, 
+Loc.AddressID, 
+DunsMove.DunsMove, 
+DunsMove.DunsYearId, 
+Loc.GEOID10, 
+Loc.Xcoord, 
+Loc.Ycoord, 
+Loc.UHCMatchCodeRank, 
+DunsMove.Year, 
+ClassifiedLong.BaseGroup
+
+FROM DunsLocation Loc 
+INNER JOIN DunsMove ON Loc.DunsLocationId = DunsMove.DunsLocationId 
+INNER JOIN ClassifiedLong ON DunsMove.DunsYearId = ClassifiedLong.DunsYearId 
+
+WHERE (Loc.State10 = '42') 
+AND (dbo.DunsMove.Year > 2005) 
+AND (Loc.UHCMatchCodeRank < 9);
+
+--runtime: canceled at 45 mins
+--nrows: 
+---------------------------------------------------------------------------------------------
